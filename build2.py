@@ -726,8 +726,9 @@ OV_HERO = """<header class="hero" id="top">
     <h1>데이터베이스 설계<br><em>야간 연구실</em> 교육 자료</h1>
     <p class="lead">오리엔테이션부터 시작해 데이터베이스가 되기까지 — 일상 사례에서 파일 시스템의 한계, 관계 데이터 모델까지를 <b>주차별로 나눠</b> 담았습니다. 아래에서 주차별 내용과 전체 로드맵, 그리고 이 자료를 보는 법을 한눈에 확인할 수 있습니다.</p>
     <div class="hbtns">
-      <a class="pbtn primary" href="#files">파일 구성 안내</a>
+      <a class="pbtn primary" href="week1/index.html">1주차부터 시작하기 →</a>
       <a class="pbtn" href="#map">주차별 내용</a>
+      <a class="pbtn" href="#files">자료 구성</a>
       <a class="pbtn" href="#road">15챕터 로드맵</a>
       <a class="pbtn" href="#how">이렇게 보면 좋아요</a>
     </div>
@@ -751,6 +752,12 @@ OV_FILES = """
     <div class="grid">
       <div class="card span">
         <div class="lbl"><span class="no">A</span>폴더 구조</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin:0 0 12px">
+          <a class="pbtn primary" href="week1/index.html">1주차</a>
+          <a class="pbtn" href="week2/index.html">2주차</a>
+          <a class="pbtn" href="week3/index.html">3주차</a>
+          <a class="pbtn" href="week4/index.html">4주차</a>
+        </div>
         <div class="calc">index.html                         ← 전체 안내
 
 week1/                            1주차 — 오리엔테이션 (데이터베이스와 첫 만남)
@@ -852,6 +859,7 @@ OV_MAP = """
           <div class="fact"><span>세부 4개</span>01 우리 생활 속 DB · 02 시트와의 차이 · 03 도구 살펴보기 · 04 습관과 보안</div>
           <div class="fact"><span>확인 문제</span>20문항 · 실습 모범 답안 2종</div>
         </div>
+        <p style="margin-top:12px"><a class="pbtn primary" href="week1/index.html">1주차 표지 열기 →</a></p>
       </div>
       <div class="card"><div class="lbl"><span class="no">2주차</span>데이터와 데이터베이스</div>
         <p class="sub">값과 정보를 가르는 기준, 데이터베이스의 네 조건과 네 가지 특징, 형태·특성에 따른 분류와 네 가지 척도.</p>
@@ -859,6 +867,7 @@ OV_MAP = """
           <div class="fact"><span>세부 4개</span>01 데이터와 정보 · 02 정의와 특징 · 03 데이터의 분류 · 04 파이썬 실습</div>
           <div class="fact"><span>확인 문제</span>8문항 · 실습 모범 답안 1종</div>
         </div>
+        <p style="margin-top:12px"><a class="pbtn primary" href="week2/index.html">2주차 표지 열기 →</a></p>
       </div>
       <div class="card"><div class="lbl"><span class="no">3주차</span>데이터베이스 관리 시스템</div>
         <p class="sub">파일 시스템이 무너지는 다섯 지점에서 DBMS의 등장 배경을 읽고, 정의·조작·제어 세 기능과 네 세대 발전사를 따라갑니다.</p>
@@ -866,6 +875,7 @@ OV_MAP = """
           <div class="fact"><span>세부 5개</span>01 파일 시스템 · 02 DBMS 등장 · 03 정의와 기능 · 04 가치와 사례 · 05 발전사</div>
           <div class="fact"><span>확인 문제</span>6문항 · 실습 모범 답안 1종</div>
         </div>
+        <p style="margin-top:12px"><a class="pbtn primary" href="week3/index.html">3주차 표지 열기 →</a></p>
       </div>
       <div class="card"><div class="lbl"><span class="no">4주차</span>데이터베이스 시스템과 설계</div>
         <p class="sub">3단계 스키마와 데이터 독립성으로 시스템을 이해하고, 데이터 모델링과 관계 모델로 설계의 뼈대를 세운 뒤 RPG 실무 프로젝트로 통과합니다.</p>
@@ -873,6 +883,7 @@ OV_MAP = """
           <div class="fact"><span>세부 5개</span>01 DB 시스템 · 02 데이터 모델링 · 03 쇼핑몰 ERD · 04 관계 모델 · 05 RPG 사례</div>
           <div class="fact"><span>확인 문제</span>24문항 · 실습 모범 답안 3종</div>
         </div>
+        <p style="margin-top:12px"><a class="pbtn primary" href="week4/index.html">4주차 표지 열기 →</a></p>
       </div>
       <div class="card span"><div class="lbl"><span class="no">전체</span>이어지는 주차</div>
         <p class="sub">정규화와 이상현상, SQL, 인덱스와 물리적 저장 구조, 트랜잭션과 동시성 제어, 회복과 보안, 분산 데이터베이스로 이어집니다.</p>
