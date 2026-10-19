@@ -1,0 +1,1050 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>4주차 정답과 채점 기준 | 데이터베이스 설계 · 4주차</title>
+<meta name="description" content="4주차 확인 문제 정답·해설·배점과 실습 모범 답안">
+<meta name="author" content="안상선 ((주)M-Robo 대표)">
+<meta property="og:title" content="4주차 정답과 채점 기준">
+<meta property="og:description" content="4주차 확인 문제 정답·해설·배점과 실습 모범 답안">
+<meta property="og:type" content="article">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;600;700&display=swap">
+<style>
+/* =========================================================
+   데이터베이스 설계 강의자료 — 공통 디자인 시스템
+   야간 연구실(Night Lab) 다크 테마 · 픽셀 라벨 + 본문 산세리프
+   © 2025 데이터베이스 설계 강의 | 안상선  (CC BY-NC 4.0)
+   ========================================================= */
+:root{
+  --night:#1b1533; --deep:#120e24; --panel:#261e45; --panel2:#2e2652;
+  --line:#3d3170; --line2:#4d3f8c;
+  --text:#efe9ff; --muted:#b5abd6; --dim:#8f85b8;
+  --violet:#b07cff; --pink:#ff86b8; --red:#ef5b5b; --cyan:#57d0dc;
+  --amber:#ffc65c; --green:#5fd39a;
+  --px:"Galmuri11","Galmuri9","DungGeunMo","IBM Plex Sans KR",monospace;
+  --body:"IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR",system-ui,sans-serif;
+  --mono:"JetBrains Mono","D2Coding",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --r:14px; --r2:10px;
+  --sh:0 10px 30px rgba(8,4,22,.55);
+}
+@font-face{font-family:"Galmuri11";font-weight:400;font-style:normal;font-display:swap;
+  src:url("https://cdn.jsdelivr.net/gh/quiple/galmuri/dist/Galmuri11.woff2") format("woff2");}
+@font-face{font-family:"Galmuri9";font-weight:400;font-style:normal;font-display:swap;
+  src:url("https://cdn.jsdelivr.net/gh/quiple/galmuri/dist/Galmuri9.woff2") format("woff2");}
+@font-face{font-family:"DungGeunMo";font-weight:400;font-style:normal;font-display:swap;
+  src:url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/DungGeunMo.woff") format("woff");}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth; scroll-padding-top:74px}
+body{
+  margin:0; background:var(--night); color:var(--text);
+  font-family:var(--body); font-size:16.5px; line-height:1.78;
+  -webkit-font-smoothing:antialiased; word-break:keep-all;
+  background-image:
+    radial-gradient(1200px 600px at 12% -6%, rgba(176,124,255,.16), transparent 62%),
+    radial-gradient(900px 500px at 92% 4%, rgba(87,208,220,.10), transparent 60%),
+    linear-gradient(180deg,#1b1533 0%,#170f2c 40%,#120e24 100%);
+  background-attachment:fixed;
+}
+img{max-width:100%}
+a{color:var(--cyan); text-decoration:none; border-bottom:1px dotted rgba(87,208,220,.5)}
+a:hover{color:#8ee9f2; border-bottom-color:#8ee9f2}
+code{font-family:var(--mono); font-size:.92em; background:rgba(87,208,220,.10);
+  border:1px solid rgba(87,208,220,.22); border-radius:6px; padding:1px 6px; color:#9fe8ef; white-space:nowrap}
+::selection{background:rgba(176,124,255,.42)}
+
+/* ---------- 상단 바 ---------- */
+.topbar{position:sticky; top:0; z-index:60; backdrop-filter:blur(12px);
+  background:linear-gradient(180deg,rgba(18,14,36,.96),rgba(18,14,36,.82));
+  border-bottom:1px solid var(--line)}
+.topbar .tb{max-width:1180px; margin:0 auto; padding:9px 20px; display:flex; align-items:center; gap:14px}
+.brand{display:flex; align-items:center; gap:9px; font-family:var(--px); font-size:13px; letter-spacing:.4px; color:var(--text)}
+.brand .dot{width:9px;height:9px;border-radius:50%;background:var(--green);box-shadow:0 0 10px var(--green);animation:blink 2.2s infinite}
+@keyframes blink{0%,92%{opacity:1}94%,100%{opacity:.25}}
+.brand small{font-family:var(--body); font-size:11.5px; color:var(--dim); letter-spacing:0}
+.tb-sp{flex:1}
+.tb a.tb-l{font-family:var(--px); font-size:11.5px; color:var(--muted); border:0; padding:5px 9px; border-radius:7px}
+.tb a.tb-l:hover{background:var(--panel); color:var(--text)}
+.tocbtn{font-family:var(--px); font-size:11.5px; background:var(--panel); color:var(--text);
+  border:1px solid var(--line2); border-radius:8px; padding:6px 11px; cursor:pointer}
+.tocbtn:hover{border-color:var(--violet)}
+.tocmenu{position:absolute; right:20px; top:52px; width:min(430px,92vw); max-height:74vh; overflow:auto;
+  background:linear-gradient(180deg,#241d44,#1d1738); border:1px solid var(--line2); border-radius:var(--r);
+  box-shadow:var(--sh); padding:10px; display:none}
+.tocmenu.on{display:block}
+.tocmenu a{display:flex; gap:10px; align-items:baseline; border:0; color:var(--text); padding:7px 9px; border-radius:8px; font-size:14px}
+.tocmenu a:hover{background:rgba(176,124,255,.14)}
+.tocmenu a i{font-family:var(--px); font-style:normal; font-size:11px; color:var(--violet); min-width:22px}
+.tocmenu .toc-h{font-family:var(--px); font-size:11px; color:var(--dim); padding:8px 9px 4px; border-top:1px dashed var(--line); margin-top:6px}
+.prog{position:absolute; left:0; bottom:-1px; height:2px; width:0; background:linear-gradient(90deg,var(--violet),var(--cyan))}
+
+/* ---------- 히어로 ---------- */
+.hero{position:relative; overflow:hidden; border-bottom:1px solid var(--line);
+  background:linear-gradient(160deg,#241b46 0%,#1b1533 46%,#150f2b 100%)}
+.hero::before{content:""; position:absolute; inset:0; opacity:.5; pointer-events:none;
+  background-image:linear-gradient(rgba(176,124,255,.09) 1px,transparent 1px),
+                   linear-gradient(90deg,rgba(176,124,255,.09) 1px,transparent 1px);
+  background-size:34px 34px; mask-image:radial-gradient(760px 380px at 26% 30%,#000,transparent 76%)}
+.hero::after{content:""; position:absolute; inset:0; pointer-events:none; opacity:.35;
+  background:repeating-linear-gradient(180deg,rgba(255,255,255,.03) 0 1px,transparent 1px 4px)}
+.hero .hwrap{position:relative; max-width:1180px; margin:0 auto; padding:52px 20px 42px}
+.crumb{font-family:var(--px); font-size:11.5px; color:var(--dim); letter-spacing:.6px; margin-bottom:14px}
+.crumb b{color:var(--violet)}
+.hero h1{margin:0 0 12px; font-size:clamp(25px,3.5vw,40px); line-height:1.28; letter-spacing:-.4px; font-weight:700}
+.hero h1 em{font-style:normal; color:var(--violet); text-shadow:0 0 26px rgba(176,124,255,.45)}
+.hero .lead{margin:0; max-width:74ch; color:#d9d1f5; font-size:16.5px}
+.hbtns{display:flex; flex-wrap:wrap; gap:9px; margin-top:22px}
+.pbtn{font-family:var(--px); font-size:12px; border:1px solid var(--line2); background:var(--panel);
+  color:var(--text); border-radius:9px; padding:9px 14px; cursor:pointer; transition:.16s; border-bottom:1px solid var(--line2)}
+.pbtn:hover{transform:translateY(-2px); border-color:var(--violet); box-shadow:0 6px 18px rgba(176,124,255,.25)}
+.pbtn.primary{background:linear-gradient(135deg,var(--violet),#8a54e8); border-color:transparent; color:#170f2c; font-weight:700}
+.hero-keys{display:flex; flex-wrap:wrap; gap:8px; margin-top:20px}
+.kchip{font-family:var(--px); font-size:11px; color:var(--muted); background:rgba(38,30,69,.85);
+  border:1px solid var(--line); border-radius:999px; padding:5px 11px}
+
+/* ---------- 레이아웃 ---------- */
+.wrap{max-width:1180px; margin:0 auto; padding:0 20px}
+.part{padding:56px 0 8px; border-top:1px dashed var(--line)}
+.part:first-of-type{border-top:0}
+.part-head{margin-bottom:22px}
+.part-no{display:inline-flex; align-items:center; gap:8px; font-family:var(--px); font-size:12px;
+  color:var(--violet); letter-spacing:1px; margin-bottom:9px}
+.part-no::before{content:""; width:20px; height:2px; background:var(--violet); display:block}
+.part-head h2{margin:0 0 8px; font-size:clamp(21px,2.5vw,28px); line-height:1.34; letter-spacing:-.3px}
+.part-head h2 .en{display:block; font-family:var(--mono); font-size:12.5px; font-weight:400;
+  color:var(--dim); letter-spacing:.4px; margin-top:7px}
+.part-head p{margin:0; color:var(--muted); max-width:80ch}
+.grid{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px}
+.grid.one{grid-template-columns:minmax(0,1fr)}
+.grid.three{grid-template-columns:repeat(3,minmax(0,1fr))}
+.card{background:linear-gradient(180deg,var(--panel),#221a40); border:1px solid var(--line);
+  border-radius:var(--r); padding:20px 22px; box-shadow:var(--sh)}
+.card.span{grid-column:1/-1}
+.card.prose{background:linear-gradient(180deg,#241c46,#1f1839)}
+.lbl{display:flex; align-items:center; gap:9px; font-family:var(--px); font-size:12px; color:var(--violet);
+  letter-spacing:.5px; margin-bottom:13px}
+.lbl .no{display:inline-flex; align-items:center; justify-content:center; min-width:22px; height:22px;
+  padding:0 6px; background:rgba(176,124,255,.16); border:1px solid rgba(176,124,255,.45);
+  border-radius:7px; font-size:11px; color:#d9c4ff}
+.card h3{margin:2px 0 10px; font-size:18px}
+.card h4{margin:16px 0 8px; font-size:15.5px; color:#dcd3fb}
+.card p{margin:0 0 11px}
+.card p:last-child{margin-bottom:0}
+.card ul,.card ol{margin:8px 0 12px; padding-left:1.25em}
+.card li{margin:5px 0}
+.hl{background:linear-gradient(transparent 62%,rgba(255,198,92,.42) 0); padding:0 2px; color:#fff2d4}
+.hl.v{background:linear-gradient(transparent 62%,rgba(176,124,255,.5) 0)}
+.sub{color:var(--muted); font-size:15px}
+.src{font-size:12.5px; color:var(--dim); margin-top:12px; border-top:1px dashed var(--line); padding-top:10px}
+
+/* ---------- 표 ---------- */
+.twrap{overflow-x:auto; margin:14px 0; border:1px solid var(--line); border-radius:var(--r2)}
+table.t{width:100%; border-collapse:collapse; font-size:14.5px; min-width:460px}
+table.t caption{caption-side:top; text-align:left; font-family:var(--px); font-size:11.5px;
+  color:var(--dim); padding:10px 12px 8px; border-bottom:1px solid var(--line)}
+table.t th,table.t td{padding:10px 13px; border-bottom:1px solid rgba(61,49,112,.6); text-align:left; vertical-align:top}
+table.t thead th{background:rgba(176,124,255,.13); font-family:var(--px); font-size:12px;
+  color:#e2d6ff; letter-spacing:.3px; border-bottom:1px solid var(--line2); white-space:nowrap}
+table.t tbody tr:nth-child(even){background:rgba(46,38,82,.4)}
+table.t tbody tr:hover{background:rgba(176,124,255,.10)}
+table.t td.ts{white-space:nowrap; font-family:var(--mono); font-size:13px}
+table.t td.tacc{color:var(--amber); font-weight:600}
+table.t td.tn{text-align:right; font-family:var(--mono)}
+table.t .ok{color:var(--green)} table.t .bad{color:var(--red)}
+table.t .pk{color:var(--amber); font-weight:700}
+table.t .fk{color:var(--cyan)}
+
+/* ---------- 팩트/장단점 ---------- */
+.facts{display:grid; gap:8px; margin-top:12px}
+.fact{display:flex; gap:11px; align-items:flex-start; background:rgba(18,14,36,.55);
+  border:1px solid var(--line); border-left:3px solid var(--violet); border-radius:9px; padding:9px 12px; font-size:14.5px}
+.fact span{font-family:var(--px); font-size:11px; color:var(--violet); min-width:74px; padding-top:3px}
+.feat{display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:14px}
+.pro,.con{border-radius:var(--r2); padding:13px 15px; font-size:14.5px}
+.pro{background:rgba(95,211,154,.09); border:1px solid rgba(95,211,154,.35)}
+.con{background:rgba(239,91,91,.09); border:1px solid rgba(239,91,91,.35)}
+.pro b,.con b{display:block; font-family:var(--px); font-size:11.5px; margin-bottom:7px}
+.pro b{color:var(--green)} .con b{color:#ff9d9d}
+.pro ul,.con ul{margin:0; padding-left:1.1em}
+.usecase{background:rgba(87,208,220,.08); border:1px dashed rgba(87,208,220,.45);
+  border-radius:var(--r2); padding:13px 15px; font-size:14.5px; margin-top:12px}
+.usecase b{color:var(--cyan); font-family:var(--px); font-size:11.5px; display:block; margin-bottom:6px}
+
+/* ---------- 콜아웃 ---------- */
+.callout{border-radius:var(--r2); padding:13px 16px 13px 15px; margin:14px 0; font-size:15px;
+  border:1px solid var(--line2); border-left-width:4px; background:rgba(18,14,36,.5)}
+.callout b{font-family:var(--px); font-size:11.5px; display:block; margin-bottom:5px}
+.callout.warn{border-left-color:var(--red); background:rgba(239,91,91,.08)} .callout.warn b{color:#ff9d9d}
+.callout.tip{border-left-color:var(--green); background:rgba(95,211,154,.08)} .callout.tip b{color:var(--green)}
+.callout.info{border-left-color:var(--cyan); background:rgba(87,208,220,.08)} .callout.info b{color:var(--cyan)}
+.callout.key{border-left-color:var(--amber); background:rgba(255,198,92,.08)} .callout.key b{color:var(--amber)}
+
+/* ---------- 다이어그램 / 수식 ---------- */
+.diagram{background:rgba(18,14,36,.6); border:1px solid var(--line); border-radius:var(--r2);
+  padding:16px; margin:14px 0; overflow-x:auto}
+.diagram svg{display:block; margin:0 auto; max-width:100%; height:auto}
+.dcap{font-size:13px; color:var(--dim); text-align:center; margin-top:9px}
+.eq{font-family:var(--mono); background:rgba(18,14,36,.7); border:1px solid var(--line);
+  border-left:3px solid var(--cyan); border-radius:8px; padding:11px 14px; margin:12px 0;
+  font-size:14.5px; color:#c8f2f6; overflow-x:auto}
+.calc{font-family:var(--mono); font-size:14px; background:rgba(18,14,36,.6); border-radius:8px;
+  padding:12px 14px; border:1px dashed var(--line); margin:12px 0; color:#d7cffb; line-height:1.9;
+  white-space:pre; overflow-x:auto; -webkit-overflow-scrolling:touch; tab-size:2}
+.calc em{color:var(--amber); font-style:normal}
+
+/* ---------- 코드 ---------- */
+.codebox{position:relative; margin:14px 0}
+.codebox .ctitle{font-family:var(--px); font-size:11.5px; color:var(--cyan);
+  background:rgba(87,208,220,.1); border:1px solid rgba(87,208,220,.3); border-bottom:0;
+  border-radius:9px 9px 0 0; padding:8px 13px; display:flex; align-items:center; gap:10px}
+.codebox .ctitle .sp{flex:1}
+.codebox pre{margin:0; background:#0e0b1d; border:1px solid var(--line); border-radius:0 0 9px 9px;
+  padding:16px 17px; overflow-x:auto; font-family:var(--mono); font-size:13.2px; line-height:1.75; color:#d6d0f2}
+.codebox.plain pre{border-radius:9px}
+.codebox pre .c{color:#7d74a8}          /* 주석 */
+.codebox pre .k{color:#ff86b8}          /* 키워드 */
+.codebox pre .s{color:#ffc65c}          /* 문자열 */
+.codebox pre .n{color:#8ee9f2}          /* 숫자/식별자 */
+.codebox pre .f{color:#b07cff}          /* 함수 */
+.codebox pre .sqlk{color:#ff86b8; font-weight:700}
+.btn{font-family:var(--px); font-size:11.5px; background:var(--panel2); color:var(--text);
+  border:1px solid var(--line2); border-radius:8px; padding:6px 11px; cursor:pointer; transition:.15s}
+.btn:hover{border-color:var(--violet); color:#fff}
+.btn.primary{background:linear-gradient(135deg,var(--violet),#8a54e8); border-color:transparent; color:#170f2c; font-weight:700}
+.btn.copy{position:absolute; right:10px; top:8px; z-index:2}
+.btn.done{background:rgba(95,211,154,.2); border-color:var(--green); color:var(--green)}
+pre.prompt-pre{background:#0d0a1b; border:1px solid var(--line); border-radius:9px; padding:18px;
+  overflow-x:auto; font-family:var(--mono); font-size:13px; line-height:1.72; color:#cfc7f0; white-space:pre-wrap}
+.promptbox .dlbar{display:flex; gap:8px; flex-wrap:wrap; margin-bottom:11px}
+
+/* ---------- 탭 ---------- */
+.tabs{display:flex; gap:8px; flex-wrap:wrap; margin:4px 0 16px; border-bottom:1px solid var(--line); padding-bottom:12px}
+.tab{font-family:var(--px); font-size:12px; background:transparent; color:var(--muted);
+  border:1px solid var(--line); border-radius:9px; padding:9px 14px; cursor:pointer; transition:.15s}
+.tab:hover{color:var(--text); border-color:var(--line2)}
+.tab[aria-selected="true"]{background:linear-gradient(135deg,rgba(176,124,255,.28),rgba(87,208,220,.18));
+  color:#fff; border-color:var(--violet)}
+.tabpanel{display:none}
+.tabpanel.on{display:block}
+
+/* ---------- 확인 문제 ---------- */
+.quiz .q{border-top:1px dashed var(--line); padding:15px 0 6px}
+.quiz .q:first-of-type{border-top:0; padding-top:4px}
+.qt{font-weight:600; margin:0 0 11px; font-size:15.5px}
+.opts{display:flex; flex-direction:column; gap:7px; margin-bottom:9px}
+.opts button{text-align:left; font-family:var(--body); font-size:14.5px; color:var(--text);
+  background:rgba(18,14,36,.55); border:1px solid var(--line); border-radius:9px; padding:9px 13px; cursor:pointer; transition:.15s}
+.opts button:hover{border-color:var(--line2); background:rgba(176,124,255,.09)}
+.opts button.ok{border-color:var(--green); background:rgba(95,211,154,.16); color:#d7ffe9}
+.opts button.no{border-color:var(--red); background:rgba(239,91,91,.14); color:#ffd9d9}
+.fb{font-size:14px; margin:0; min-height:0; color:var(--muted)}
+.fb.on{padding:10px 13px; border-radius:9px; background:rgba(18,14,36,.6); border:1px dashed var(--line)}
+.fb.ok{color:#c8ffe4; border-color:rgba(95,211,154,.5)} .fb.no{color:#ffd9d9; border-color:rgba(239,91,91,.5)}
+.qscore{font-family:var(--px); font-size:12px; color:var(--amber); margin-top:12px;
+  border-top:1px solid var(--line); padding-top:11px}
+
+/* ---------- 용어 사전 ---------- */
+.term{border-bottom:1px dashed var(--cyan); cursor:help; color:#bfeef3}
+.gl-group{margin:18px 0}
+.gl-group h4{font-family:var(--px); font-size:12px; color:var(--cyan); letter-spacing:.5px; margin:0 0 10px}
+.gl-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:12px}
+.gl-card{background:linear-gradient(180deg,#241c46,#1e1738); border:1px solid var(--line);
+  border-radius:var(--r2); padding:14px 16px}
+.gl-card b{display:block; font-size:15.5px; color:#e6dcff; margin-bottom:8px}
+.gl-an,.gl-mean{margin:0 0 8px; font-size:14px; color:var(--muted)}
+.gl-an span,.gl-mean span{font-family:var(--px); font-size:10.5px; border-radius:5px; padding:2px 7px; margin-right:7px}
+.gl-an span{background:rgba(255,134,184,.16); color:var(--pink)}
+.gl-mean span{background:rgba(87,208,220,.16); color:var(--cyan)}
+.gl-an:last-child,.gl-mean:last-child{margin-bottom:0}
+#gttip{position:fixed; z-index:90; max-width:340px; background:#1a1436; border:1px solid var(--line2);
+  border-radius:10px; padding:11px 13px; font-size:13.5px; box-shadow:var(--sh); display:none; pointer-events:none}
+#gttip b{color:var(--cyan); display:block; margin-bottom:4px; font-size:13px}
+
+/* ---------- 캐릭터 ---------- */
+.crew{display:grid; grid-template-columns:repeat(auto-fit,minmax(196px,1fr)); gap:16px; margin-top:16px}
+.mem{background:linear-gradient(180deg,#241c46,#1c1636); border:1px solid var(--line);
+  border-radius:var(--r); padding:16px; text-align:center; display:flex; flex-direction:column; align-items:center}
+.mem .stagebox{height:186px; display:flex; align-items:flex-end; justify-content:center; margin-bottom:10px}
+.mem .stagebox img{height:186px; width:auto; image-rendering:pixelated; filter:drop-shadow(0 8px 16px rgba(8,4,22,.6))}
+.mem h3{margin:0 0 6px; font-size:16px}
+.mem .role{font-family:var(--px); font-size:10.5px; color:var(--dim); letter-spacing:.4px; margin-bottom:8px}
+.mem .say{font-size:13.6px; color:var(--muted); margin:0 0 12px; min-height:44px}
+.mem .pose{display:flex; flex-wrap:wrap; gap:5px; justify-content:center}
+.mem .pose button{font-family:var(--px); font-size:10.5px; background:rgba(18,14,36,.6); color:var(--muted);
+  border:1px solid var(--line); border-radius:7px; padding:4px 8px; cursor:pointer}
+.mem .pose button:hover{color:var(--text); border-color:var(--line2)}
+.mem .pose button[aria-pressed="true"]{background:rgba(176,124,255,.24); color:#fff; border-color:var(--violet)}
+.mem.doc{border-color:rgba(87,208,220,.4)} .mem.asst{border-color:rgba(255,134,184,.4)}
+.mem.fly{border-color:rgba(255,198,92,.4)} .mem.robo{border-color:rgba(176,124,255,.55)}
+/* 페이지 안 캐릭터 한 줄 (인라인) */
+.cameo{display:flex; gap:14px; align-items:flex-end; background:rgba(18,14,36,.5);
+  border:1px solid var(--line); border-radius:var(--r2); padding:13px 15px; margin:14px 0}
+.cameo img{height:96px; width:auto; image-rendering:pixelated; flex:0 0 auto}
+.cameo .bub{flex:1}
+.cameo .who{font-family:var(--px); font-size:11px; color:var(--violet); margin-bottom:5px}
+.cameo p{margin:0; font-size:14.6px; color:#ded6f7}
+.cameo.robo .who{color:var(--pink)}
+
+/* ---------- 단계 애니메이션 ---------- */
+.anim{background:rgba(18,14,36,.6); border:1px solid var(--line); border-radius:var(--r2); padding:16px; margin:16px 0}
+.anim-stage{position:relative; min-height:180px}
+.anim-layer{display:none; animation:fade .35s ease}
+.anim-layer.on{display:block}
+@keyframes fade{from{opacity:0; transform:translateY(6px)}to{opacity:1; transform:none}}
+.anim-ctl{display:flex; align-items:center; gap:9px; margin-top:13px; flex-wrap:wrap}
+.anim-ctl .step-txt{font-family:var(--px); font-size:11.5px; color:var(--dim); min-width:74px}
+.anim-steps{list-style:none; margin:12px 0 0; padding:0; display:grid; gap:6px}
+.anim-steps li{font-size:14px; color:var(--dim); padding:8px 12px; border-radius:8px;
+  border:1px dashed transparent; transition:.2s}
+.anim-steps li.on{color:var(--text); background:rgba(176,124,255,.12); border-color:rgba(176,124,255,.45)}
+.anim-params{display:flex; flex-wrap:wrap; gap:14px; margin:12px 0; font-size:13.5px; color:var(--muted)}
+.anim-params label{display:flex; align-items:center; gap:8px; font-family:var(--px); font-size:11px}
+.anim-params input[type=range]{accent-color:var(--violet); width:132px}
+.anim-cap{font-size:13px; color:var(--dim); margin-top:10px; text-align:center}
+
+/* ---------- ERD 노드 ---------- */
+.erd{display:flex; flex-wrap:wrap; gap:14px; align-items:flex-start; justify-content:center; margin:14px 0}
+.ent{min-width:168px; background:#1a1436; border:1.5px solid var(--line2); border-radius:10px; overflow:hidden}
+.ent .en{font-family:var(--px); font-size:11.5px; background:rgba(176,124,255,.2); padding:7px 11px; color:#e8dcff; border-bottom:1px solid var(--line2)}
+.ent ul{list-style:none; margin:0; padding:7px 0}
+.ent li{font-family:var(--mono); font-size:12.5px; padding:3px 11px; color:#cfc7f0; display:flex; justify-content:space-between; gap:10px}
+.ent li.pk{color:var(--amber)} .ent li.fk{color:var(--cyan)}
+.ent li i{font-style:normal; color:var(--dim); font-size:11px}
+.rel{font-family:var(--px); font-size:11px; color:var(--pink); align-self:center}
+
+/* ---------- 체크리스트 / 단계 ---------- */
+.checklist{list-style:none; margin:12px 0; padding:0; display:grid; gap:7px}
+.checklist li{position:relative; padding-left:30px; font-size:14.6px; color:#ded6f7}
+.checklist li::before{content:"☐"; position:absolute; left:4px; top:-1px; color:var(--violet); font-size:17px}
+ol.steps{counter-reset:s; list-style:none; margin:12px 0; padding:0}
+ol.steps li{counter-increment:s; position:relative; padding:9px 0 9px 42px; border-bottom:1px dashed var(--line); font-size:14.8px}
+ol.steps li:last-child{border-bottom:0}
+ol.steps li::before{content:counter(s); position:absolute; left:0; top:8px; width:26px; height:26px;
+  display:flex; align-items:center; justify-content:center; font-family:var(--px); font-size:11.5px;
+  background:rgba(176,124,255,.18); border:1px solid rgba(176,124,255,.5); border-radius:8px; color:#e0cfff}
+ol.steps li b{color:#fff; display:block; margin-bottom:2px}
+
+/* ---------- 파이프라인 / 흐름 ---------- */
+.flow{display:flex; flex-wrap:wrap; gap:10px; align-items:center; margin:14px 0}
+.fbox{background:rgba(38,30,69,.85); border:1px solid var(--line2); border-radius:10px;
+  padding:11px 14px; font-size:14px; text-align:center; min-width:112px}
+.fbox b{display:block; font-family:var(--px); font-size:11px; color:var(--violet); margin-bottom:4px}
+.fbox.hot{border-color:var(--violet); box-shadow:0 0 0 3px rgba(176,124,255,.12)}
+.farr{color:var(--violet); font-family:var(--px); font-size:14px}
+
+/* ---------- 요약/마무리 ---------- */
+.tiles{display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:12px; margin:16px 0}
+.tile{background:linear-gradient(180deg,#241c46,#1d1738); border:1px solid var(--line);
+  border-radius:var(--r2); padding:14px 16px}
+.tile .tn{font-family:var(--px); font-size:22px; color:var(--violet); display:block; margin-bottom:5px}
+.tile p{margin:0; font-size:14px; color:var(--muted)}
+.author{display:flex; gap:18px; align-items:center; flex-wrap:wrap; background:linear-gradient(160deg,#241c46,#1b1533);
+  border:1px solid var(--line2); border-radius:var(--r); padding:20px 22px}
+.author .ph{width:74px; height:74px; border-radius:50%; background:linear-gradient(135deg,var(--violet),var(--cyan));
+  display:flex; align-items:center; justify-content:center; font-family:var(--px); font-size:22px; color:#150f2b; flex:0 0 auto}
+.author img.ph{width:92px; height:92px; border-radius:18px; flex:0 0 auto; object-fit:cover; object-position:50% 6%;
+  background:linear-gradient(150deg,rgba(176,124,255,.30),rgba(87,208,220,.20)); border:1px solid var(--line2);
+  image-rendering:pixelated}
+.author .ai{flex:1; min-width:240px}
+.author h3{margin:0 0 6px; font-size:18px}
+.author p{margin:0 0 5px; font-size:14.5px; color:var(--muted)}
+.outro{text-align:center; padding:56px 0 76px}
+.outro h2{font-family:var(--px); font-size:22px; margin:0 0 12px; color:var(--violet)}
+.outro p{color:var(--muted); max-width:70ch; margin:0 auto 18px}
+.pager{display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-top:26px}
+
+/* ---------- 푸터 ---------- */
+footer{border-top:1px solid var(--line); background:rgba(18,14,36,.7); padding:26px 0; margin-top:20px}
+footer .wrap{display:flex; gap:14px; justify-content:space-between; flex-wrap:wrap; align-items:center;
+  font-size:13px; color:var(--dim)}
+footer .lic{font-family:var(--px); font-size:11px}
+
+/* ---------- 반응형 ---------- */
+@media (max-width:900px){
+  .grid,.grid.three{grid-template-columns:minmax(0,1fr)}
+  .feat{grid-template-columns:1fr}
+  .hero .hwrap{padding:38px 18px 32px}
+  .part{padding:40px 0 6px}
+  .cameo{flex-direction:column; align-items:flex-start}
+  .cameo img{height:78px}
+}
+@media (max-width:560px){
+  body{font-size:16px}
+  .card{padding:16px 15px}
+  .wrap{padding:0 15px}
+  .tb a.tb-l{display:none}
+}
+@media print{
+  body{background:#fff; color:#111; background-image:none}
+  .topbar,.pbtn,.btn,.anim-ctl,.mem .pose,.hbtns,.pager{display:none!important}
+  .card,.gl-card,.mem,.tile,.anim,.codebox pre,.prompt-pre{background:#fff!important; border-color:#bbb!important; box-shadow:none!important}
+  .part{page-break-inside:avoid; border-top:1px solid #ccc}
+  .part-head h2 .en,.src,.sub{color:#555}
+  a{color:#000; border:0}
+  .card,.tile,.cameo{break-inside:avoid}
+  table.t{min-width:0}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important; transition:none!important}}
+
+/* ── 교육자용 정답 페이지 ─────────────────────────── */
+.anslist{display:grid; gap:12px; margin:14px 0}
+.ans-group{font-family:var(--px); font-size:12.5px; color:var(--violet); letter-spacing:.02em;
+  margin:16px 0 -2px; padding-bottom:7px; border-bottom:1px solid var(--line)}
+.ans-group:first-child{margin-top:4px}
+.ans{background:var(--panel); border:1px solid var(--line); border-radius:var(--r2); padding:14px 16px}
+.ans .aq{display:flex; gap:10px; align-items:flex-start; margin:0 0 10px; font-size:15.5px;
+  font-weight:700; color:var(--text); line-height:1.5}
+.ans .aq .qn{font-family:var(--px); font-size:12px; color:var(--cyan); flex:none; height:fit-content;
+  background:rgba(87,208,220,.12); border:1px solid rgba(87,208,220,.38); border-radius:6px; padding:2px 7px}
+.ans ul.ao{list-style:none; margin:0 0 11px; padding:0; display:grid; gap:5px}
+.ans ul.ao li{font-size:14px; color:var(--muted); border-left:2px solid var(--line); padding-left:10px; line-height:1.55}
+.ans ul.ao li.correct{color:var(--green); border-left-color:var(--green); font-weight:600}
+.ans .ae{font-size:14.2px; color:var(--muted); line-height:1.7; background:rgba(18,14,36,.55);
+  border-radius:var(--r2); padding:11px 13px}
+.ans .ae b{color:var(--text)}
+.ans .ae ul.checklist{margin:8px 0 0}
+.ans .score{font-family:var(--px); font-size:11.5px; color:var(--amber); margin-top:11px;
+  border-top:1px dashed var(--line); padding-top:9px; line-height:1.6}
+@media print{.ans,.ans .ae{background:#fff; border-color:#bbb} .ans .ae{color:#333} .ans .aq .qn{color:#444}}
+
+/* ── OVERVIEW: 링크 없는 항목 표시 ── */
+.topbar span.tb-l{cursor:default; opacity:.7}
+.topbar span.tb-l:hover{background:transparent; color:var(--dim)}
+.tocmenu .toc-dead{display:flex; gap:9px; align-items:baseline; padding:7px 12px; border-radius:8px;
+  color:var(--dim); font-size:13.5px; cursor:default; opacity:.72}
+.tocmenu .toc-dead i{font-family:var(--px); font-size:11.5px; color:var(--dim); flex:none; width:30px}
+
+/* ── 캐릭터 대화 (말풍선 교차) ─────────────────── */
+.talk{display:grid; gap:10px; margin:18px 0; padding:16px 16px 14px; border:1px solid var(--line);
+  border-radius:var(--r2); background:linear-gradient(180deg,#221b42,#1b1534)}
+.talk .line{display:flex; gap:12px; align-items:flex-start}
+.talk .line img{height:74px; width:auto; flex:0 0 auto; image-rendering:pixelated}
+.talk .line .tb{background:rgba(18,14,36,.62); border:1px solid var(--line); border-radius:12px;
+  padding:10px 13px; flex:1; min-width:0}
+.talk .line .who{font-family:var(--px); font-size:11.5px; margin-bottom:5px; color:var(--violet)}
+.talk .line .who i{font-style:normal; color:var(--dim); margin-left:7px; font-size:10.5px; letter-spacing:.02em}
+.talk .line p{margin:0; font-size:14.8px; color:#e6dfff; line-height:1.72}
+.talk .line.doc .who{color:var(--cyan)}
+.talk .line.asst .who{color:var(--amber)}
+.talk .line.fly .who{color:var(--green)}
+.talk .line.robo .who{color:var(--pink)}
+.talk .line.robo .tb{border-color:var(--line2); background:rgba(176,124,255,.09)}
+.talk .line.asst{flex-direction:row-reverse}
+.talk .line.asst .tb{border-color:rgba(255,198,92,.32)}
+.talk .line.asst .who{text-align:right}
+@media (max-width:640px){ .talk{padding:12px} .talk .line img{height:56px} .talk .line p{font-size:14px} }
+@media print{ .talk{background:#fff;border-color:#bbb} .talk .line .tb{background:#fff;border-color:#bbb}
+  .talk .line p{color:#222} }
+
+/* ── 추가 이미지 (히어로 · 일러스트 · 도식 · 아이콘) ─────── */
+.heroimg{display:block; width:100%; height:auto; margin:24px 0 0; border-radius:var(--r2);
+  border:1px solid var(--line2); box-shadow:0 18px 40px -24px #000}
+.figwrap{margin:0 0 30px}
+.figwrap .figimg{display:block; width:100%; height:auto; border-radius:var(--r2); border:1px solid var(--line2)}
+.figwrap .cap{display:flex; align-items:center; gap:8px; margin-top:10px; font-size:13px; color:var(--dim)}
+.figwrap .cap .capico{width:22px; height:22px; flex:none; opacity:.85}
+.diaimg{margin:16px 0 20px}
+.diaimg img{display:block; width:100%; height:auto; border-radius:var(--r2); border:1px solid var(--line)}
+.diaimg .cap{font-size:12.5px; color:var(--dim); margin-top:8px; padding-left:2px}
+.part-head img.ph-ico{display:block; width:32px; height:32px; margin:0 0 9px; opacity:.95}
+@media (max-width:640px){ .figwrap .cap{font-size:12px} .part-head img.ph-ico{width:26px;height:26px} }
+@media print{ .heroimg,.figwrap .figimg,.diaimg img{box-shadow:none; border-color:#bbb} }
+
+/* ── 넓은 ASCII 도식: 줄바꿈 대신 가로 스크롤 ── */
+.calc.scroll{white-space:pre; overflow-x:auto; -webkit-overflow-scrolling:touch}
+@media print{ .calc,.calc.scroll{white-space:pre-wrap; overflow:visible} }
+
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="tb">
+    <span class="brand"><span class="dot"></span>DB&nbsp;DESIGN<small>4주차 · 데이터베이스 시스템과 설계</small></span>
+    <span class="tb-sp"></span>
+    <a class="tb-l" href="index.html">표지</a><a class="tb-l" href="01_db_system.html">01</a><a class="tb-l" href="02_data_modeling.html">02</a><a class="tb-l" href="03_erd_practice.html">03</a><a class="tb-l" href="04_relational_model.html">04</a><a class="tb-l" href="05_rpg_case.html">05</a><a class="tb-l on" href="answers.html">정답</a>
+    <button class="tocbtn" type="button" aria-expanded="false" aria-controls="tocmenu">목차 ▾</button>
+  </div>
+  <div class="tocmenu" id="tocmenu"><div class="toc-h">이 페이지 목차</div><a href="#how"><i>안내</i><span>채점 기준 Scoring</span></a><a href="#a1"><i>정답</i><span>4주차 확인 문제 정답 Answer Key</span></a><a href="#lab"><i>실습</i><span>실습 과제 모범 답안 Lab Notes</span></a><a href="#grade"><i>채점</i><span>오답이 몰리는 지점 Common Mistakes</span></a><div class="toc-h">4주차 구성</div><a href="index.html"><i>표지</i><span>4주차 — 데이터베이스 시스템과 설계</span></a><a href="01_db_system.html"><i>01</i><span>데이터베이스 시스템과 3단계 구조</span></a><a href="02_data_modeling.html"><i>02</i><span>데이터 모델링과 개체·속성·관계</span></a><a href="03_erd_practice.html"><i>03</i><span>논리적 데이터 모델과 쇼핑몰 ERD</span></a><a href="04_relational_model.html"><i>04</i><span>관계 데이터 모델 — 릴레이션·키·무결성</span></a><a href="05_rpg_case.html"><i>05</i><span>실무 프로젝트 — RPG 용사의 전설</span></a><a href="answers.html"><i>✓</i><span>정답과 채점 기준</span></a></div>
+  <div class="prog"></div>
+</div>
+<header class="hero" id="top">
+  <div class="hwrap">
+    <div class="crumb">데이터베이스 설계 · <b>4주차</b> · <b>정답과 채점 기준</b></div>
+    <h1>확인 문제 <em>정답과 채점 기준</em></h1>
+    <p class="lead">학습자라면 각 편의 확인 문제를 먼저 풀어 본 뒤 여세요. 강사·튜터는 정답과 해설, 문항당 배점, 실습 과제의 모범 답안을 수업에 맞게 조정해 쓰면 됩니다.</p>
+    <div class="hbtns"><a class="pbtn primary" href="#how">채점 기준</a><a class="pbtn" href="#a1">정답</a><a class="pbtn" href="#lab">실습 모범 답안</a></div>
+    <div class="hero-keys"><span class="kchip">24문항</span><span class="kchip">48점 만점</span><span class="kchip">실습 모범 답안 3종</span></div>
+  </div>
+</header>
+
+
+<section class="part" id="how">
+  <div class="wrap">
+    <div class="part-head"><div class="part-no">안내</div>
+      <h2>채점 기준<span class="en">Scoring</span></h2>
+      <p>문항당 2점입니다. 정답만 고른 학습자보다 <b>이유를 말한 학습자</b>를 더 높게 봅니다.</p></div>
+    <div class="grid">
+      <div class="card span">
+        <div class="lbl"><span class="no">1</span>문항당 배점</div>
+        <ul class="checklist">
+          <li><b>2점</b> — 정답을 고르고, 그 이유를 해설의 핵심 논리로 한 문장 설명함</li>
+          <li><b>1점</b> — 정답만 고름 (이유를 말하지 못함)</li>
+          <li><b>1점</b> — 오답이지만 해설의 핵심 이유를 말함</li>
+          <li><b>0점</b> — 무응답이거나, 오답이고 이유도 다른 개념을 가리킴</li>
+        </ul>
+        <div class="callout key"><b>왜 오답에도 1점인가</b> — 이 자료의 확인 문제는 암기 시험이 아니라 <b>설계 판단 훈련</b>입니다. 근거를 말할 수 있으면 개념은 잡힌 것이므로 부분 점수를 줍니다.</div>
+      </div>
+      <div class="card span">
+        <div class="lbl"><span class="no">2</span>이 주차 배점표</div>
+        <table class="t"><thead><tr><th>구분</th><th>문항</th><th>배점</th></tr></thead><tbody><tr><td>4주차</td><td>4</td><td>8점</td></tr>
+        <tr><td>4주차</td><td>7</td><td>14점</td></tr>
+        <tr><td>4주차</td><td>5</td><td>10점</td></tr>
+        <tr><td>4주차</td><td>8</td><td>16점</td></tr>
+        <tr><td><b>합계</b></td><td><b>24</b></td><td><b>48점</b></td></tr></tbody></table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="part" id="a1"><div class="wrap">
+  <div class="part-head"><div class="part-no">정답</div><h2>4주차 확인 문제 정답<span class="en">Answer Key</span></h2><p>24문항 · 문항당 2점 · 총 48점</p></div>
+  <div class="anslist">
+      <div class="ans-group">✓ 확인 문제</div>
+      <div class="ans">
+        <p class="aq"><span class="qn">01</span><span>Q1. 개념 스키마에서 &#x27;연락처&#x27;를 &#x27;전화번호&#x27;로 바꿀 때 올바른 조치는?</span></p>
+        <ul class="ao">
+          <li>테이블을 새로 만들고 응용 프로그램을 수정한다</li>
+          <li class="correct">외부/개념 사상 정보만 수정한다 ✔ 정답</li>
+          <li>내부 스키마와 인덱스를 다시 만든다</li>
+        </ul>
+        <div class="ae"><b>해설</b> 개념 스키마의 이름이 바뀌면 외부/개념 사상 정보만 수정합니다. 테이블 자체를 고치는 것이 아니므로 외부 스키마와 응용 프로그램은 영향을 받지 않습니다.</div>
+        <div class="score">배점 2점 · 정답을 고르고 이유를 한 문장으로 말하면 2점, 정답만 고르면 1점, 오답이어도 해설의 핵심 이유를 말하면 1점.</div>
+      </div>
+      <div class="ans">
+        <p class="aq"><span class="qn">02</span><span>Q2. 인덱스를 추가하거나 저장 매체를 교체해도 개념 스키마가 영향을 받지 않는 성질은?</span></p>
+        <ul class="ao">
+          <li>논리적 데이터 독립성</li>
+          <li>참조 무결성</li>
+          <li class="correct">물리적 데이터 독립성 ✔ 정답</li>
+        </ul>
+        <div class="ae"><b>해설</b> 물리적 데이터 독립성은 내부 스키마가 변경되어도 개념 스키마에 영향이 없는 성질입니다. 논리적 독립성은 개념↔외부 사이입니다.</div>
+        <div class="score">배점 2점 · 정답을 고르고 이유를 한 문장으로 말하면 2점, 정답만 고르면 1점, 오답이어도 해설의 핵심 이유를 말하면 1점.</div>
+      </div>
+      <div class="ans">
+        <p class="aq"><span class="qn">03</span><span>Q3. 사용자의 데이터 처리 요구를 해석해서 처리하는 DBMS 구성 요소는?</span></p>
+        <ul class="ao">
+          <li class="correct">질의처리기 ✔ 정답</li>
+          <li>저장데이터 관리자</li>
+          <li>데이터 사전</li>
+        </ul>
+        <div class="ae"><b>해설</b> 사용자의 데이터 처리 요구를 해석해서 처리하는 역할은 질의처리기입니다. 저장데이터 관리자는 디스크의 데이터베이스와 데이터사전을 관리합니다.</div>
+        <div class="score">배점 2점 · 정답을 고르고 이유를 한 문장으로 말하면 2점, 정답만 고르면 1점, 오답이어도 해설의 핵심 이유를 말하면 1점.</div>
+      </div>
+      <div class="ans">
+        <p class="aq"><span class="qn">04</span><span>Q4. 데이터 사전에 대한 설명으로 옳지 않은 것은?</span></p>
+        <ul class="ao">
+          <li>스키마와 사상 정보를 저장한다</li>
+          <li class="correct">사용자가 자유롭게 수정·삭제할 수 있다 ✔ 정답</li>
+          <li>시스템 카탈로그라고도 한다</li>
+        </ul>
+        <div class="ae"><b>해설</b> 데이터 사전(시스템 카탈로그)은 스키마·사상 정보를 담은 메타데이터로, 사용자는 접근만 가능하고 수정·삭제 권한은 없습니다.</div>
+        <div class="score">배점 2점 · 정답을 고르고 이유를 한 문장으로 말하면 2점, 정답만 고르면 1점, 오답이어도 해설의 핵심 이유를 말하면 1점.</div>
+      </div>
+      <div class="ans">
+        <p class="aq"><span class="qn">05</span><span>Q1. 생년월일에서 계산되는 &#x27;나이&#x27;는 어떤 속성인가요?</span></p>
+        <ul class="ao">
+          <li>다중값 속성</li>
+          <li>복합 속성</li>
+          <li class="correct">유도 속성 ✔ 정답</li>
+        </ul>
+        <div class="ae"><b>해설</b> 유도 속성은 다른 속성 값에서 계산해 낼 수 있는 속성입니다. 나이는 생년월일에서 계산되므로 유도 속성이고, ERD에서는 점선 타원으로 표기합니다.</div>
+        <div class="score">배점 2점 · 정답을 고르고 이유를 한 문장으로 말하면 2점, 정답만 고르면 1점, 오답이어도 해설의 핵심 이유를 말하면 1점.</div>
+      </div>
+      <div class="ans">
+        <p class="aq"><span class="qn">06</span><span>Q2. ERD에서 이중 타원 으로 표기하는 속성은?</span></p>
+        <ul class="ao">
+          <li class="correct">다중값 속성 ✔ 정답</li>
+          <li>유도 속성</li>
+          <li>키 속성</li>
+        </ul>
+        <div class="ae"><b>해설</b> 다중값 속성은 한 개체가 여러 값을 가질 수 있는 속성으로 ERD에서 이중 타원으로 표기합니다. 전화번호·취미가 대표적입니다.</div>
+        <div class="score">배점 2점 · 정답을 고르고 이유를 한 문장으로 말하면 2점, 정답만 고르면 1점, 오답이어도 해설의 핵심 이유를 말하면 1점.</div>
+      </div>
+      <div class="ans">
+        <p class="aq"><span class="qn">07</span><span>Q3. &quot;한 부서에 여러 사원이 속한다&quot;의 관계 유형은?</span></p>
+        <ul class="ao">
+          <li>1:1</li>
+          <li class="correct">1:N ✔ 정답</li>
+          <li>N:M</li>
+        </ul>
+        <div class="ae"><b>해설</b> 한 부서에 여러 사원이 속하고, 사원은 하나의 부서에만 속하므로 1:N(일대다)입니다. 1:N은 실무에서 가장 흔한 관계입니다.</div>
+        <div class="score">배점 2점 · 정답을 고르고 이유를 한 문장으로 말하면 2점, 정답만 고르면 1점, 오답이어도 해설의 핵심 이유를 말하면 1점.</div>
+      </div>
+      <div class="ans">
+        <p class="aq"><span class="qn">08</span><span>Q4. 다대다 관계를 릴레이션으로 옮길 때 반드시 필요한 것은?</span></p>
+        <ul class="ao">
+          <li>한쪽 개체를 삭제한다</li>
+          <li>속성을 모두 제거한다</li>
+          <li class="correct">관계를 나타내는 별도 테이블을 만든다 ✔ 정답</li>
+        </ul>
+        <div class="ae"><b>해설</b> 고객과 책처럼 양쪽 모두 여러 개와 연결되는 다대다 관계에서는 구매일·수량 같은 속성이 관계에 붙고, 릴레이션으로 옮길 때 별도 테이블이 필요합니다.</div>
+        <div class="score">배점 2점 · 정답을 고르고 이유를 한 문장으로 말하면 2점, 정답만 고르면 1점, 오답이어도 해설의 핵심 이유를 말하면 1점.</div>
+      </div>
+      <div class="ans">
+        <p class="aq"><span class="qn">09</span><span>Q5. 계층 데이터 모델의 한계로 알맞은 것은?</span></p>
+        <ul class="ao">
+          <li class="correct">1:N 관계만 표현할 수 있다 ✔ 정답</li>
+          <li>표 형태로 저장할 수 없다</li>
+          <li>여러 사용자가 동시에 쓸 수 없다</li>
+        </ul>
+        <div class="ae"><b>해설</b> 계층 데이터 모델은 트리 구조이므로 1:N 관계만 표현할 수 있고, 다대다 관계는 중복 저장으로 우회해야 합니다. 네트워크 모델이 그래프 구조로 이를 보완했습니다.</div>
+        <div class="score">배점 2점 · 정답을 고르고 이유를 한 문장으로 말하면 2점, 정답만 고르면 1점, 오답이어도 해설의 핵심 이유를 말하면 1점.</div>
+      </div>
+      <div class="ans">
+        <p class="aq"><span class="qn">10</span><span>Q6. 1:N 관계를 릴레이션으로 옮기는 방법은?</span></p>
+        <ul class="ao">
+          <li>별도 테이블을 새로 만든다</li>
+          <li class="correct">N쪽 테이블에 1쪽의 키를 외래키로 추가한다 ✔ 정답</li>
+          <li>1쪽 테이블에 N쪽의 키를 외래키로 추가한다</li>
+        </ul>
+        <div class="ae"><b>해설</b> 1:N 관계는 N쪽 테이블에 1쪽의 기본키를 외래키로 추가하는 방식으로 변환합니다. 주문 여러 건이 같은 고객을 가리키게 됩니다.</div>
+        <div class="score">배점 2점 · 정답을 고르고 이유를 한 문장으로 말하면 2점, 정답만 고르면 1점, 오답이어도 해설의 핵심 이유를 말하면 1점.</div>
+      </div>
+      <div class="ans">
+        <p class="aq"><span class="qn">11</span><span>Q7. 주문과 상품의 다대다 관계를 옮긴 테이블은?</span></p>
+        <ul class="ao">
+          <li>고객</li>
+          <li>카테고리</li>
+          <li class="correct">주문상세 ✔ 정답</li>
+        </ul>
+        <div class="ae"><b>해설</b> N:M 관계는 관계 자체를 하나의 테이블로 만들고 양쪽 개체의 키를 외래키로 가져옵니다. 주문상세(order_item)가 그 예입니다.</div>
+        <div class="score">배점 2점 · 정답을 고르고 이유를 한 문장으로 말하면 2점, 정답만 고르면 1점, 오답이어도 해설의 핵심 이유를 말하면 1점.</div>
+      </div>
+      <div class="ans">
+        <p class="aq"><span class="qn">12</span><span>Q1. 속성이 4개, 튜플이 10개인 릴레이션의 차수와 카디널리티는?</span></p>
+        <ul class="ao">
+          <li>차수 10, 카디널리티 4</li>
+          <li class="correct">차수 4, 카디널리티 10 ✔ 정답</li>
+          <li>둘 다 14</li>
+        </ul>
+        <div class="ae"><b>해설</b> 차수(degree)는 속성(열)의 개수, 카디널리티(cardinality)는 튜플(행)의 개수입니다. 서로 헷갈리기 쉬우니 &#x27;차수=열, 카디널리티=행&#x27;으로 기억하세요.</div>
+        <div class="score">배점 2점 · 정답을 고르고 이유를 한 문장으로 말하면 2점, 정답만 고르면 1점, 오답이어도 해설의 핵심 이유를 말하면 1점.</div>
+      </div>
+      <div class="ans">
+        <p class="aq"><span class="qn">13</span><span>Q2. 릴레이션의 특징 중 &quot;한 칸에 여러 값을 넣지 못한다&quot;에 해당하는 것은?</span></p>
+        <ul class="ao">
+          <li>튜플의 유일성</li>
+          <li>속성의 무순서</li>
+          <li class="correct">속성의 원자성 ✔ 정답</li>
+        </ul>
+        <div class="ae"><b>해설</b> 속성의 원자성은 속성 값으로 원자 값만 사용할 수 있다는 뜻입니다. 한 칸에 여러 값(예: 전화번호 두 개)을 넣으면 원자성이 깨집니다.</div>
+        <div class="score">배점 2점 · 정답을 고르고 이유를 한 문장으로 말하면 2점, 정답만 고르면 1점, 오답이어도 해설의 핵심 이유를 말하면 1점.</div>
+      </div>
+      <div class="ans">
+        <p class="aq"><span class="qn">14</span><span>Q3. 고객 릴레이션에서 (이름+이메일)이 후보키가 될 수 없는 이유는?</span></p>
+        <ul class="ao">
+          <li>유일성을 만족하지 않기 때문</li>
+          <li>NULL을 포함하기 때문</li>
+          <li class="correct">최소성을 만족하지 않기 때문 ✔ 정답</li>
+        </ul>
+        <div class="ae"><b>해설</b> 후보키는 유일성과 최소성을 모두 만족해야 합니다. (이름+이메일)은 유일하지만 이메일만으로도 구별되므로 최소성을 만족하지 못해 후보키가 아닙니다.</div>
+        <div class="score">배점 2점 · 정답을 고르고 이유를 한 문장으로 말하면 2점, 정답만 고르면 1점, 오답이어도 해설의 핵심 이유를 말하면 1점.</div>
+      </div>
+      <div class="ans">
+        <p class="aq"><span class="qn">15</span><span>Q4. &quot;기본키를 구성하는 모든 속성은 NULL값을 가지면 안 된다&quot;는 제약은?</span></p>
+        <ul class="ao">
+          <li>참조 무결성의 제약조건</li>
+          <li class="correct">개체 무결성의 제약조건 ✔ 정답</li>
+          <li>도메인 제약조건</li>
+        </ul>
+        <div class="ae"><b>해설</b> 개체 무결성은 기본키를 구성하는 속성이 NULL을 가질 수 없다는 제약입니다. 참조 무결성은 외래키가 참조할 수 없는 값을 가질 수 없다는 제약입니다.</div>
+        <div class="score">배점 2점 · 정답을 고르고 이유를 한 문장으로 말하면 2점, 정답만 고르면 1점, 오답이어도 해설의 핵심 이유를 말하면 1점.</div>
+      </div>
+      <div class="ans">
+        <p class="aq"><span class="qn">16</span><span>Q5. 기본키 선택 기준으로 부적합한 후보키는?</span></p>
+        <ul class="ao">
+          <li class="correct">값이 자주 변경될 수 있는 속성을 포함한 후보키 ✔ 정답</li>
+          <li>속성이 하나뿐인 단순한 후보키</li>
+          <li>자동 증가하는 대리키</li>
+        </ul>
+        <div class="ae"><b>해설</b> 기본키 선택 기준으로, NULL을 가질 수 있거나 값이 자주 변경되는 속성이 포함된 후보키는 부적합합니다. 또 단순한 후보키를 우선합니다.</div>
+        <div class="score">배점 2점 · 정답을 고르고 이유를 한 문장으로 말하면 2점, 정답만 고르면 1점, 오답이어도 해설의 핵심 이유를 말하면 1점.</div>
+      </div>
+      <div class="ans">
+        <p class="aq"><span class="qn">17</span><span>Q1. &#x27;RPG 용사의 전설&#x27; 프로젝트의 목표로 가장 알맞은 것은?</span></p>
+        <ul class="ao">
+          <li>게임 그래픽 품질 향상</li>
+          <li class="correct">복잡한 데이터의 효율적 관리와 향후 확장성 보장 ✔ 정답</li>
+          <li>개발 인력의 축소</li>
+        </ul>
+        <div class="ae"><b>해설</b> 이 프로젝트의 목표는 &#x27;대규모 RPG 게임의 복잡한 데이터를 효율적으로 관리하여 안정적인 게임 서비스와 향후 확장성 보장&#x27;입니다. 확장성이 처음부터 목표에 들어 있습니다.</div>
+        <div class="score">배점 2점 · 정답을 고르고 이유를 한 문장으로 말하면 2점, 정답만 고르면 1점, 오답이어도 해설의 핵심 이유를 말하면 1점.</div>
+      </div>
+      <div class="ans">
+        <p class="aq"><span class="qn">18</span><span>Q2. DBMS 도입의 과제(단점) 에 해당하지 않는 것은?</span></p>
+        <ul class="ao">
+          <li>DB 장애 시 전체 게임 서비스 중단 가능성</li>
+          <li>라이브 서비스 후 스키마 변경의 어려움</li>
+          <li class="correct">캐릭터·아이템 데이터의 중복 방지 ✔ 정답</li>
+        </ul>
+        <div class="ae"><b>해설</b> DBMS 도입의 과제로는 개발 비용 증가, 백업·유지보수 부담, 시스템 의존성(DB 장애 시 서비스 전체 중단), 초기 설계의 중요성이 있습니다. &#x27;데이터 중복 방지&#x27;는 이점입니다.</div>
+        <div class="score">배점 2점 · 정답을 고르고 이유를 한 문장으로 말하면 2점, 정답만 고르면 1점, 오답이어도 해설의 핵심 이유를 말하면 1점.</div>
+      </div>
+      <div class="ans">
+        <p class="aq"><span class="qn">19</span><span>Q3. 캐릭터-스탯 테이블을 분리한 주된 이유는?</span></p>
+        <ul class="ao">
+          <li class="correct">성능 최적화 ✔ 정답</li>
+          <li>스토리 분기 관리</li>
+          <li>아이템 희귀도 표현</li>
+        </ul>
+        <div class="ae"><b>해설</b> 캐릭터와 스탯을 별도 테이블로 분리한 이유는 성능 최적화입니다. 자주 조회되는 기본 정보와 자주 바뀌지 않는 상세 스탯을 나누어 관리합니다. 레벨업 시에는 스탯 계산을 트랜잭션으로 처리합니다.</div>
+        <div class="score">배점 2점 · 정답을 고르고 이유를 한 문장으로 말하면 2점, 정답만 고르면 1점, 오답이어도 해설의 핵심 이유를 말하면 1점.</div>
+      </div>
+      <div class="ans">
+        <p class="aq"><span class="qn">20</span><span>Q4. 캐릭터와 아이템의 다대다 관계를 해결한 방법은?</span></p>
+        <ul class="ao">
+          <li>items 테이블에 캐릭터ID를 직접 추가</li>
+          <li class="correct">inventories 중간 테이블로 분해 ✔ 정답</li>
+          <li>아이템 속성을 전부 JSON으로 저장</li>
+        </ul>
+        <div class="ae"><b>해설</b> characters(1)─(N)inventories(N)─(1)items 구조로, 캐릭터와 아이템의 다대다 관계를 inventories라는 중간 테이블로 분해했습니다. 수량은 관계의 속성으로 inventories에 저장됩니다.</div>
+        <div class="score">배점 2점 · 정답을 고르고 이유를 한 문장으로 말하면 2점, 정답만 고르면 1점, 오답이어도 해설의 핵심 이유를 말하면 1점.</div>
+      </div>
+      <div class="ans">
+        <p class="aq"><span class="qn">21</span><span>Q5. 활성 퀘스트 목록 조회를 빠르게 하기 위해 쓴 인덱스 전략은?</span></p>
+        <ul class="ao">
+          <li>quest_id 단일 인덱스</li>
+          <li>reward_exp 인덱스</li>
+          <li class="correct">player_id + status 복합 인덱스 ✔ 정답</li>
+        </ul>
+        <div class="ae"><b>해설</b> 활성 퀘스트 목록을 빠르게 조회하기 위해 player_id + status 복합 인덱스를 사용했습니다. 선행/후행 관계는 그래프 구조로 관리하고, 선택 기록은 JSON으로 저장했습니다.</div>
+        <div class="score">배점 2점 · 정답을 고르고 이유를 한 문장으로 말하면 2점, 정답만 고르면 1점, 오답이어도 해설의 핵심 이유를 말하면 1점.</div>
+      </div>
+      <div class="ans">
+        <p class="aq"><span class="qn">22</span><span>Q6. 장애 사례에서 응답시간이 단축된 폭은?</span></p>
+        <ul class="ao">
+          <li>3초 → 1초</li>
+          <li class="correct">3초 → 0.1초 ✔ 정답</li>
+          <li>10초 → 3초</li>
+        </ul>
+        <div class="ae"><b>해설</b> 신규 서버 오픈 당일 동시접속자 5만 명 상황에서 인벤토리 조회 쿼리 지연으로 전체 서비스가 마비되었고, 인덱스 추가 및 조회 로직 개선으로 응답시간이 3초에서 0.1초로 단축되었습니다.</div>
+        <div class="score">배점 2점 · 정답을 고르고 이유를 한 문장으로 말하면 2점, 정답만 고르면 1점, 오답이어도 해설의 핵심 이유를 말하면 1점.</div>
+      </div>
+      <div class="ans">
+        <p class="aq"><span class="qn">23</span><span>Q7. 이 프로젝트의 설계자가 강조한 가장 중요한 설계 원칙은?</span></p>
+        <ul class="ao">
+          <li class="correct">미래의 확장성을 고려한 유연한 구조 ✔ 정답</li>
+          <li>최대한 많은 테이블 만들기</li>
+          <li>모든 데이터를 한 테이블에 넣기</li>
+        </ul>
+        <div class="ae"><b>해설</b> 설계자는 &#x27;관계형 데이터베이스 설계에서 가장 중요한 것은 미래의 확장성&#x27;이라고 강조했습니다. 게임 업데이트에 따른 변경사항을 수용할 수 있는 유연한 구조가 핵심입니다.</div>
+        <div class="score">배점 2점 · 정답을 고르고 이유를 한 문장으로 말하면 2점, 정답만 고르면 1점, 오답이어도 해설의 핵심 이유를 말하면 1점.</div>
+      </div>
+      <div class="ans">
+        <p class="aq"><span class="qn">24</span><span>Q8. &#x27;흔한 실수와 해결책&#x27;에 포함되지 않는 것은?</span></p>
+        <ul class="ao">
+          <li>과도한 정규화</li>
+          <li class="correct">지나치게 자세한 ERD 문서화 ✔ 정답</li>
+          <li>확장성 미고려</li>
+        </ul>
+        <div class="ae"><b>해설</b> 흔한 실수로는 과도한 정규화, 인덱스 부족, 확장성 미고려가 제시되었습니다. 해결책은 각각 적절한 비정규화, 자주 조회하는 필드 인덱싱, 초기부터 DLC·확장팩 고려입니다.</div>
+        <div class="score">배점 2점 · 정답을 고르고 이유를 한 문장으로 말하면 2점, 정답만 고르면 1점, 오답이어도 해설의 핵심 이유를 말하면 1점.</div>
+      </div>
+  </div></div></section>
+<section class="part" id="lab"><div class="wrap">
+  <div class="part-head"><div class="part-no">실습</div><h2>실습 과제 모범 답안<span class="en">Lab Notes</span></h2><p>실습은 정답이 하나로 고정되지 않습니다. 아래는 <b>설계 판단의 근거</b> 중심의 채점 참고안입니다.</p></div>
+  <div class="anslist">
+    <div class="ans"><p class="aq"><span class="qn">L3</span><span>4주차 실습 — 쇼핑몰 ERD를 릴레이션으로 옮기기</span></p><div class="ae"><b>모범 답안 요점</b> — 개체는 테이블로, 관계는 <b>N쪽의 외래키</b> 또는 <b>별도 테이블</b>로 옮깁니다.
+  <ul class="checklist">
+    <li><b>category</b>(카테고리번호 PK, 이름)</li>
+    <li><b>customer</b>(고객번호 PK, 이름, 이메일, 주소)</li>
+    <li><b>product</b>(상품번호 PK, 이름, 가격, 카테고리번호 FK → category) — 1:N이므로 <b>N쪽</b>에 1쪽의 키를 넣습니다.</li>
+    <li><b>orders</b>(주문번호 PK, 고객번호 FK → customer, 주문일, 상태)</li>
+    <li><b>order_item</b>(주문번호 + 상품번호 PK, 수량, 단가) — 주문과 상품은 <b>N:M</b>이라 별도 테이블로 분해하고, 수량·단가 같은 <b>관계의 속성</b>을 여기에 둡니다.</li>
+  </ul>
+  <b>채점 포인트</b> — ① N:M을 order_item으로 분해했는가 ② 외래키 방향(N쪽에 FK)을 맞게 잡았는가 ③ 수량을 상품 테이블이 아니라 order_item에 두었는가.</div></div>
+    <div class="ans"><p class="aq"><span class="qn">L4</span><span>4주차 실습 — 적재 전 키·무결성 위반 점검</span></p><div class="ae"><b>모범 답안 요점</b> — 데이터를 넣기 전에 아래 순서로 점검하고, 위반은 <b>정책을 정해서</b> 고칩니다.
+  <ul class="checklist">
+    <li><b>개체 무결성</b> — 기본키에 NULL이나 중복이 있는지. 고객번호가 비어 있으면 그 행은 개체로 성립하지 않습니다.</li>
+    <li><b>참조 무결성</b> — orders.고객번호가 customer에 없는 값을 가리키는지(고아 레코드). 임시 고객을 만들지, 적재를 보류할지 정해야 합니다.</li>
+    <li><b>도메인 제약</b> — 가격에 음수, 이메일에 형식 위반 값이 들어오는지.</li>
+    <li><b>순환 참조</b> — 서로를 참조하는 두 테이블은 <b>지연(deferrable) 제약</b>으로 검사를 커밋 시점까지 미룹니다.</li>
+  </ul>
+  <b>채점 포인트</b> — 위반을 찾는 것보다 "어느 정책이 업무에 맞는가"를 근거와 함께 정하는 것이 목표입니다. 정책 없이 "삭제하면 됩니다"라고만 답하면 절반 점수입니다.</div></div>
+    <div class="ans"><p class="aq"><span class="qn">L5</span><span>4주차 사례 실습 — RPG 데이터베이스 설계 10단계와 인덱스 효과</span></p><div class="ae"><b>모범 답안 요점</b> — 파일 시스템의 한계 인식 → DBMS 도입 → 3단계 구조 → 개체 도출 → 관계 정리 → 인덱스·운영 순으로 답이 이어져야 합니다.
+  <ul class="checklist">
+    <li><b>개체</b> — game_character, character_stat, item, inventory, battle_log. 캐릭터와 아이템은 <b>N:M</b>이므로 inventory로 분해하고 수량을 그곳에 둡니다.</li>
+    <li><b>캐릭터·스탯 분리</b> — 자주 조회되는 기본 정보와 자주 바뀌지 않는 상세 스탯을 나누는 <b>성능 최적화</b> 목적입니다. 레벨업 갱신은 트랜잭션으로 묶습니다.</li>
+    <li><b>인덱스</b> — 활성 퀘스트 조회에는 <b>player_id + status 복합 인덱스</b>. 선행/후행 관계는 그래프로, 선택 기록은 JSON으로 관리합니다.</li>
+    <li><b>장애와 개선</b> — 동시접속 5만 명 상황에서 인벤토리 조회 지연으로 서비스가 마비되었고, 인덱스 추가와 조회 로직 개선으로 <b>3초 → 0.1초</b>로 줄었습니다.</li>
+    <li><b>대규모 로그</b> — battle_log는 기간별 <b>파티셔닝</b>으로 관리합니다.</li>
+    <li><b>회고</b> — "가장 중요한 것은 미래의 확장성." 업데이트를 견디는 유연한 구조가 결론입니다.</li>
+  </ul>
+  <b>채점 포인트</b> — 표를 몇 개 만들었는지보다 <b>관계를 어떻게 풀었는지</b>와 <b>왜 그 인덱스를 골랐는지</b>가 점수의 대부분입니다.</div></div>
+  </div></div></section>
+<section class="part" id="grade"><div class="wrap">
+  <div class="part-head"><div class="part-no">채점</div><h2>오답이 몰리는 지점<span class="en">Common Mistakes</span></h2><p>4주차에서 특히 자주 틀리는 곳입니다.</p></div>
+  <div class="grid"><div class="card"><div class="lbl"><span class="no">1</span>논리적 ↔ 물리적 독립성</div><p>어느 스키마 '사이'의 이야기인지 확인합니다. 개념↔외부가 논리적, 내부↔개념이 물리적입니다.</p></div><div class="card"><div class="lbl"><span class="no">2</span>차수 ↔ 카디널리티</div><p>'차수=열, 카디널리티=행'으로 고정해 익히게 합니다.</p></div><div class="card"><div class="lbl"><span class="no">3</span>후보키의 최소성</div><p>(이름+이메일)은 유일하지만 이메일만으로도 구별되므로 후보키가 아닙니다. 유일성만 보고 고르는 오답이 많습니다.</p></div><div class="card"><div class="lbl"><span class="no">4</span>1:N 변환 방향</div><p>외래키는 항상 N쪽에 둡니다. 1쪽에 두면 한 칸에 여러 값이 생겨 원자성이 깨집니다.</p></div><div class="card"><div class="lbl"><span class="no">5</span>유도 속성</div><p>나이는 생년월일에서 계산되므로 유도 속성입니다. 값을 저장하지 않고 계산으로 얻는 속성을 구분하게 합니다.</p></div><div class="card"><div class="lbl"><span class="no">6</span>인덱스 선택</div><p>'활성 퀘스트 목록 조회'에는 player_id + status 복합 인덱스가 맞습니다. 단일 컬럼 인덱스로는 부족한 이유를 조회 조건에서 읽게 합니다.</p></div></div>
+  <div class="callout key"><b>출처 표기</b> — 이 자료는 안상선 ((주)M-Robo 대표)의 강의 자료를 바탕으로 제작되었으며 <b>CC BY-NC 4.0</b>을 따릅니다. 비상업적 이용은 자유이고, 출처를 반드시 표기해야 합니다.</div>
+</div></section>
+
+<footer>
+  <div class="wrap">
+    <div>
+      <b>데이터베이스 설계</b> · 야간 연구실 교육 자료<br>
+      <span style="font-size:12.5px">글: 안상선 ((주)M-Robo 대표) · logix44@hanmail.net</span>
+    </div>
+    <div class="lic">© 2025 데이터베이스 설계 강의 | 안상선<br>CC BY-NC 4.0 — 비상업적 이용, 출처 표기 필수</div>
+  </div>
+</footer>
+<button class="btn totop" type="button" style="position:fixed;right:18px;bottom:18px;z-index:70;opacity:0;transition:.25s">↑ 위로</button>
+<div class="pager"><a class="pbtn" href="05_rpg_case.html">← 실무 프로젝트 — RPG 용사의 전설</a><a class="pbtn primary" href="index.html">4주차 표지로 →</a></div>
+<script>
+window.IMG={};
+/* =========================================================
+   데이터베이스 설계 강의자료 — 공통 인터랙션
+   © 2025 데이터베이스 설계 강의 | 안상선  (CC BY-NC 4.0)
+   ========================================================= */
+(function () {
+  "use strict";
+  var $ = function (s, r) { return (r || document).querySelector(s); };
+  var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+
+  /* ---------- 1. 목차 드롭다운 ---------- */
+  var tocBtn = $(".tocbtn"), tocMenu = $(".tocmenu");
+  if (tocBtn && tocMenu) {
+    tocBtn.addEventListener("click", function (e) {
+      e.stopPropagation();
+      tocMenu.classList.toggle("on");
+      tocBtn.setAttribute("aria-expanded", String(tocMenu.classList.contains("on")));
+    });
+    document.addEventListener("click", function () { tocMenu.classList.remove("on"); });
+    tocMenu.addEventListener("click", function (e) { e.stopPropagation(); });
+  }
+
+  /* ---------- 2. 읽기 진행률 ---------- */
+  var bar = $(".prog");
+  if (bar) {
+    var upd = function () {
+      var h = document.documentElement;
+      var max = h.scrollHeight - h.clientHeight;
+      bar.style.width = (max > 0 ? (h.scrollTop / max) * 100 : 0) + "%";
+    };
+    window.addEventListener("scroll", upd, { passive: true });
+    window.addEventListener("resize", upd);
+    upd();
+  }
+
+  /* ---------- 3. 확인 문제 채점 ---------- */
+  $$(".quiz .q").forEach(function (q) {
+    var ok = parseInt(q.getAttribute("data-ok"), 10);
+    var ex = q.getAttribute("data-ex") || "";
+    var fb = $(".fb", q);
+    $$(".opts button", q).forEach(function (b) {
+      b.addEventListener("click", function () {
+        var i = parseInt(b.getAttribute("data-i"), 10);
+        $$(".opts button", q).forEach(function (x) { x.classList.remove("ok", "no"); x.disabled = true; });
+        var right = (i === ok);
+        b.classList.add(right ? "ok" : "no");
+        if (!right) { var t = $$(".opts button", q)[ok]; if (t) t.classList.add("ok"); }
+        if (fb) {
+          fb.className = "fb on " + (right ? "ok" : "no");
+          fb.innerHTML = (right ? "✅ 맞았습니다. " : "❌ 다시 볼까요. ") + ex;
+        }
+        // 진행 점수 갱신
+        var box = q.closest(".quiz"), tot = box ? $$(".q", box).length : 0;
+        if (box && tot) {
+          if (!box.dataset.done) box.dataset.done = "0";
+          if (!box.dataset.scored) box.dataset.scored = "";
+          if (box.dataset.scored.indexOf(i + "-" + (q.dataset.idx || $$(".q", box).indexOf(q))) < 0) {
+            box.dataset.scored += i + "-" + (q.dataset.idx || $$(".q", box).indexOf(q)) + ",";
+            if (right) box.dataset.done = String(parseInt(box.dataset.done, 10) + 1);
+          }
+          var sc = $(".qscore", box);
+          if (sc) sc.textContent = "이 카드 점수 " + box.dataset.done + " / " + tot;
+        }
+      });
+    });
+  });
+
+  /* ---------- 4. 코드 복사 / 프롬프트 복사·저장 ---------- */
+  function copyText(txt, btn) {
+    var done = function () {
+      var old = btn.textContent;
+      btn.textContent = "복사됨 ✓"; btn.classList.add("done");
+      setTimeout(function () { btn.textContent = old; btn.classList.remove("done"); }, 1600);
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(txt).then(done, function () { fallback(txt, done); });
+    } else { fallback(txt, done); }
+  }
+  function fallback(txt, done) {
+    var ta = document.createElement("textarea");
+    ta.value = txt; ta.style.position = "fixed"; ta.style.opacity = "0";
+    document.body.appendChild(ta); ta.select();
+    try { document.execCommand("copy"); done(); } catch (e) { alert("복사에 실패했습니다. 직접 선택해 주세요."); }
+    document.body.removeChild(ta);
+  }
+  function dl(name, txt) {
+    var b = new Blob([txt], { type: "text/plain;charset=utf-8" });
+    var a = document.createElement("a");
+    a.href = URL.createObjectURL(b); a.download = name;
+    document.body.appendChild(a); a.click();
+    setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 800);
+  }
+  $$("[data-copy]").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var pre = document.getElementById(btn.getAttribute("data-copy"));
+      if (pre) copyText(pre.innerText, btn);
+    });
+  });
+  $$("[data-pcopy]").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var box = btn.closest(".promptbox") || document;
+      var pre = $("pre", box);
+      if (pre) copyText(pre.innerText, btn);
+    });
+  });
+  $$("[data-ptxt]").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var box = btn.closest(".promptbox") || document;
+      var pre = $("pre", box);
+      if (!pre) return;
+      var nm = btn.getAttribute("data-ptxt") || "prompt.txt";
+      dl(nm, pre.innerText);
+    });
+  });
+  $$("[data-save]").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var pre = document.getElementById(btn.getAttribute("data-save"));
+      if (pre) dl((pre.getAttribute("data-name") || "code") + ".sql", pre.innerText);
+    });
+  });
+
+  /* ---------- 5. 탭 ---------- */
+  $$(".tabs").forEach(function (bar2) {
+    var tabs = $$(".tab", bar2);
+    tabs.forEach(function (t) {
+      t.addEventListener("click", function () {
+        tabs.forEach(function (x) { x.setAttribute("aria-selected", String(x === t)); });
+        var scope = bar2.parentNode;
+        $$(".tabpanel", scope).forEach(function (p) { p.classList.remove("on"); });
+        var tgt = document.getElementById("tab-" + t.getAttribute("data-tab"));
+        if (tgt) tgt.classList.add("on");
+      });
+    });
+  });
+
+  /* ---------- 6. 캐릭터 표정 전환 ---------- */
+  $$("img[data-src]").forEach(function (img) {
+    var k = img.getAttribute("data-src");
+    if (window.IMG && window.IMG[k]) img.src = window.IMG[k];
+  });
+  $$(".mem").forEach(function (m) {
+    var img = $("img", m), btns = $$(".pose button", m);
+    btns.forEach(function (b) {
+      b.addEventListener("click", function () {
+        var key = b.getAttribute("data-src");
+        if (img && window.IMG && window.IMG[key]) {
+          img.src = window.IMG[key];
+          img.alt = (m.getAttribute("data-name") || "캐릭터") + " — " + b.textContent;
+        }
+        btns.forEach(function (x) { x.setAttribute("aria-pressed", String(x === b)); });
+      });
+    });
+  });
+
+  /* ---------- 7. 용어 툴팁 ---------- */
+  var tip = null;
+  function ensureTip() {
+    if (!tip) { tip = document.createElement("div"); tip.id = "gttip"; document.body.appendChild(tip); }
+    return tip;
+  }
+  $$(".term").forEach(function (t) {
+    var id = t.getAttribute("data-g");
+    var card = id ? document.getElementById(id) : null;
+    var show = function (e) {
+      var box = card ? card : null;
+      var tt = ensureTip();
+      var title = t.getAttribute("data-t") || (box ? $("b", box).textContent : t.textContent);
+      var an = box ? ($(".gl-an", box) || { innerText: "" }).innerText : (t.getAttribute("data-a") || "");
+      var mn = box ? ($(".gl-mean", box) || { innerText: "" }).innerText : (t.getAttribute("data-m") || "");
+      tt.innerHTML = "<b>" + title + "</b>" + (an ? "<div style='color:#ffb8d6;margin-bottom:5px'>" + an + "</div>" : "") +
+        (mn ? "<div style='color:#cfe9ee'>" + mn + "</div>" : "");
+      tt.style.display = "block";
+      var r = t.getBoundingClientRect();
+      var tw = tt.offsetWidth, th = tt.offsetHeight;
+      var left = Math.min(Math.max(8, r.left + r.width / 2 - tw / 2), window.innerWidth - tw - 8);
+      var top = r.top - th - 10;
+      if (top < 8) top = r.bottom + 10;
+      tt.style.left = left + "px"; tt.style.top = top + "px";
+    };
+    t.addEventListener("mouseenter", show);
+    t.addEventListener("focus", show);
+    t.addEventListener("click", show);
+    t.setAttribute("tabindex", "0");
+    var hide = function () { if (tip) tip.style.display = "none"; };
+    t.addEventListener("mouseleave", hide);
+    t.addEventListener("blur", hide);
+    document.addEventListener("scroll", hide, { passive: true });
+  });
+
+  /* ---------- 8. 단계 애니메이션 ---------- */
+  $$(".anim").forEach(function (box) {
+    var layers = $$(".anim-layer", box), steps = $$(".anim-steps li", box);
+    var prev = $("[data-anim-prev]", box), next = $("[data-anim-next]", box), play = $("[data-anim-play]", box);
+    var txt = $(".step-txt", box), i = 0, timer = null;
+    var n = layers.length || steps.length;
+    if (!n) return;
+    function render() {
+      layers.forEach(function (l, k) { l.classList.toggle("on", k === i); });
+      steps.forEach(function (s, k) { s.classList.toggle("on", k === i); });
+      if (txt) txt.textContent = (i + 1) + " / " + n;
+    }
+    function go(d) { i = (i + d + n) % n; render(); }
+    if (prev) prev.addEventListener("click", function () { stop(); go(-1); });
+    if (next) next.addEventListener("click", function () { stop(); go(1); });
+    function stop() { if (timer) { clearInterval(timer); timer = null; if (play) play.textContent = "▶ 자동 재생"; } }
+    if (play) play.addEventListener("click", function () {
+      if (timer) { stop(); return; }
+      play.textContent = "❚❚ 멈춤";
+      timer = setInterval(function () { go(1); }, 2400);
+    });
+    render();
+  });
+
+  /* ---------- 9. 슬라이더 → 계산값 ---------- */
+  $$("[data-calc]").forEach(function (box) {
+    var out = $("[data-calc-out]", box);
+    var inputs = $$("input[type=range]", box);
+    function upd() {
+      var v = {};
+      inputs.forEach(function (x) { v[x.name] = parseFloat(x.value); });
+      if (out) out.innerHTML = box.getAttribute("data-calc").replace(/\{(\w+)\}/g, function (_, k) {
+        return (v[k] !== undefined ? (Math.round(v[k] * 100) / 100).toLocaleString("ko-KR") : "");
+      });
+      $$("[data-out]", box).forEach(function (el) {
+        var k = el.getAttribute("data-out");
+        if (v[k] !== undefined) el.textContent = Math.round(v[k] * 100) / 100;
+      });
+    }
+    inputs.forEach(function (x) { x.addEventListener("input", upd); });
+    upd();
+  });
+
+  /* ---------- 10. 상단으로 ---------- */
+  var top = $(".totop");
+  if (top) {
+    top.addEventListener("click", function () { window.scrollTo({ top: 0, behavior: "smooth" }); });
+    window.addEventListener("scroll", function () {
+      top.style.opacity = window.scrollY > 600 ? "1" : "0";
+    }, { passive: true });
+  }
+})();
+
+</script>
+</body>
+</html>

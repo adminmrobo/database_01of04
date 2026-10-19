@@ -4,13 +4,13 @@
    index.html (다른 HTML로 링크하지 않음)
    week1|week2|week3|week4/{index.html, 01~05.html, answers.html}
 
-   OUT_DIR 환경변수로 출력 폴더를 바꿀 수 있습니다(기본 docs/).
+   OUT_DIR 환경변수로 출력 폴더를 바꿀 수 있습니다(기본 저장소 루트).
 """
 import os, re, json, html, shutil
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 SRC  = os.path.join(ROOT, "src")
-DIST = os.path.join(ROOT, os.environ.get("OUT_DIR", "docs"))
+DIST = os.path.abspath(os.environ.get("OUT_DIR", ROOT))
 CSS  = open(os.path.join(ROOT, "assets/base.css"), encoding="utf-8").read()
 JS   = open(os.path.join(ROOT, "assets/base.js"), encoding="utf-8").read()
 CHARS= json.load(open(os.path.join(ROOT, "assets/chars.json"), encoding="utf-8"))
@@ -976,8 +976,13 @@ TRAPS = {
 
 # ─────────────────────────── 실행 ───────────────────────────
 def main():
-    if os.path.isdir(DIST): shutil.rmtree(DIST)
-    os.makedirs(DIST)
+    # 생성물만 지우고 소스(src/, assets/)는 보존
+    for name in ("index.html", "overview.html"):
+        f = os.path.join(DIST, name)
+        if os.path.isfile(f): os.remove(f)
+    for i in range(1, 16):
+        d = os.path.join(DIST, "week%d" % i)
+        if os.path.isdir(d): shutil.rmtree(d)
     allsecs = {}
     srcfiles = []
     for w in WEEKS:
