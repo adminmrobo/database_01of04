@@ -1,0 +1,292 @@
+<section class="part" id="problem">
+  <div class="wrap">
+    <div class="part-head"><div class="part-no">00</div>
+      <h2>도입 문제 — 편의점 알바 첫날<span class="en">Problem</span></h2>
+      <p>오리엔테이션은 늘 질문에서 시작합니다. 오늘의 질문은 이것입니다 — <b>"콜라가 몇 개 남았는지, 당신은 어떻게 아는가?"</b></p></div>
+    <div class="grid">
+      <div class="card span">
+        <div class="lbl"><span class="no">1</span>밤 11시, 계산대 앞</div>
+        <p>손님이 콜라 두 병을 집어 왔습니다. 알바생은 바코드를 찍고, 계산이 끝나면 화면의 숫자가 하나 줄어듭니다. 재고 장부를 펼쳐 연필로 지우는 사람은 아무도 없습니다.</p>
+        <div class="calc">손님이 콜라 2병을 사 갔을 때 일어나는 일
+
+  [바코드 스캔]  →  [판매 기록 저장]  →  [재고 수량 자동 차감]
+                                            ↓
+                              재고 3개 미만이면?
+                                            ↓
+                                   [발주 목록에 자동 등록]
+
+  사람이 한 일        : 바코드를 찍었다
+  시스템이 한 일      : 기록하고, 빼고, 판단하고, 목록에 올렸다</div>
+        <div class="callout key"><b>이 편의 결론 미리 보기</b>
+          편의점·은행·도서관·병원이 하는 일은 결국 같습니다. <b>무엇을 기록하고(개체), 무엇을 남기고(기록), 무엇을 물어보고(조회), 무엇을 지키는가(규칙).</b> 이 네 가지가 데이터베이스의 뼈대입니다.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="part" id="m1">
+  <div class="wrap">
+    <div class="part-head"><div class="part-no">01</div>
+      <h2>편의점 — 재고와 발주<span class="en">Convenience Store</span></h2>
+      <p>가장 가까운 곳에 데이터베이스가 있습니다. 오늘 하루 몇 번이나 이 표를 들여다보셨을까요?</p></div>
+    <div class="grid">
+      <div class="card">
+        <div class="lbl"><span class="no">1</span>세 개의 표가 동시에 움직인다</div>
+        <p>편의점에서 실제로 관리되는 것은 하나의 표가 아니라 <b>서로 연결된 표</b>입니다. 상품 목록이 있고, 그 상품의 재고가 있고, 언제 무엇이 팔렸는지가 남습니다.</p>
+        <div class="twrap"><table class="t">
+          <caption>편의점의 세 가지 기록</caption>
+          <thead><tr><th>표</th><th>무엇을 담나</th><th>예</th></tr></thead>
+          <tbody>
+            <tr><td class="ts">상품</td><td>파는 물건의 목록</td><td>바코드 · 이름 · 가격 · 분류</td></tr>
+            <tr><td class="ts">재고</td><td>지금 몇 개 있는가</td><td>바코드 · 수량 · 유통기한</td></tr>
+            <tr><td class="ts">판매</td><td>언제 무엇이 나갔는가</td><td>시각 · 바코드 · 수량 · 결제수단</td></tr>
+          </tbody>
+        </table></div>
+        <div class="callout info"><b>바코드가 왜 여러 표에 반복될까요</b>
+          바코드는 상품을 가리키는 <b>이름표</b>입니다. 이름표를 반복해서 적어 두면, 상품 이름이 바뀌어도 <b>상품 표 한 곳만</b> 고치면 됩니다. 이것이 뒤에 배울 <b>키</b>와 <b>중복 최소화</b>의 씨앗입니다.</div>
+      </div>
+      <div class="card">
+        <div class="lbl"><span class="no">2</span>사람이 아니라 규칙이 판단한다</div>
+        <p>"재고 3개 미만이면 발주" — 이 문장은 사람의 판단이 아니라 시스템에 적어 둔 <b>규칙</b>입니다. 규칙이 있으면 알바생이 바뀌어도, 점장이 휴가여도 발주는 빠지지 않습니다.</p>
+        <ul class="checklist">
+          <li><b>기록이 남는다</b> — 어제 몇 개 팔렸는지가 남아 있어야 내일 발주량을 정할 수 있습니다</li>
+          <li><b>규칙이 강제된다</b> — 재고보다 많이 팔리는 순간을 시스템이 막습니다</li>
+          <li><b>여러 사람이 같은 값을 본다</b> — 점장·알바·본사가 동시에 같은 재고를 확인합니다</li>
+        </ul>
+        <div class="callout tip"><b>POS의 뜻</b>
+          계산대 단말기를 <b>POS(Point of Sale, 판매 시점 정보 관리)</b>라고 부릅니다. 이름 그대로 <b>팔린 그 순간</b>에 정보를 만든다는 뜻입니다. 종이 장부와 갈리는 지점이 바로 여기입니다 — 종이는 하루가 끝나야 합계가 나오지만, POS는 찍는 순간 값이 바뀝니다.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="part" id="m2">
+  <div class="wrap">
+    <div class="part-head"><div class="part-no">02</div>
+      <h2>은행 — 내 잔고는 어디에 있을까<span class="en">Bank</span></h2>
+      <p>앱으로 잔고를 볼 때, 그 숫자는 어딘가에 <b>적혀 있는 값</b>일까요, <b>계산된 값</b>일까요?</p></div>
+    <div class="grid">
+      <div class="card span">
+        <div class="lbl"><span class="no">1</span>잔고는 저장하지 않고 계산한다</div>
+        <p>정확히 말하면 은행은 <b>거래내역</b>을 남기고, 잔고는 그 내역의 결과로 관리합니다. 입금·출금·이체가 한 줄씩 쌓이고, 그 합이 지금의 잔고입니다.</p>
+        <div class="calc">거래내역에서 잔고가 만들어지는 과정
+
+  거래번호   일시              구분     금액        잔고
+  ─────────────────────────────────────────────────────
+   1001     10-01 09:12      입금   +500,000    500,000
+   1002     10-01 13:40      출금    -32,000    468,000
+   1003     10-02 08:05      이체   -150,000    318,000
+   1004     10-02 19:22      입금    +80,000    398,000
+                                              ↑ 이 값이 앱에 뜨는 잔고
+
+  잔고를 '한 칸'에만 적어 두면 → 거래내역과 잔고가 어긋날 수 있다
+  거래내역에서 계산하면     → 언제든 다시 맞춰 볼 수 있다</div>
+        <div class="callout key"><b>여기서 데이터베이스의 핵심이 나옵니다</b>
+          이체는 <b>내 계좌에서 빼고</b>와 <b>상대 계좌에 넣기</b>가 <b>한 묶음</b>이어야 합니다. 빼기만 되고 넣기가 실패하면 돈이 사라집니다. 이 "전부 되거나, 전부 안 되거나"를 보장하는 장치가 <b>트랜잭션</b>입니다.</div>
+      </div>
+      <div class="card">
+        <div class="lbl"><span class="no">2</span>세 창구가 같은 값을 본다</div>
+        <p>ATM, 모바일 앱, 창구 직원 — 셋이 <b>동시에</b> 같은 계좌를 봅니다. 각자 자기 장부를 들고 있었다면 숫자가 달라졌을 것입니다.</p>
+        <div class="facts">
+          <div class="fact"><span>같은 값</span>모든 창구가 하나의 원본을 읽는다</div>
+          <div class="fact"><span>순서</span>동시 요청은 시스템이 차례를 정한다</div>
+          <div class="fact"><span>기록</span>누가·언제·무엇을 했는지 남는다</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="lbl"><span class="no">3</span>돌아보기 — 2주차 예고</div>
+        <p>여기까지 오면 자연스러운 질문이 생깁니다. <b>"이걸 왜 파일로 하면 안 되나?"</b></p>
+        <p>고객 파일, 주문 파일, 배송 파일에 주소가 흩어져 있으면 하나를 고칠 때마다 나머지를 찾아야 합니다. 이 문제를 <b>데이터 중복</b>과 <b>데이터 종속성</b>이라고 부르고, 2주차에서 본격적으로 다룹니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="part" id="m3">
+  <div class="wrap">
+    <div class="part-head"><div class="part-no">03</div>
+      <h2>그 밖의 하루 — 어디에나 있습니다<span class="en">Everywhere</span></h2>
+      <p>오늘 하루만 떠올려 봐도 열 곳이 넘습니다. 모두 같은 구조를 하고 있습니다.</p></div>
+    <div class="grid">
+      <div class="card span">
+        <div class="lbl"><span class="no">1</span>일상 사례 지도</div>
+        <div class="twrap"><table class="t">
+          <caption>우리 생활 속 데이터베이스 — 무엇을 기록하고 무엇을 물어보는가</caption>
+          <thead><tr><th style="width:150px">어디서</th><th>무엇을 기록하는가</th><th>무엇을 물어보는가</th></tr></thead>
+          <tbody>
+            <tr><td>편의점</td><td>상품 · 재고 · 판매 시각</td><td>"콜라 몇 개 남았어?"</td></tr>
+            <tr><td>은행</td><td>계좌 · 거래내역</td><td>"내 잔고 얼마야?"</td></tr>
+            <tr><td>배달 앱</td><td>가게 · 메뉴 · 주문 · 배달 상태</td><td>"내 주문 어디쯤이야?"</td></tr>
+            <tr><td>도서관</td><td>책 · 회원 · 대출 기록</td><td>"이 책 누가 빌려 갔어?"</td></tr>
+            <tr><td>병원</td><td>환자 · 진료 · 처방 기록</td><td>"이 환자의 지난 처방은?"</td></tr>
+            <tr><td>학교</td><td>학생 · 과목 · 성적</td><td>"이 과목 수강생 명단은?"</td></tr>
+            <tr><td>교통카드</td><td>카드 · 승하차 시각 · 요금</td><td>"이번 달 교통비 얼마 썼어?"</td></tr>
+            <tr><td>쇼핑몰</td><td>고객 · 상품 · 주문 · 배송</td><td>"지난달 가장 많이 팔린 상품은?"</td></tr>
+          </tbody>
+        </table></div>
+        <div class="callout info"><b>표의 오른쪽 칸이 핵심입니다</b>
+          왼쪽은 "무엇을 모으는가", 오른쪽은 "무엇을 묻는가"입니다. 데이터베이스는 <b>모으는 일</b>보다 <b>묻는 일</b>을 잘하기 위해 만들어졌습니다. 그래서 설계할 때도 "이 데이터로 어떤 질문을 받을 것인가"를 먼저 생각합니다.</div>
+      </div>
+      <div class="card">
+        <div class="lbl"><span class="no">2</span>겉모습은 달라도 뼈대는 같다</div>
+        <p>배달 앱의 "주문"과 병원의 "진료"는 전혀 다른 일처럼 보이지만, 데이터베이스 안에서는 <b>같은 모양</b>입니다.</p>
+        <ul class="checklist">
+          <li>기록할 대상이 있다 — 고객 · 환자 · 회원</li>
+          <li>그 대상이 하는 일이 있다 — 주문 · 진료 · 대출</li>
+          <li>대상과 일이 연결된다 — 누가 무엇을 했는가</li>
+          <li>지켜야 할 규칙이 있다 — 없는 회원은 대출할 수 없다</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="lbl"><span class="no">3</span>만약 데이터베이스가 없다면</div>
+        <p>도서관 대출을 종이 카드로 관리한다고 해 봅시다. "이 책 누가 빌려 갔지?"를 알려면 카드함을 처음부터 끝까지 뒤져야 합니다. <b>찾는 비용</b>이 계속 커지는 것입니다.</p>
+        <p>그래서 데이터베이스는 <b>찾기 빠르게</b>도 만들어졌습니다. 3주차에 배울 <b>인덱스</b>가 바로 그 이야기입니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="part" id="m4">
+  <div class="wrap">
+    <div class="part-head"><div class="part-no">04</div>
+      <h2>일상 사례의 공통 구조 — 네 가지 질문<span class="en">Common Structure</span></h2>
+      <p>편의점도 은행도 도서관도, 결국 같은 네 가지를 정하고 있습니다. 이 편의 결론입니다.</p></div>
+    <div class="grid">
+      <div class="card span">
+        <div class="lbl"><span class="no">1</span>무엇을 · 무엇을 남기고 · 무엇을 묻고 · 무엇을 지키는가</div>
+        <div class="twrap"><table class="t">
+          <caption>일상 사례 → 데이터베이스의 뼈대</caption>
+          <thead><tr><th style="width:110px">질문</th><th>편의점의 답</th><th>데이터베이스 용어</th><th style="width:110px">배우는 곳</th></tr></thead>
+          <tbody>
+            <tr><td><b>무엇을</b> 다루나</td><td>상품, 회원</td><td class="ts">개체 (Entity)</td><td class="ts">4주차</td></tr>
+            <tr><td><b>무엇을</b> 남기나</td><td>바코드 · 수량 · 시각</td><td class="ts">속성 (Attribute)</td><td class="ts">4주차</td></tr>
+            <tr><td><b>어떻게</b> 연결되나</td><td>상품이 재고에, 회원이 주문에</td><td class="ts">관계 (Relationship)</td><td class="ts">4주차</td></tr>
+            <tr><td><b>무엇을</b> 묻나</td><td>"콜라 몇 개 남았어?"</td><td class="ts">질의 (Query)</td><td class="ts">6주차 예정</td></tr>
+            <tr><td><b>무엇을</b> 지키나</td><td>재고보다 많이 팔 수 없다</td><td class="ts">제약조건 (Constraint)</td><td class="ts">4주차</td></tr>
+          </tbody>
+        </table></div>
+        <div class="callout key"><b>이 표가 이 강의의 지도입니다</b>
+          앞으로 배울 것은 새로 생기는 지식이 아니라, <b>이미 매일 쓰고 있는 이 네 가지에 이름을 붙이는 일</b>입니다. 그래서 오리엔테이션을 사례에서 시작했습니다.</div>
+      </div>
+      <div class="card span quiz"><div class="lbl"><span class="no">✓</span>확인 문제</div>
+        <div class="q" data-ok="1" data-ex="편의점 계산대에서 바코드를 찍는 순간 판매 기록이 저장되고 재고가 자동으로 차감됩니다. 사람이 장부를 고치는 것이 아니라, 규칙에 따라 시스템이 처리합니다.">
+          <p class="qt">Q1. 편의점에서 콜라를 판매했을 때 재고 수량이 줄어드는 까닭은?</p>
+          <div class="opts">
+            <button type="button" data-i="0">알바생이 퇴근 후 장부를 정리하기 때문</button>
+            <button type="button" data-i="1">바코드를 찍는 순간 판매가 기록되고 재고가 차감되기 때문</button>
+            <button type="button" data-i="2">본사에서 하루에 한 번 알려 주기 때문</button>
+          </div>
+          <p class="fb" aria-live="polite"></p>
+        </div>
+        <div class="q" data-ok="2" data-ex="POS는 Point of Sale, 즉 '판매 시점 정보 관리'입니다. 종이 장부는 하루가 끝나야 합계가 나오지만 POS는 찍는 순간 정보가 만들어집니다.">
+          <p class="qt">Q2. POS를 "판매 시점 정보 관리"라고 부르는 이유로 알맞은 것은?</p>
+          <div class="opts">
+            <button type="button" data-i="0">가격을 자동으로 올려 주기 때문</button>
+            <button type="button" data-i="1">종이 영수증을 대신 인쇄해 주기 때문</button>
+            <button type="button" data-i="2">물건이 팔린 그 순간에 정보가 만들어지기 때문</button>
+          </div>
+          <p class="fb" aria-live="polite"></p>
+        </div>
+        <div class="q" data-ok="0" data-ex="이체는 '내 계좌에서 빼기'와 '상대 계좌에 넣기'가 한 묶음이어야 합니다. 일부만 실행되면 돈이 사라지므로, 전부 되거나 전부 안 되게 만드는 트랜잭션이 필요합니다.">
+          <p class="qt">Q3. 계좌 이체에서 <b>트랜잭션</b>이 반드시 필요한 까닭은?</p>
+          <div class="opts">
+            <button type="button" data-i="0">빼기와 넣기가 한 묶음으로 처리되어야 하기 때문</button>
+            <button type="button" data-i="1">이체 속도를 빠르게 하기 때문</button>
+            <button type="button" data-i="2">이체 수수료를 계산하기 때문</button>
+          </div>
+          <p class="fb" aria-live="polite"></p>
+        </div>
+        <div class="q" data-ok="2" data-ex="ATM·앱·창구가 각자 자기 장부를 갖고 있으면 숫자가 달라집니다. 하나의 원본을 여러 사용자가 함께 보는 것을 '동시 공유'라고 하며, 데이터베이스의 대표적인 특징입니다.">
+          <p class="qt">Q4. ATM·모바일 앱·창구에서 잔고가 항상 같게 보이는 까닭은?</p>
+          <div class="opts">
+            <button type="button" data-i="0">창구 직원이 매번 전화로 확인하기 때문</button>
+            <button type="button" data-i="1">앱에서만 최신 값을 보여 주기 때문</button>
+            <button type="button" data-i="2">모든 창구가 하나의 원본 데이터를 함께 보기 때문</button>
+          </div>
+          <p class="fb" aria-live="polite"></p>
+        </div>
+        <div class="q" data-ok="1" data-ex="데이터베이스 설계는 '무엇을 모을까'보다 '무엇을 물어볼까'에서 출발합니다. 어떤 질문을 받을지 정해야 필요한 기록과 규칙이 정해집니다.">
+          <p class="qt">Q5. 데이터베이스를 설계할 때 가장 먼저 정해야 하는 것으로 알맞은 것은?</p>
+          <div class="opts">
+            <button type="button" data-i="0">표를 몇 개 만들지</button>
+            <button type="button" data-i="1">이 데이터로 어떤 질문을 받을지</button>
+            <button type="button" data-i="2">서버를 어디에 둘지</button>
+          </div>
+          <p class="fb" aria-live="polite"></p>
+        </div>
+        <div class="qscore" aria-live="polite"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="part" id="glossary">
+  <div class="wrap">
+    <div class="part-head">
+      <div class="part-no">Aa</div>
+      <h2>용어 사전 — 비유로 보기<span class="en">Glossary</span></h2>
+      <p>이 편에 나온 낱말을 비유와 함께 정리했습니다. 다른 편에서도 같은 비유가 그대로 쓰입니다.</p>
+    </div>
+    <div class="gl-group"><h4>일상에서 만나는 데이터베이스</h4>
+      <div class="gl-grid">
+        <div class="gl-card" id="g-재고"><b>재고</b>
+          <p class="gl-an"><span>비유</span>냉장고 안을 세는 일. 문을 열 때마다 몇 개 남았는지 알아야 장을 볼 수 있습니다.</p>
+          <p class="gl-mean"><span>뜻</span>지금 팔 수 있도록 남아 있는 물건의 수량. 판매가 일어날 때마다 줄어듭니다.</p></div>
+        <div class="gl-card" id="g-POS"><b>POS</b>
+          <p class="gl-an"><span>비유</span>계산대 위의 저울. 물건이 올라가는 순간 무게가 찍힙니다.</p>
+          <p class="gl-mean"><span>뜻</span>Point of Sale. 물건이 팔린 그 시점에 판매 정보를 만들어 기록하는 시스템.</p></div>
+        <div class="gl-card" id="g-거래내역"><b>거래내역</b>
+          <p class="gl-an"><span>비유</span>통장에 찍히는 한 줄 한 줄. 잔고는 이 줄들의 합으로 나옵니다.</p>
+          <p class="gl-mean"><span>뜻</span>입금·출금·이체처럼 값이 오간 사건을 시간 순서대로 남긴 기록.</p></div>
+        <div class="gl-card" id="g-동시공유"><b>동시 공유</b>
+          <p class="gl-an"><span>비유</span>사무실 공용 냉장고. 여러 사람이 함께 넣고 함께 꺼냅니다.</p>
+          <p class="gl-mean"><span>뜻</span>여러 사용자가 같은 데이터를 동시에 함께 사용하는 것. 데이터베이스의 대표적인 특징입니다.</p></div>
+      </div>
+    </div>
+    <div class="gl-group"><h4>앞으로 배울 뼈대</h4>
+      <div class="gl-grid">
+        <div class="gl-card" id="g-개체"><b>개체</b>
+          <p class="gl-an"><span>비유</span>이야기에 등장하는 사람과 물건. 이름을 붙일 수 있으면 개체입니다.</p>
+          <p class="gl-mean"><span>뜻</span>데이터베이스가 정보를 담으려는 대상. 고객·상품·주문처럼 관리할 가치가 있는 것.</p></div>
+        <div class="gl-card" id="g-질의"><b>질의 (Query)</b>
+          <p class="gl-an"><span>비유</span>창구에 대고 하는 질문. "이 책 누가 빌려 갔어요?"</p>
+          <p class="gl-mean"><span>뜻</span>데이터베이스에 값을 물어보는 요청. 보통 SQL이라는 언어로 표현합니다.</p></div>
+        <div class="gl-card" id="g-제약조건"><b>제약조건</b>
+          <p class="gl-an"><span>비유</span>출입 금지 테이프. 넘어가면 안 되는 선을 미리 그어 둡니다.</p>
+          <p class="gl-mean"><span>뜻</span>데이터가 지켜야 할 규칙. 예를 들어 재고보다 많이 팔리거나, 없는 상품을 주문하는 일을 막습니다.</p></div>
+        <div class="gl-card" id="g-트랜잭션"><b>트랜잭션</b>
+          <p class="gl-an"><span>비유</span>한 번에 끝내야 하는 계약. 서명이 반쯤 되면 계약이 아닙니다.</p>
+          <p class="gl-mean"><span>뜻</span>여러 작업을 하나로 묶어, 전부 성공하거나 전부 취소되게 만드는 처리 단위.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="part" id="author-sec">
+  <div class="wrap">
+    <div class="part-head">
+      <div class="part-no">E-1</div>
+      <h2>저자 소개<span class="en">About the Author</span></h2>
+    </div>
+    <div class="author">
+      <img class="ph" data-src="ch_doc_front" alt="박사">
+      <div class="ai">
+        <h3>안상선</h3>
+        <p>(주)M-Robo 대표 · 데이터베이스 설계 강의 담당</p>
+        <p>logix44@hanmail.net</p>
+        <p style="margin-top:10px">이 자료는 실제 강의 교안을 웹에서 버튼만 눌러 따라올 수 있도록 다시 구성한 것입니다. 1주차는 오리엔테이션으로, 강의 전체에서 다룰 개념을 일상 사례에서 미리 만나 봅니다. 교재로는 김연희, 『데이터베이스 개론』(3판)에서 커리큘럼의 순서 및 주요 용어의 정의, 예시의 설명 등을 참고했습니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="part" id="outro">
+  <div class="wrap outro">
+    <h2>첫 시간은 여기까지입니다</h2>
+    <p>편의점 재고도, 은행 잔고도, 도서관 대출도 결국 <b>무엇을 기록하고 무엇을 묻는가</b>의 문제였습니다. 다음 페이지에서 데이터베이스와 엑셀·구글 시트가 어떻게 다른지 봅니다.</p>
+    <div class="hbtns" style="justify-content:center">
+      <a class="pbtn primary" href="02_db_vs_spreadsheet.html">다음 · 데이터베이스와 엑셀·구글 시트</a>
+      <a class="pbtn" href="index.html">1주차 표지로</a>
+    </div>
+  </div>
+</section>

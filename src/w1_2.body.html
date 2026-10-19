@@ -1,0 +1,217 @@
+<section class="part" id="m1">
+  <div class="wrap">
+    <div class="part-head"><div class="part-no">01</div>
+      <h2>엑셀·구글 시트가 잘하는 것<span class="en">What Spreadsheets Do Well</span></h2>
+      <p>먼저 오해를 풀고 갑니다. 엑셀과 구글 시트는 데이터베이스의 <b>열등한 버전</b>이 아닙니다. 잘하는 일이 다를 뿐입니다.</p></div>
+    <div class="grid">
+      <div class="card span">
+        <div class="lbl"><span class="no">1</span>즉시 쓰는 도구의 힘</div>
+        <p>시트를 열고 첫 줄에 이름을 적는 순간 표가 됩니다. 설계도, 서버도, 설치도 필요 없습니다. 이 <b>즉시성</b>이 시트의 가장 큰 무기입니다.</p>
+        <div class="twrap"><table class="t">
+          <caption>엑셀·구글 시트가 강한 지점</caption>
+          <thead><tr><th style="width:170px">상황</th><th>시트가 잘하는 일</th></tr></thead>
+          <tbody>
+            <tr><td>한 번 보고 끝나는 자료</td><td>회의 자료, 견적 비교, 명단 정리</td></tr>
+            <tr><td>계산과 집계</td><td>합계·평균·순위·피벗, 조건부 서식</td></tr>
+            <tr><td>눈으로 확인하며 고치기</td><td>칸을 눌러 바로 고치고 바로 보기</td></tr>
+            <tr><td>가벼운 공유</td><td>링크 하나로 전달, 코멘트로 의견 주고받기</td></tr>
+            <tr><td>일회성 분석</td><td>차트를 그리고 결론을 뽑아내기</td></tr>
+          </tbody>
+        </table></div>
+        <div class="callout tip"><b>이 강의도 시트로 시작합니다</b>
+          손에 있는 자료를 정리하고, 각 열이 어떤 유형인지 살펴보고, 표를 어떻게 나눌지 생각하는 단계에서는 시트가 오히려 편합니다. 데이터베이스는 <b>그 다음 단계</b>의 도구입니다.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="part" id="m2">
+  <div class="wrap">
+    <div class="part-head"><div class="part-no">02</div>
+      <h2>표로 관리하다 무너지는 순간<span class="en">Where It Breaks</span></h2>
+      <p>시트가 나쁜 게 아닙니다. <b>여러 사람이 오래 쓰기 시작할 때</b> 한계가 드러납니다. 다섯 가지로 정리했습니다.</p></div>
+    <div class="grid">
+      <div class="card"><div class="lbl"><span class="no">1</span>동시 편집 충돌</div>
+        <p>두 사람이 같은 시트를 동시에 고치면, 나중에 저장한 쪽이 이기거나 두 값을 합치는 방식으로 처리됩니다. <b>"누가 맞는지"</b>를 시스템이 판단해 주지 않습니다.</p>
+        <p>은행에서 두 사람이 같은 계좌에서 동시에 출금한다고 생각해 보세요. 시트라면 한쪽이 사라질 수 있습니다.</p></div>
+      <div class="card"><div class="lbl"><span class="no">2</span>형식을 강제하지 않는다</div>
+        <p>한 칸에는 원래 하나의 값만 들어가야 합니다. 그런데 시트는 <code>서울/부산</code>처럼 두 값을 슬래시로 적어도, 전화번호에 하이픈을 넣어도 그냥 받아 줍니다. 나중에 "부산 고객만 뽑아 주세요"라는 요청에 <b>답할 수 없게</b> 됩니다.</p></div>
+      <div class="card"><div class="lbl"><span class="no">3</span>중복을 막지 못한다</div>
+        <p>같은 고객이 세 줄에 적혀도 시트는 경고하지 않습니다. 주소를 바꿀 때 <b>세 곳을 모두 찾아야</b> 하고, 하나를 빠뜨리면 어느 줄이 맞는지 알 수 없게 됩니다.</p></div>
+      <div class="card"><div class="lbl"><span class="no">4</span>규모의 한계</div>
+        <p>시트에도 물리적 상한이 있습니다.</p>
+        <div class="twrap"><table class="t">
+          <thead><tr><th>도구</th><th>한 장(시트)에 담을 수 있는 양</th></tr></thead>
+          <tbody>
+            <tr><td class="ts">엑셀</td><td>1,048,576행 × 16,384열</td></tr>
+            <tr><td class="ts">구글 시트</td><td>문서 전체 1,000만 셀 · 최대 18,278열</td></tr>
+          </tbody>
+        </table></div>
+        <p class="src">출처 — Microsoft 「Excel specifications and limits」, Google Workspace Updates(2022) 셀 한도 상향 공지</p></div>
+      <div class="card"><div class="lbl"><span class="no">5</span>권한과 기록이 거칠다</div>
+        <p>시트의 권한은 보통 "문서 전체" 단위입니다. <b>이 열만 보여 주기</b>가 어렵습니다. 또 누가 어느 칸을 언제 바꿨는지 추적하려면 별도 기능에 의존해야 합니다.</p></div>
+    </div>
+    <div class="callout warn"><b>정리하면</b>
+      시트의 한계는 <b>성능</b> 문제가 아니라 <b>보장</b> 문제입니다. "이 값은 반드시 하나만 존재한다", "이 형식만 들어온다", "동시에 고쳐도 값이 깨지지 않는다"를 <b>도구가 보장해 주지 않습니다.</b> 사람이 규칙을 지켜야 하고, 사람은 잊습니다.</div>
+  </div>
+</section>
+
+<section class="part" id="m3">
+  <div class="wrap">
+    <div class="part-head"><div class="part-no">03</div>
+      <h2>데이터베이스가 다른 점<span class="en">What Databases Add</span></h2>
+      <p>같은 표인데 무엇이 다른가. 일곱 항목으로 나란히 놓고 보겠습니다.</p></div>
+    <div class="grid">
+      <div class="card span">
+        <div class="lbl"><span class="no">1</span>나란히 비교</div>
+        <div class="twrap"><table class="t">
+          <caption>엑셀·구글 시트 vs 데이터베이스</caption>
+          <thead><tr><th style="width:130px">항목</th><th>엑셀 · 구글 시트</th><th>데이터베이스</th></tr></thead>
+          <tbody>
+            <tr><td>기본 단위</td><td>칸(셀)과 시트</td><td class="ts">행(레코드)과 테이블</td></tr>
+            <tr><td>형식</td><td>아무 값이나 들어감</td><td class="ts">열마다 형식을 <b>미리 정하고 강제</b></td></tr>
+            <tr><td>중복</td><td>막지 못함</td><td class="ts">키로 <b>막음</b></td></tr>
+            <tr><td>동시 사용</td><td>충돌을 나중에 정리</td><td class="ts">순서와 잠금을 <b>시스템이 관리</b></td></tr>
+            <tr><td>규모</td><td>수십만 행에서 급격히 느려짐</td><td class="ts">억 단위까지 다루도록 설계</td></tr>
+            <tr><td>조회</td><td>마우스로 필터·정렬</td><td class="ts">질의(SQL)로 <b>말로 물어봄</b></td></tr>
+            <tr><td>권한</td><td>문서 단위</td><td class="ts">사용자·테이블·열 단위</td></tr>
+            <tr><td>되돌리기</td><td>실행 취소(사람이 한 만큼)</td><td class="ts">트랜잭션(전부 또는 전무)</td></tr>
+          </tbody>
+        </table></div>
+        <div class="callout key"><b>가장 큰 차이는 '보장'입니다</b>
+          표 모양은 비슷합니다. 다른 것은 <b>도구가 무엇을 책임지는가</b>입니다. 시트는 사람이 지키는 규칙에 기대고, 데이터베이스는 규칙을 <b>기계가 강제</b>합니다.</div>
+      </div>
+      <div class="card"><div class="lbl"><span class="no">2</span>그래서 생기는 실무 차이</div>
+        <div class="facts">
+          <div class="fact"><span>고객 주소 변경</span>한 행만 고치면 끝난다</div>
+          <div class="fact"><span>없는 상품 주문</span>참조 무결성이 막아 준다</div>
+          <div class="fact"><span>동시 주문 폭주</span>잠금과 트랜잭션이 순서를 정한다</div>
+          <div class="fact"><span>야간 작업</span>백업·복구가 도구 기능으로 있다</div>
+        </div>
+      </div>
+      <div class="card"><div class="lbl"><span class="no">3</span>시트를 버려야 하나?</div>
+        <p>아닙니다. 실무에서는 <b>둘을 함께</b> 씁니다. 데이터베이스에서 필요한 값만 뽑아 시트로 가져와 보고, 검토와 의사결정은 시트에서 합니다.</p>
+        <p>파이썬의 <code>read_sql()</code>이나 CSV 내보내기가 그 다리 역할을 합니다.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="part" id="m4">
+  <div class="wrap">
+    <div class="part-head"><div class="part-no">04</div>
+      <h2>언제 무엇을 쓰나<span class="en">Choosing the Right Tool</span></h2>
+      <p>도구는 취향이 아니라 <b>조건</b>으로 고릅니다. 네 가지만 확인하면 판단이 서습니다.</p></div>
+    <div class="grid">
+      <div class="card span">
+        <div class="lbl"><span class="no">1</span>네 가지 확인 질문</div>
+        <div class="twrap"><table class="t">
+          <caption>도구 선택 기준</caption>
+          <thead><tr><th style="width:210px">확인할 것</th><th>시트가 맞다</th><th>데이터베이스가 맞다</th></tr></thead>
+          <tbody>
+            <tr><td>① 함께 쓰는 사람이 몇 명인가</td><td>한두 명, 잠깐</td><td class="ts">여러 명이 계속</td></tr>
+            <tr><td>② 값이 살아 있는가</td><td>한 번 만들고 끝</td><td class="ts">매일 바뀌고 쌓인다</td></tr>
+            <tr><td>③ 틀린 값이 들어오면 어떤 일이 나는가</td><td>다시 고치면 된다</td><td class="ts">사고가 난다 (돈·개인정보)</td></tr>
+            <tr><td>④ 찾는 질문이 정해져 있는가</td><td>눈으로 찾으면 된다</td><td class="ts">같은 질문을 계속 반복한다</td></tr>
+          </tbody>
+        </table></div>
+        <div class="callout tip"><b>실무 감각</b>
+          네 항목 중 <b>하나라도 오른쪽</b>에 걸리면 데이터베이스를 검토할 시점입니다. 특히 ③번은 타협하지 마세요. 개인정보나 금액이 오가는 표라면 처음부터 데이터베이스로 가는 편이 훨씬 싸게 끝납니다.</div>
+      </div>
+      <div class="card span quiz"><div class="lbl"><span class="no">✓</span>확인 문제</div>
+        <div class="q" data-ok="2" data-ex="시트의 한계는 속도가 아니라 '보장'입니다. 형식 강제·중복 방지·동시 편집 시 값 보존을 도구가 책임지지 않아, 사람이 규칙을 지켜야 합니다.">
+          <p class="qt">Q1. 엑셀·구글 시트의 가장 근본적인 한계는?</p>
+          <div class="opts">
+            <button type="button" data-i="0">색을 예쁘게 못 넣는다</button>
+            <button type="button" data-i="1">차트를 그릴 수 없다</button>
+            <button type="button" data-i="2">형식·중복·동시 편집을 도구가 보장하지 않는다</button>
+          </div>
+          <p class="fb" aria-live="polite"></p>
+        </div>
+        <div class="q" data-ok="1" data-ex="한 칸에 '서울/부산'처럼 두 값을 넣으면 나중에 '부산 고객만' 뽑을 수 없습니다. 데이터베이스는 한 칸에 원자 값 하나만 허용해 이런 문제를 원천적으로 막습니다.">
+          <p class="qt">Q2. 한 칸에 <code>서울/부산</code>처럼 두 값을 적는 것이 문제인 까닭은?</p>
+          <div class="opts">
+            <button type="button" data-i="0">글자가 너무 길어져서</button>
+            <button type="button" data-i="1">나중에 값 하나로 조건을 걸어 조회할 수 없어서</button>
+            <button type="button" data-i="2">색이 자동으로 바뀌어서</button>
+          </div>
+          <p class="fb" aria-live="polite"></p>
+        </div>
+        <div class="q" data-ok="0" data-ex="엑셀은 1,048,576행 × 16,384열, 구글 시트는 문서 전체 1,000만 셀이라는 상한이 있습니다. 상한에 닿으면 더 이상 값을 넣을 수 없습니다.">
+          <p class="qt">Q3. 엑셀 한 장에 담을 수 있는 최대 크기는?</p>
+          <div class="opts">
+            <button type="button" data-i="0">1,048,576행 × 16,384열</button>
+            <button type="button" data-i="1">10,000행 × 1,000열</button>
+            <button type="button" data-i="2">제한이 없다</button>
+          </div>
+          <p class="fb" aria-live="polite"></p>
+        </div>
+        <div class="q" data-ok="1" data-ex="두 사람이 같은 계좌에서 동시에 출금할 때, 시트는 나중에 저장한 값이 이기거나 값을 합쳐 버릴 수 있습니다. 데이터베이스는 트랜잭션과 잠금으로 순서를 정해 이런 사고를 막습니다.">
+          <p class="qt">Q4. 여러 사람이 동시에 같은 값을 고칠 때 데이터베이스가 시트보다 안전한 까닭은?</p>
+          <div class="opts">
+            <button type="button" data-i="0">화면이 더 커서</button>
+            <button type="button" data-i="1">트랜잭션과 잠금으로 처리 순서를 정하기 때문</button>
+            <button type="button" data-i="2">자동 저장을 하지 않기 때문</button>
+          </div>
+          <p class="fb" aria-live="polite"></p>
+        </div>
+        <div class="q" data-ok="2" data-ex="데이터베이스에서 필요한 값만 뽑아 시트로 가져와 보고·검토하는 방식이 실무의 표준입니다. 둘은 대체 관계가 아니라 역할 분담 관계입니다.">
+          <p class="qt">Q5. 실무에서 시트와 데이터베이스의 올바른 관계는?</p>
+          <div class="opts">
+            <button type="button" data-i="0">데이터베이스가 생기면 시트는 쓰지 않는다</button>
+            <button type="button" data-i="1">시트가 더 좋으니 데이터베이스는 필요 없다</button>
+            <button type="button" data-i="2">데이터베이스에서 뽑아 시트로 보고·검토하며 함께 쓴다</button>
+          </div>
+          <p class="fb" aria-live="polite"></p>
+        </div>
+        <div class="qscore" aria-live="polite"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="part" id="glossary">
+  <div class="wrap">
+    <div class="part-head">
+      <div class="part-no">Aa</div>
+      <h2>용어 사전 — 비유로 보기<span class="en">Glossary</span></h2>
+      <p>이 편에 나온 낡말을 비유와 함께 정리했습니다.</p>
+    </div>
+    <div class="gl-group"><h4>표와 데이터베이스</h4>
+      <div class="gl-grid">
+        <div class="gl-card" id="g-시트"><b>스프레드시트</b>
+          <p class="gl-an"><span>비유</span>화이트보드에 그린 표. 누구나 바로 쓰고 바로 지울 수 있지만, 지워진 건 돌아오지 않습니다.</p>
+          <p class="gl-mean"><span>뜻</span>엑셀·구글 시트처럼 칸(셀) 단위로 값을 넣고 계산하는 도구.</p></div>
+        <div class="gl-card" id="g-레코드"><b>레코드 (행)</b>
+          <p class="gl-an"><span>비유</span>명부의 한 줄. 한 사람에 대한 정보가 한 줄에 모여 있습니다.</p>
+          <p class="gl-mean"><span>뜻</span>하나의 대상을 나타내는 값의 묶음. 데이터베이스에서는 튜플이라고도 부릅니다.</p></div>
+        <div class="gl-card" id="g-원자값"><b>원자 값</b>
+          <p class="gl-an"><span>비유</span>더 쪼갤 수 없는 한 알의 알갱이.</p>
+          <p class="gl-mean"><span>뜻</span>한 칸에 하나만 들어가는 값. '서울/부산'은 원자 값이 아닙니다.</p></div>
+        <div class="gl-card" id="g-보장"><b>보장 (Guarantee)</b>
+          <p class="gl-an"><span>비유</span>계약서에 적힌 약속. 말이 아니라 문서로 남습니다.</p>
+          <p class="gl-mean"><span>뜻</span>도구가 반드시 지켜 주는 성질. 데이터베이스는 형식·중복·동시성을 보장합니다.</p></div>
+      </div>
+    </div>
+    <div class="gl-group"><h4>도구 고르기</h4>
+      <div class="gl-grid">
+        <div class="gl-card" id="g-잠금"><b>잠금 (Lock)</b>
+          <p class="gl-an"><span>비유</span>화장실 문고리. 한 사람이 쓰는 동안 다른 사람은 기다립니다.</p>
+          <p class="gl-mean"><span>뜻</span>여러 사용자가 같은 값을 동시에 고치지 못하게 잠시 막는 장치.</p></div>
+        <div class="gl-card" id="g-질의언어"><b>질의 언어</b>
+          <p class="gl-an"><span>비유</span>창구에서 쓰는 정중한 말투. 정해진 형식으로 물으면 정확히 답이 옵니다.</p>
+          <p class="gl-mean"><span>뜻</span>데이터베이스에 요청을 보내는 언어. 대표적으로 SQL이 있습니다.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="part" id="outro">
+  <div class="wrap outro">
+    <h2>도구는 조건으로 고릅니다</h2>
+    <p>시트는 즉시성이 강하고, 데이터베이스는 보장이 강합니다. 다음 페이지에서 데이터베이스를 실제로 구현하는 도구들을 살펴봅니다.</p>
+    <div class="hbtns" style="justify-content:center">
+      <a class="pbtn primary" href="03_db_tools.html">다음 · 데이터베이스를 구현하는 도구</a>
+      <a class="pbtn" href="01_everyday_database.html">이전 · 우리 생활 속 데이터베이스</a>
+    </div>
+  </div>
+</section>

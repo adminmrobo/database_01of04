@@ -1,0 +1,247 @@
+<section class="part" id="m1">
+  <div class="wrap">
+    <div class="part-head"><div class="part-no">01</div>
+      <h2>질문 — 반드시 프로그래밍을 배워야 할까<span class="en">The Question</span></h2>
+      <p>오리엔테이션에서 가장 많이 나오는 질문입니다. 답부터 말하면 <b>"아니다. 하지만 아무것도 안 배우면 안 된다."</b></p></div>
+    <div class="grid">
+      <div class="card">
+        <div class="lbl"><span class="no">1</span>먼저 오해를 풀자</div>
+        <p>데이터베이스를 <b>쓰는 일</b>과 <b>만드는 일</b>은 다릅니다. 대부분의 직무는 쓰는 쪽입니다.</p>
+        <div class="twrap"><table class="t">
+          <caption>직무별로 실제로 필요한 것</caption>
+          <thead><tr><th style="width:150px">하는 일</th><th>실제로 필요한 능력</th><th style="width:110px">코딩</th></tr></thead>
+          <tbody>
+            <tr><td>현업 담당자</td><td>필요한 값을 정확히 요청하고, 결과를 검증하기</td><td class="ts">거의 없음</td></tr>
+            <tr><td>기획·운영</td><td>무엇을 기록할지 정하고 규칙을 합의하기</td><td class="ts">거의 없음</td></tr>
+            <tr><td>분석 담당</td><td>조회(SQL)로 값을 뽑아 해석하기</td><td class="ts">SQL 정도</td></tr>
+            <tr><td>설계 담당</td><td>표를 나누고 키와 제약을 정하기</td><td class="ts">SQL + 약간의 코드</td></tr>
+            <tr><td>개발자</td><td>설계 + 프로그램과 연결하기</td><td class="ts">필수</td></tr>
+          </tbody>
+        </table></div>
+      </div>
+      <div class="card">
+        <div class="lbl"><span class="no">2</span>그래도 최소한의 문법은 필요하다</div>
+        <p>SQL은 프로그래밍 언어라기보다 <b>영어 문장</b>에 가깝습니다. 문법이 짧고, 배우는 데 오래 걸리지 않습니다.</p>
+        <div class="calc">SELECT   name, email          -- 무엇을 보고 싶은가
+FROM     customer             -- 어느 표에서
+WHERE    address = '부산'      -- 어떤 조건일 때
+ORDER BY name;                -- 어떤 순서로
+
+  읽는 순서 그대로 적으면 됩니다.
+  "고객 표에서 주소가 부산인 사람의 이름과 이메일을
+   이름 순서로 보여 주세요."</div>
+        <div class="callout key"><b>진짜 관문은 문법이 아닙니다</b>
+          어려운 것은 <b>무엇을 물어봐야 하는지 스스로 아는 일</b>입니다. 그건 코딩 실력이 아니라 업무 이해와 정리 습관에서 나옵니다.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="part" id="m2">
+  <div class="wrap">
+    <div class="part-head"><div class="part-no">02</div>
+      <h2>코딩보다 먼저 — 수집하고 분류하는 습관<span class="en">Habits Before Code</span></h2>
+      <p>데이터베이스 설계에서 가장 오래 걸리는 작업은 코드를 쓰는 일이 아닙니다. <b>무엇을 담을지 정하는 일</b>입니다.</p></div>
+    <div class="grid">
+      <div class="card span">
+        <div class="lbl"><span class="no">1</span>세 가지 습관</div>
+        <div class="twrap"><table class="t">
+          <caption>코딩 실력보다 먼저 자리 잡아야 하는 습관</caption>
+          <thead><tr><th style="width:150px">습관</th><th>하는 일</th><th>이것이 없으면</th></tr></thead>
+          <tbody>
+            <tr><td><b>수집</b></td><td>업무에서 실제로 어떤 값이 생기는지 관찰해 모은다</td><td class="ts">나중에 열을 계속 덧붙이게 된다</td></tr>
+            <tr><td><b>분류</b></td><td>비슷한 것끼리 묶고, 무엇이 무엇에 속하는지 가른다</td><td class="ts">한 표에 뒤섞여 중복이 생긴다</td></tr>
+            <tr><td><b>정리</b></td><td>이름을 정하고, 같은 뜻은 하나로 통일한다</td><td class="ts">같은 값이 여러 이름으로 흩어진다</td></tr>
+          </tbody>
+        </table></div>
+        <div class="callout info"><b>관찰이 먼저입니다</b>
+          "고객 표를 만들자"가 아니라 <b>"현장에서 실제로 무엇을 적고 있는가"</b>부터 봅니다. 영수증, 주문서, 메모, 엑셀 파일이 모두 재료입니다. 이 관찰을 건너뛰면 표를 세 번쯤 다시 만들게 됩니다.</div>
+      </div>
+      <div class="card">
+        <div class="lbl"><span class="no">2</span>분류 연습 — 이 값은 어디에 속할까</div>
+        <ul class="checklist">
+          <li><b>고객 이름</b> — 고객에 속한다 (한 사람에 하나)</li>
+          <li><b>전화번호</b> — 고객에 속하지만 <b>여러 개일 수 있다</b> → 따로 떼어낸다</li>
+          <li><b>주문 날짜</b> — 고객이 아니라 <b>주문</b>에 속한다</li>
+          <li><b>상품 가격</b> — 상품에 속한다</li>
+          <li><b>주문 당시의 가격</b> — 상품이 아니라 <b>주문 항목</b>에 속한다 (나중에 가격이 바뀌어도 과거 기록은 그대로여야 하므로)</li>
+        </ul>
+        <p>이 다섯 줄이 그대로 <b>테이블 분할</b>입니다. 4주차에 배울 개체·속성 찾기의 원형입니다.</p>
+      </div>
+      <div class="card">
+        <div class="lbl"><span class="no">3</span>AI 시대에도 남는 능력</div>
+        <p>코드 작성은 도구가 많이 도와줍니다. 그러나 <b>"무엇을 물어야 하는지"</b>와 <b>"이 결과가 맞는지"</b>는 사람이 판단합니다.</p>
+        <p>질문을 정확히 만들 수 있는 사람이 AI도 잘 씁니다. 그 힘은 결국 <b>정리하는 습관</b>에서 나옵니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="part" id="m3">
+  <div class="wrap">
+    <div class="part-head"><div class="part-no">03</div>
+      <h2>보안 의식 — 데이터베이스는 개인정보의 창고다<span class="en">Security Mindset</span></h2>
+      <p>데이터베이스를 배우는 순간 <b>남의 정보를 다루는 자리</b>에 서게 됩니다. 여기서는 원칙만 잡고 갑니다.</p></div>
+    <div class="grid">
+      <div class="card span">
+        <div class="lbl"><span class="no">1</span>다섯 가지 원칙</div>
+        <div class="twrap"><table class="t">
+          <caption>데이터베이스를 다룰 때의 최소 보안 원칙</caption>
+          <thead><tr><th style="width:150px">원칙</th><th>내용</th><th>흔한 실수</th></tr></thead>
+          <tbody>
+            <tr><td><b>최소 수집</b></td><td>목적에 필요한 값만 담는다</td><td class="ts">쓰지도 않는 주민번호·생년월일을 모은다</td></tr>
+            <tr><td><b>권한 분리</b></td><td>보는 사람·고치는 사람·관리하는 사람을 나눈다</td><td class="ts">모두에게 관리자 계정을 준다</td></tr>
+            <tr><td><b>접속 정보 관리</b></td><td>비밀번호는 코드에 적지 않는다</td><td class="ts">프로그램 소스에 비밀번호를 박아 둔다</td></tr>
+            <tr><td><b>백업</b></td><td>복구할 수 있어야 안전하다</td><td class="ts">백업이 없다가 한 번에 잃는다</td></tr>
+            <tr><td><b>기록</b></td><td>누가 언제 무엇을 했는지 남긴다</td><td class="ts">문제가 생겨도 원인을 못 찾는다</td></tr>
+          </tbody>
+        </table></div>
+        <div class="callout warn"><b>절대 하지 말 것</b>
+          <code>SELECT * FROM customer WHERE name = '" + 이름 + "'</code> 처럼 <b>입력값을 문장에 이어 붙이지 마세요.</b> 값은 반드시 자리표시자(<code>?</code>)로 넘깁니다. 이 한 줄이 <b>SQL 인젝션</b>을 막는 가장 확실한 방법입니다.</div>
+      </div>
+      <div class="card">
+        <div class="lbl"><span class="no">2</span>권한은 이렇게 나눈다</div>
+        <div class="calc scroll">권한 분리 예시 (개념)
+
+  역할            조회   입력   수정   삭제   구조 변경
+  ─────────────────────────────────────────────────
+  현업 담당자      ✓      ✓      ✗      ✗      ✗
+  운영 담당자      ✓      ✓      ✓      ✗      ✗
+  분석 담당자      ✓      ✗      ✗      ✗      ✗
+  관리자(DBA)      ✓      ✓      ✓      ✓      ✓
+
+  핵심 : 필요한 만큼만 준다 (최소 권한 원칙)</div>
+      </div>
+      <div class="card">
+        <div class="lbl"><span class="no">3</span>정리하면</div>
+        <ul class="checklist">
+          <li>데이터는 <b>맡은 만큼 책임</b>이 따라옵니다</li>
+          <li>편한 것과 안전한 것은 다릅니다 — 편한 설정이 사고를 만듭니다</li>
+          <li>사고는 대개 <b>실수</b>로 납니다. 그래서 <b>되돌릴 수 있게</b> 준비합니다</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="part" id="m4">
+  <div class="wrap">
+    <div class="part-head"><div class="part-no">04</div>
+      <h2>정리 의식 — 중복을 만들지 않는 습관<span class="en">Order &amp; Discipline</span></h2>
+      <p>이 편의 결론입니다. 좋은 데이터베이스는 좋은 정리 습관에서 나옵니다.</p></div>
+    <div class="grid">
+      <div class="card span">
+        <div class="lbl"><span class="no">1</span>정리 의식 다섯 가지</div>
+        <div class="twrap"><table class="t">
+          <caption>정리 의식 — 습관과 그 결과</caption>
+          <thead><tr><th style="width:170px">습관</th><th>구체적으로</th><th>얻는 것</th></tr></thead>
+          <tbody>
+            <tr><td><b>한 곳에만 적는다</b></td><td>같은 사실은 한 테이블에만 저장한다</td><td class="ts">고칠 곳이 한 곳뿐이다</td></tr>
+            <tr><td><b>이름을 정한다</b></td><td>표와 열의 이름 규칙을 처음에 정한다</td><td class="ts">나중에 찾기 쉽다</td></tr>
+            <tr><td><b>같은 뜻은 하나로</b></td><td>'고객명'과 '성명'을 섞어 쓰지 않는다</td><td class="ts">합칠 때 어긋나지 않는다</td></tr>
+            <tr><td><b>빈 값의 뜻을 정한다</b></td><td>모름 · 없음 · 미입력을 구분한다</td><td class="ts">평균·집계가 틀리지 않는다</td></tr>
+            <tr><td><b>바뀐 것을 남긴다</b></td><td>수정 이력을 기록한다</td><td class="ts">나중에 이유를 되짚을 수 있다</td></tr>
+          </tbody>
+        </table></div>
+        <div class="callout key"><b>중복을 없애면 무엇이 좋아지나</b>
+          같은 값을 여러 곳에 두면 <b>① 저장 공간이 늘고 ② 고칠 때 빠뜨리고 ③ 어느 값이 맞는지 알 수 없게</b> 됩니다. 이 세 문제는 뒤에서 <b>이상현상(삽입·갱신·삭제)</b>이라는 이름으로 다시 나옵니다.</div>
+      </div>
+      <div class="card">
+        <div class="lbl"><span class="no">2</span>정리 전 · 정리 후</div>
+        <div class="calc scroll">정리 전 — 한 표에 다 넣은 상태
+
+  주문번호  고객명   고객주소      상품명    수량
+  ────────────────────────────────────────────
+   A-001    김철수   서울 강남      콜라      2
+   A-001    김철수   서울 강남      과자      1     ← 고객 정보 중복
+   A-002    김철수   서울 강남      물        1     ← 또 중복
+   A-003    이영희   부산 해운대    콜라      3
+
+  김철수가 이사하면? → 3줄을 고쳐야 하고, 하나를 빠뜨리면 값이 어긋난다
+
+정리 후 — 역할별로 나눈 상태
+
+  고객(고객번호, 이름, 주소)         주문(주문번호, 고객번호, 일시)
+  주문항목(주문번호, 상품번호, 수량)  상품(상품번호, 이름, 가격)
+
+  김철수가 이사하면? → 고객 표의 1줄만 고치면 끝난다</div>
+      </div>
+      <div class="card span quiz"><div class="lbl"><span class="no">✓</span>확인 문제</div>
+        <div class="q" data-ok="1" data-ex="데이터베이스를 '쓰는' 일에는 대부분 프로그래밍이 필요하지 않습니다. 다만 SQL 정도의 최소한의 문법은 필요하며, 진짜 관문은 무엇을 물어야 하는지 아는 것입니다.">
+          <p class="qt">Q1. 데이터베이스를 다루려면 프로그래밍을 반드시 배워야 할까?</p>
+          <div class="opts">
+            <button type="button" data-i="0">반드시 배워야 한다. 코드 없이는 아무것도 못 한다</button>
+            <button type="button" data-i="1">쓰는 일에는 대부분 필요 없지만, SQL 정도의 최소 문법은 필요하다</button>
+            <button type="button" data-i="2">전혀 필요 없다. 아무것도 몰라도 된다</button>
+          </div>
+          <p class="fb" aria-live="polite"></p>
+        </div>
+        <div class="q" data-ok="2" data-ex="SQL은 프로그래밍 언어라기보다 영어 문장에 가깝습니다. SELECT / FROM / WHERE / ORDER BY를 읽는 순서대로 적으면 되므로 배우는 부담이 작습니다.">
+          <p class="qt">Q2. SQL에 대한 설명으로 가장 알맞은 것은?</p>
+          <div class="opts">
+            <button type="button" data-i="0">수학 공식처럼 복잡한 기호 언어다</button>
+            <button type="button" data-i="1">배우는 데 수년이 걸리는 고급 언어다</button>
+            <button type="button" data-i="2">영어 문장에 가깝고 문법이 짧아 배우기 쉽다</button>
+          </div>
+          <p class="fb" aria-live="polite"></p>
+        </div>
+        <div class="q" data-ok="0" data-ex="입력값을 문자열로 이어 붙여 SQL을 만들면 악의적인 문장이 실행되는 SQL 인젝션에 노출됩니다. 값은 반드시 자리표시자(?)로 넘겨야 합니다.">
+          <p class="qt">Q3. SQL 인젝션을 막는 가장 확실한 방법은?</p>
+          <div class="opts">
+            <button type="button" data-i="0">입력값을 문장에 이어 붙이지 않고 자리표시자(<code>?</code>)로 넘긴다</button>
+            <button type="button" data-i="1">비밀번호를 길게 만든다</button>
+            <button type="button" data-i="2">테이블 이름을 어렵게 짓는다</button>
+          </div>
+          <p class="fb" aria-live="polite"></p>
+        </div>
+        <div class="q" data-ok="1" data-ex="같은 값을 여러 곳에 두면 고칠 때 빠뜨리기 쉽고, 어느 값이 맞는지 알 수 없게 됩니다. 그래서 같은 사실은 한 테이블에만 저장하는 것이 정리 의식의 첫 번째입니다.">
+          <p class="qt">Q4. '같은 사실은 한 곳에만 적는다'가 중요한 까닭은?</p>
+          <div class="opts">
+            <button type="button" data-i="0">표를 작게 만들기 위해서</button>
+            <button type="button" data-i="1">고칠 때 빠뜨리지 않고, 어느 값이 맞는지 헷갈리지 않기 때문</button>
+            <button type="button" data-i="2">저장 공간이 무한하기 때문</button>
+          </div>
+          <p class="fb" aria-live="polite"></p>
+        </div>
+        <div class="qscore" aria-live="polite"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="part" id="glossary">
+  <div class="wrap">
+    <div class="part-head">
+      <div class="part-no">Aa</div>
+      <h2>용어 사전 — 비유로 보기<span class="en">Glossary</span></h2>
+      <p>습관과 보안에 관한 낱말을 정리했습니다.</p>
+    </div>
+    <div class="gl-group"><h4>습관과 태도</h4>
+      <div class="gl-grid">
+        <div class="gl-card" id="g-최소권한"><b>최소 권한 원칙</b>
+          <p class="gl-an"><span>비유</span>창고 열쇠는 필요한 사람에게만, 필요한 만큼만.</p>
+          <p class="gl-mean"><span>뜻</span>업무에 꼭 필요한 권한만 주고 나머지는 주지 않는 보안 원칙.</p></div>
+        <div class="gl-card" id="g-이상현상"><b>이상현상</b>
+          <p class="gl-an"><span>비유</span>한 통에 뒤섞인 서류. 하나를 빼면 다른 것도 따라 나옵니다.</p>
+          <p class="gl-mean"><span>뜻</span>중복 저장 때문에 삽입·갱신·삭제가 의도와 다르게 동작하는 문제.</p></div>
+        <div class="gl-card" id="g-자리표시자"><b>자리표시자</b>
+          <p class="gl-an"><span>비유</span>빈칸에 값을 끼우는 서식. 문장은 그대로, 값만 갈아 끼웁니다.</p>
+          <p class="gl-mean"><span>뜻</span>SQL에 값을 안전하게 전달하는 기호(<code>?</code> 등). 문장과 값을 분리해 인젝션을 막습니다.</p></div>
+        <div class="gl-card" id="g-최소수집"><b>최소 수집</b>
+          <p class="gl-an"><span>비유</span>필요한 서류만 받는 창구. 안 받으면 잃을 것도 없습니다.</p>
+          <p class="gl-mean"><span>뜻</span>목적에 필요한 정보만 모으는 원칙. 모으지 않은 개인정보는 유출될 일도 없습니다.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="part" id="outro">
+  <div class="wrap outro">
+    <h2>1주차를 마칩니다</h2>
+    <p>일상 속 사례에서 출발해, 시트와의 차이, 도구의 종류, 그리고 <b>무엇보다 습관</b>을 봤습니다. 다음 주차부터는 데이터베이스의 정의와 특징으로 들어갑니다.</p>
+    <div class="hbtns" style="justify-content:center">
+      <a class="pbtn primary" href="answers.html">1주차 정답과 채점 기준</a>
+      <a class="pbtn" href="index.html">1주차 표지로</a>
+    </div>
+  </div>
+</section>

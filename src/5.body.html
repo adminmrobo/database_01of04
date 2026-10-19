@@ -1,0 +1,850 @@
+<header class="hero" id="top">
+  <div class="hwrap">
+    <div class="crumb">데이터베이스 설계 · 4주차 · <b>데이터 모델링과 E-R 모델</b></div>
+    <h1>현실 세계를<br><em>개체와 관계</em>로 옮기기</h1>
+    <p class="lead">"고객이 상품을 주문한다"는 문장 하나에서 무엇이 개체이고 무엇이 관계인지 가려내는 일. 이 편에서는 개체·속성·관계와 ERD 표기법을 익히고, 쇼핑몰 ERD를 직접 그려 봅니다.</p>
+    <div class="hbtns">
+      <a class="pbtn primary" href="#problem">도입 문제부터</a>
+      <a class="pbtn" href="#m3">ERD 기호</a>
+      <a class="pbtn" href="#prompt">코드 가이드</a>
+      <a class="pbtn" href="index.html">처음 화면</a>
+    </div>
+    <div class="hero-keys"><span class="kchip">현실세계 → 개념 → 논리</span><span class="kchip">속성 6종</span>
+      <span class="kchip">1:1 · 1:N · N:M</span><span class="kchip">계층·네트워크·관계 모델</span></div>
+  </div>
+</header>
+
+<section class="part" id="problem">
+  <div class="wrap">
+    <div class="part-head"><div class="part-no">00</div>
+      <h2>도입 문제 — 한 문장을 표로 바꾸기<span class="en">Problem</span></h2>
+      <p>"김철수가 지난 10월 5일에 삼각김밥 2개와 커피 1잔을 주문했다." 이 문장에서 표를 만들어야 합니다. 무엇부터 시작할까요?</p></div>
+    <div class="grid">
+      <div class="card"><div class="lbl"><span class="no">가</span>문장을 뜯어보면</div>
+        <div class="calc">김철수   → 사람 (이름)
+10월 5일 → 시간
+삼각김밥 → 물건 (이름)
+커피     → 물건 (이름)
+2개, 1잔 → 수량
+주문했다 → <em>둘 사이의 관계</em></div>
+        <p>값들(김철수·삼각김밥·10월 5일)과 <b>값 사이의 관계</b>(주문했다)가 섞여 있습니다. 이 둘을 갈라내는 것이 데이터 모델링의 시작입니다.</p>
+      </div>
+      <div class="card"><div class="lbl"><span class="no">나</span>잘못 시작하면</div>
+        <div class="calc">주문표
+┌──────┬────────┬──────┬──────┬──────┐
+│ 고객 │ 날짜   │ 상품 │ 수량 │ 가격 │
+├──────┼────────┼──────┼──────┼──────┤
+│김철수│10-05   │삼각김밥│  2  │1400 │
+│김철수│10-05   │커피   │  1  │1800 │
+└──────┴────────┴──────┴──────┴──────┘
+한 번의 주문이 <em>두 행</em>으로 흩어짐</div>
+        <p>주문 하나가 여러 행에 흩어지고, 고객 이름과 상품 이름이 반복됩니다. 3편에서 본 <b>중복</b>이 여기서 다시 나타납니다.</p>
+      </div>
+      <div class="card span"><div class="lbl"><span class="no">다</span>이 편의 질문</div>
+        <p>현실 세계를 <b>개념적 구조</b>로 표현하려면 무엇을 먼저 정해야 할까요? 개체는 어떻게 찾고, 속성은 어떻게 나누며, 관계의 종류는 어떻게 구분할까요? — 그리고 그것을 그림으로 그리는 규칙이 ERD입니다.</p>
+      </div>
+    </div>
+    <div class="cameo robo"><img alt="M-Robo" data-src="ch_robo_tablet">
+      <div class="bub"><div class="who">M-Robo</div>
+      <p>삐빅 — 설계 순서를 안내합니다, 휴먼. <b>① 현실 관찰 → ② 개념 모델(ERD) → ③ 논리 모델 → ④ 물리 모델</b>입니다. 박사님, 이번 편은 ②입니다.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="part" id="m1">
+  <div class="wrap">
+    <div class="part-head"><div class="part-no">01</div>
+      <h2>데이터 모델링과 데이터 모델<span class="en">Data Modeling</span></h2>
+      <p>현실 세계와 컴퓨터 세계 사이를 잇는 두 단계를 먼저 봅니다.</p></div>
+    <div class="grid">
+      <div class="card"><div class="lbl"><span class="no">1</span>현실세계 → 컴퓨터 세계</div>
+        <div class="flow">
+          <div class="fbox"><b>현실 세계</b>사람·사물·사건</div><span class="farr">→</span>
+          <div class="fbox hot"><b>개념 세계</b>개념적 구조 (ERD)</div><span class="farr">→</span>
+          <div class="fbox"><b>컴퓨터 세계</b>논리·물리 구조</div>
+        </div>
+        <div class="callout key"><b>두 단계의 이름</b>
+          <b>개념적 데이터 모델링</b> — 현실 세계를 개체와 관계로 추상화 (ERD, 이번 편)<br>
+          <b>논리적 데이터 모델링</b> — 개념 구조를 릴레이션으로 변환 (관계 데이터 모델, 다음 편)</div>
+      </div>
+      <div class="card"><div class="lbl"><span class="no">2</span>데이터 모델의 구성</div>
+        <p>데이터 모델은 세 가지로 이루어집니다.</p>
+        <div class="facts">
+          <div class="fact"><span>구조</span>데이터의 정적 성질 — 어떤 개체가 있고 어떻게 연결되는가</div>
+          <div class="fact"><span>연산</span>데이터의 동적 성질 — 삽입·삭제·수정·검색</div>
+          <div class="fact"><span>제약조건</span>값이 지켜야 할 규칙 — 논리적 제약</div>
+        </div>
+        <p class="src">구조가 그릇, 연산이 사용법, 제약조건이 안전장치입니다. 셋이 함께 있어야 데이터 모델입니다.</p>
+      </div>
+      <div class="card"><div class="lbl"><span class="no">3</span>개념적 구조 vs 논리적 구조</div>
+        <div class="twrap"><table class="t">
+          <thead><tr><th></th><th>개념적 구조</th><th>논리적 구조</th></tr></thead>
+          <tbody>
+            <tr><td class="ts">표현</td><td>ERD (개체-관계 다이어그램)</td><td>릴레이션(표), 계층, 네트워크</td></tr>
+            <tr><td class="ts">기준</td><td>사용자 관점의 의미</td><td>DBMS가 다룰 수 있는 형식</td></tr>
+            <tr><td class="ts">예</td><td>고객 ─ 주문 ─ 상품</td><td>customer, orders, order_item</td></tr>
+            <tr><td class="ts">이 편</td><td class="tacc">이번 편</td><td>다음 편</td></tr>
+          </tbody>
+        </table></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="part" id="m2">
+  <div class="wrap">
+    <div class="part-head"><div class="part-no">02</div>
+      <h2>개체와 속성<span class="en">Entity &amp; Attribute</span></h2>
+      <p>ERD의 두 재료입니다. 개체는 <b>타입과 인스턴스</b>로, 속성은 <b>여섯 갈래</b>로 나뉩니다.</p></div>
+    <div class="grid">
+      <div class="card"><div class="lbl"><span class="no">1</span>개체 타입과 개체 인스턴스</div>
+        <p>개체는 <b>현실 세계에서 독립적으로 존재하는 것</b>입니다. 개체 타입은 <b>틀</b>, 개체 인스턴스는 <b>실제 값</b>입니다.</p>
+        <div class="calc">개체 타입 : 고객        개체 인스턴스
+┌───────────┐        ┌─────────────────────┐
+│  고객     │  ────▶ │ 김철수 / 이영희 / 박민수 │
+└───────────┘        └─────────────────────┘
+  (틀·설계도)            (실제 데이터 행)</div>
+        <p class="src">릴레이션으로 옮기면 <b>개체 타입 = 테이블</b>, <b>개체 인스턴스 = 튜플(행)</b>입니다.</p>
+      </div>
+      <div class="card"><div class="lbl"><span class="no">2</span>속성의 여섯 갈래</div>
+        <div class="twrap"><table class="t">
+          <thead><tr><th>속성</th><th>뜻</th><th>예</th><th>ERD 표기</th></tr></thead>
+          <tbody>
+            <tr><td class="ts">단순 속성</td><td>더 나눌 수 없음</td><td>나이, 성별</td><td>타원</td></tr>
+            <tr><td class="ts">복합 속성</td><td>여러 값으로 나뉨</td><td>주소(시·구·동)</td><td>큰 타원 + 작은 타원</td></tr>
+            <tr><td class="ts">단일값 속성</td><td>값이 하나</td><td>주민번호</td><td>타원</td></tr>
+            <tr><td class="ts">다중값 속성</td><td>값이 여러 개</td><td>전화번호, 취미</td><td>이중 타원</td></tr>
+            <tr><td class="ts">유도 속성</td><td>다른 값에서 계산됨</td><td>나이(생년월일), 총액</td><td>점선 타원</td></tr>
+            <tr><td class="ts">키 속성</td><td>개체를 유일하게 식별</td><td>고객번호</td><td>밑줄</td></tr>
+          </tbody>
+        </table></div>
+      </div>
+      <div class="card span"><div class="lbl"><span class="no">3</span>ERD 기호로 보기</div>
+        <div class="diagram">
+          <svg viewBox="0 0 720 230" role="img" aria-label="속성의 ERD 표현">
+            <rect x="20" y="80" width="120" height="52" rx="4" fill="rgba(176,124,255,.18)" stroke="#b07cff"/>
+            <text x="80" y="112" text-anchor="middle" fill="#e6dcff" font-size="13">고객</text>
+            <ellipse cx="220" cy="40" rx="52" ry="20" fill="rgba(38,30,69,.95)" stroke="#4d3f8c"/>
+            <text x="220" y="45" text-anchor="middle" fill="#cfc7f0" font-size="11.5">고객번호</text>
+            <line x1="220" y1="60" x2="220" y2="78" stroke="#4d3f8c"/><line x1="180" y1="95" x2="140" y2="95" stroke="#4d3f8c"/>
+            <text x="220" y="86" text-anchor="middle" fill="#ffc65c" font-size="11">키 속성 — 밑줄</text>
+            <ellipse cx="360" cy="40" rx="46" ry="20" fill="rgba(38,30,69,.95)" stroke="#4d3f8c"/>
+            <text x="360" y="45" text-anchor="middle" fill="#cfc7f0" font-size="11.5">이름</text>
+            <line x1="340" y1="58" x2="180" y2="82" stroke="#4d3f8c"/>
+            <ellipse cx="500" cy="40" rx="50" ry="20" fill="rgba(38,30,69,.95)" stroke="#4d3f8c"/>
+            <text x="500" y="45" text-anchor="middle" fill="#cfc7f0" font-size="11.5">주소</text>
+            <line x1="470" y1="58" x2="200" y2="84" stroke="#4d3f8c"/>
+            <ellipse cx="500" cy="40" rx="72" ry="20" fill="none" stroke="#3d3170" stroke-dasharray="3 3"/>
+            <ellipse cx="622" cy="40" rx="56" ry="20" fill="rgba(38,30,69,.95)" stroke="#4d3f8c"/>
+            <text x="622" y="45" text-anchor="middle" fill="#cfc7f0" font-size="11.5">전화번호</text>
+            <line x1="590" y1="58" x2="220" y2="86" stroke="#4d3f8c"/>
+            <ellipse cx="622" cy="40" rx="78" ry="20" fill="none" stroke="#3d3170" stroke-dasharray="3 3"/>
+            <ellipse cx="220" cy="170" rx="52" ry="20" fill="rgba(38,30,69,.95)" stroke="#4d3f8c"/>
+            <text x="220" y="175" text-anchor="middle" fill="#cfc7f0" font-size="11.5">나이</text>
+            <line x1="220" y1="150" x2="220" y2="132" stroke="#4d3f8c"/>
+            <ellipse cx="220" cy="170" rx="64" ry="20" fill="none" stroke="#57d0dc" stroke-dasharray="3 3"/>
+            <text x="360" y="175" fill="#57d0dc" font-size="11">점선 타원 = 유도 속성 (생년월일에서 계산)</text>
+            <text x="360" y="200" fill="#ff86b8" font-size="11">이중 타원 = 다중값 속성 (전화번호가 여러 개)</text>
+            <text x="360" y="222" fill="#b5abd6" font-size="11">큰 타원 + 작은 타원 = 복합 속성 (주소 = 시 + 구 + 동)</text>
+          </svg>
+        </div>
+      </div>
+      <div class="card"><div class="lbl"><span class="no">4</span>0과 NULL값</div>
+        <p>두 값은 다릅니다. <b>0은 "값이 0"</b>이고, <b>NULL은 "값을 모르거나 해당 없음"</b>입니다.</p>
+        <div class="calc">재고수량 = 0     → "품절" 이라는 사실을 아는 상태
+재고수량 = NULL  → "재고를 아직 세지 못함" 이라는 상태
+전화번호 = NULL  → "전화번호가 없는 고객" (해당 없음)</div>
+        <div class="callout warn"><b>집계할 때 반드시 걸립니다</b>
+          <code>AVG(재고수량)</code>은 NULL을 <b>분모에서 제외</b>합니다. 0을 NULL로 바꾸면 평균이 달라집니다.</div>
+      </div>
+      <div class="card span quiz"><div class="lbl"><span class="no">✓</span>확인 문제</div>
+        <div class="q" data-ok="2" data-ex="유도 속성은 다른 속성 값에서 계산해 낼 수 있는 속성입니다. 나이는 생년월일에서 계산되므로 유도 속성이고, ERD에서는 점선 타원으로 표기합니다.">
+          <p class="qt">Q1. 생년월일에서 계산되는 '나이'는 어떤 속성인가요?</p>
+          <div class="opts"><button type="button" data-i="0">다중값 속성</button>
+            <button type="button" data-i="1">복합 속성</button><button type="button" data-i="2">유도 속성</button></div>
+          <p class="fb" aria-live="polite"></p></div>
+        <div class="q" data-ok="0" data-ex="다중값 속성은 한 개체가 여러 값을 가질 수 있는 속성으로 ERD에서 이중 타원으로 표기합니다. 전화번호·취미가 대표적입니다.">
+          <p class="qt">Q2. ERD에서 <b>이중 타원</b>으로 표기하는 속성은?</p>
+          <div class="opts"><button type="button" data-i="0">다중값 속성</button>
+            <button type="button" data-i="1">유도 속성</button><button type="button" data-i="2">키 속성</button></div>
+          <p class="fb" aria-live="polite"></p></div>
+        <p class="qscore">이 카드 점수 0 / 2</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="part" id="m3">
+  <div class="wrap">
+    <div class="part-head"><div class="part-no">03</div>
+      <h2>관계와 관계의 유형<span class="en">Relationship</span></h2>
+      <p>관계는 <b>개체와 개체가 맺는 뜻 있는 연결</b>입니다. 연결되는 개체의 수에 따라 세 가지로 나뉩니다.</p></div>
+    <div class="grid three">
+      <div class="card"><div class="lbl"><span class="no">1</span>일대일 (1:1)</div>
+        <p>양쪽이 각각 하나씩만 연결됩니다.</p>
+        <div class="calc">사람 ──── 혼인증 ──── 사람
+  배우자 1명 ↔ 배우자 1명</div>
+        <p class="src">실무에서는 <b>같은 개체를 굳이 나눈 경우</b>가 많습니다(보안 정보 분리 등).</p>
+      </div>
+      <div class="card"><div class="lbl"><span class="no">2</span>일대다 (1:N)</div>
+        <p>한쪽 하나가 다른 쪽 여러 개와 연결됩니다. <b>가장 흔한 관계</b>입니다.</p>
+        <div class="calc">부서 ──── 소속 ──── 사원
+  1개 부서  ↔  N명 사원
+  (사원은 부서 하나에만)</div>
+        <p class="src">고객–주문, 게시판–글, 카테고리–상품이 모두 1:N입니다.</p>
+      </div>
+      <div class="card"><div class="lbl"><span class="no">3</span>다대다 (N:M)</div>
+        <p>양쪽 모두 여러 개와 연결됩니다. <b>관계 자체에 속성이 생깁니다.</b></p>
+        <div class="calc">고객 ──── 구매 ──── 책
+  N명 고객 ↔ M권의 책
+  (구매일·수량은 관계의 속성)</div>
+        <p class="src">릴레이션으로 옮길 때 <b>별도 테이블</b>이 필요합니다(다음 편).</p>
+      </div>
+      <div class="card span"><div class="lbl"><span class="no">4</span>관계의 종류와 ERD 표기</div>
+        <div class="diagram">
+          <svg viewBox="0 0 720 220" role="img" aria-label="관계의 유형 세 가지">
+            <rect x="30" y="60" width="90" height="44" rx="4" fill="rgba(176,124,255,.18)" stroke="#b07cff"/>
+            <text x="75" y="87" text-anchor="middle" fill="#e6dcff" font-size="12">사람</text>
+            <diamond points="210,82 250,60 290,82 250,104" fill="rgba(255,134,184,.16)" stroke="#ff86b8"/>
+            <text x="250" y="87" text-anchor="middle" fill="#ffd6e8" font-size="11">혼인</text>
+            <line x1="120" y1="82" x2="210" y2="82" stroke="#4d3f8c"/><line x1="290" y1="82" x2="380" y2="82" stroke="#4d3f8c"/>
+            <rect x="380" y="60" width="90" height="44" rx="4" fill="rgba(176,124,255,.18)" stroke="#b07cff"/>
+            <text x="425" y="87" text-anchor="middle" fill="#e6dcff" font-size="12">사람</text>
+            <text x="150" y="72" fill="#b5abd6" font-size="11">1</text><text x="360" y="72" fill="#b5abd6" font-size="11">1</text>
+            <text x="500" y="87" fill="#8f85b8" font-size="11.5">일대일 — 혼인</text>
+
+            <rect x="30" y="150" width="90" height="44" rx="4" fill="rgba(176,124,255,.18)" stroke="#b07cff"/>
+            <text x="75" y="177" text-anchor="middle" fill="#e6dcff" font-size="12">부서</text>
+            <polygon points="210,172 250,150 290,172 250,194" fill="rgba(255,134,184,.16)" stroke="#ff86b8"/>
+            <text x="250" y="177" text-anchor="middle" fill="#ffd6e8" font-size="11">소속</text>
+            <line x1="120" y1="172" x2="210" y2="172" stroke="#4d3f8c"/><line x1="290" y1="172" x2="380" y2="172" stroke="#4d3f8c"/>
+            <rect x="380" y="150" width="90" height="44" rx="4" fill="rgba(176,124,255,.18)" stroke="#b07cff"/>
+            <text x="425" y="177" text-anchor="middle" fill="#e6dcff" font-size="12">사원</text>
+            <text x="150" y="162" fill="#b5abd6" font-size="11">1</text><text x="360" y="162" fill="#b5abd6" font-size="11">N</text>
+            <text x="500" y="177" fill="#8f85b8" font-size="11.5">일대다 — 부서와 사원</text>
+
+            <text x="560" y="40" fill="#ff86b8" font-size="11.5">다대다 — 고객과 책</text>
+            <text x="560" y="58" fill="#8f85b8" font-size="11">관계에 속성이 붙고, 별도 표가 필요</text>
+          </svg>
+        </div>
+      </div>
+      <div class="card"><div class="lbl"><span class="no">5</span>관계의 참여도와 차수</div>
+        <div class="facts">
+          <div class="fact"><span>참여도</span>전체 참여(모든 개체가 반드시 참여) / 부분 참여(일부만 참여)</div>
+          <div class="fact"><span>차수</span>관계에 참여하는 개체의 수 — 2개면 이항, 3개면 삼항</div>
+        </div>
+        <div class="usecase"><b>참여도 예</b>
+          "모든 주문은 반드시 한 고객에 속한다" → 주문은 <b>전체 참여</b><br>
+          "고객은 주문이 없을 수도 있다" → 고객은 <b>부분 참여</b></div>
+      </div>
+      <div class="card"><div class="lbl"><span class="no">6</span>관계도 속성을 가진다</div>
+        <p>관계는 연결만이 아니라 <b>값</b>을 가질 수 있습니다. 다대다 관계에서 특히 그렇습니다.</p>
+        <div class="calc">고객 ── 구매 ── 책
+              │
+        관계의 속성
+        · 구매일
+        · 수량
+        · 결제금액</div>
+        <p class="src">이 속성들을 어디에 둘지가 다음 편의 핵심 주제입니다.</p>
+      </div>
+      <div class="card span quiz"><div class="lbl"><span class="no">✓</span>확인 문제</div>
+        <div class="q" data-ok="1" data-ex="한 부서에 여러 사원이 속하고, 사원은 하나의 부서에만 속하므로 1:N(일대다)입니다. 1:N은 실무에서 가장 흔한 관계입니다.">
+          <p class="qt">Q3. "한 부서에 여러 사원이 속한다"의 관계 유형은?</p>
+          <div class="opts"><button type="button" data-i="0">1:1</button>
+            <button type="button" data-i="1">1:N</button><button type="button" data-i="2">N:M</button></div>
+          <p class="fb" aria-live="polite"></p></div>
+        <div class="q" data-ok="2" data-ex="고객과 책처럼 양쪽 모두 여러 개와 연결되는 다대다 관계에서는 구매일·수량 같은 속성이 관계에 붙고, 릴레이션으로 옮길 때 별도 테이블이 필요합니다.">
+          <p class="qt">Q4. 다대다 관계를 릴레이션으로 옮길 때 반드시 필요한 것은?</p>
+          <div class="opts"><button type="button" data-i="0">한쪽 개체를 삭제한다</button>
+            <button type="button" data-i="1">속성을 모두 제거한다</button>
+            <button type="button" data-i="2">관계를 나타내는 별도 테이블을 만든다</button></div>
+          <p class="fb" aria-live="polite"></p></div>
+        <p class="qscore">이 카드 점수 0 / 2</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="part" id="m4">
+  <div class="wrap">
+    <div class="part-head"><div class="part-no">04</div>
+      <h2>논리적 데이터 모델<span class="en">Logical Data Models</span></h2>
+      <p>개념 구조를 컴퓨터가 다룰 수 있는 형식으로 옮긴 것입니다. 세 가지 모델이 순서대로 등장했습니다.</p></div>
+    <div class="grid three">
+      <div class="card"><div class="lbl"><span class="no">1</span>계층 데이터 모델</div>
+        <p>부모-자식 트리 구조입니다. <b>1:N 관계만</b> 표현할 수 있습니다.</p>
+        <div class="calc">      회사
+     ╱   ╲
+  부서1   부서2
+   │
+  사원1, 사원2</div>
+        <p class="src">1편의 계층형 DBMS(IMS)와 짝을 이룹니다. 다대다를 표현할 수 없어 <b>중복 저장</b>이 생깁니다.</p>
+      </div>
+      <div class="card"><div class="lbl"><span class="no">2</span>네트워크 데이터 모델</div>
+        <p>그래프 구조로 <b>다대다 관계까지</b> 표현합니다. 레코드 사이에 여러 개의 링크를 둘 수 있습니다.</p>
+        <div class="calc">  사원 ──▶ 부서
+   │  ╲
+   │   ╲──▶ 프로젝트
+   └──────▶ 스킬</div>
+        <p class="src">표현력은 좋지만 <b>구조가 복잡하고 물리 구조에 종속</b>됩니다.</p>
+      </div>
+      <div class="card"><div class="lbl"><span class="no">3</span>관계 데이터 모델</div>
+        <p>데이터를 <b>2차원 표(릴레이션)</b>로 표현합니다. 단순하고 수학적 기반이 튼튼해 현재의 표준입니다.</p>
+        <div class="calc">고객(고객번호, 이름, 주소)
+주문(주문번호, 고객번호, 날짜)</div>
+        <p class="src">관계 사이의 연결은 <b>값의 일치</b>(외래키)로 표현합니다. 다음 편 전체가 이 모델입니다.</p>
+      </div>
+      <div class="card span"><div class="lbl"><span class="no">4</span>세 모델 비교</div>
+        <div class="twrap"><table class="t">
+          <thead><tr><th>항목</th><th>계층 모델</th><th>네트워크 모델</th><th>관계 모델</th></tr></thead>
+          <tbody>
+            <tr><td class="ts">구조</td><td>트리</td><td>그래프</td><td class="tacc">2차원 표</td></tr>
+            <tr><td class="ts">관계 표현</td><td class="bad">1:N만</td><td>1:N, N:M</td><td>모두 (표로 변환)</td></tr>
+            <tr><td class="ts">검색 방법</td><td>포인터 따라가기</td><td>링크 따라가기</td><td>값의 조건(SQL)</td></tr>
+            <tr><td class="ts">구조 변경</td><td class="bad">어려움</td><td class="bad">어려움</td><td class="ok">비교적 쉬움</td></tr>
+            <tr><td class="ts">사용 편의</td><td>낮음</td><td>낮음</td><td class="tacc">높음</td></tr>
+          </tbody>
+        </table></div>
+      </div>
+      <div class="card span quiz"><div class="lbl"><span class="no">✓</span>확인 문제</div>
+        <div class="q" data-ok="0" data-ex="계층 데이터 모델은 트리 구조이므로 1:N 관계만 표현할 수 있고, 다대다 관계는 중복 저장으로 우회해야 합니다. 네트워크 모델이 그래프 구조로 이를 보완했습니다.">
+          <p class="qt">Q5. 계층 데이터 모델의 한계로 알맞은 것은?</p>
+          <div class="opts"><button type="button" data-i="0">1:N 관계만 표현할 수 있다</button>
+            <button type="button" data-i="1">표 형태로 저장할 수 없다</button>
+            <button type="button" data-i="2">여러 사용자가 동시에 쓸 수 없다</button></div>
+          <p class="fb" aria-live="polite"></p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="part" id="m5">
+  <div class="wrap">
+    <div class="part-head"><div class="part-no">05</div>
+      <h2>쇼핑몰 ERD 그려 보기<span class="en">Practice</span></h2>
+      <p>배운 기호로 6편 전체에서 쓸 예제의 ERD를 완성합니다. 왼쪽은 개념 구조, 오른쪽은 그것을 표로 옮긴 모습입니다.</p></div>
+    <div class="grid">
+      <div class="card"><div class="lbl"><span class="no">1</span>개체 찾기 — 명사에 밑줄</div>
+        <div class="calc">"<em>고객</em>이 <em>상품</em>을 <em>주문</em>한다.
+ 고객은 여러 번 주문할 수 있고,
+ 한 주문에 여러 상품이 담긴다.
+ 상품은 <em>카테고리</em>로 분류된다."</div>
+        <div class="facts">
+          <div class="fact"><span>개체</span>고객, 주문, 상품, 카테고리</div>
+          <div class="fact"><span>관계</span>고객─주문(1:N), 주문─상품(N:M), 카테고리─상품(1:N)</div>
+          <div class="fact"><span>관계의 속성</span>주문─상품의 수량·단가</div>
+        </div>
+      </div>
+      <div class="card"><div class="lbl"><span class="no">2</span>관계 유형 판정</div>
+        <div class="twrap"><table class="t">
+          <thead><tr><th>문장</th><th>관계</th><th>근거</th></tr></thead>
+          <tbody>
+            <tr><td class="ts">고객이 주문한다</td><td class="tacc">1:N</td><td>한 고객이 여러 주문, 주문은 한 고객</td></tr>
+            <tr><td class="ts">주문에 상품이 담긴다</td><td class="tacc">N:M</td><td>한 주문에 여러 상품, 한 상품이 여러 주문</td></tr>
+            <tr><td class="ts">상품이 분류된다</td><td class="tacc">1:N</td><td>한 카테고리에 여러 상품, 상품은 한 카테고리</td></tr>
+          </tbody>
+        </table></div>
+        <div class="callout key"><b>N:M은 반드시 쪼갭니다</b>
+          주문─상품의 N:M은 <code>order_item</code>이라는 중간 개체로 나눠 <b>두 개의 1:N</b>으로 만듭니다. 그래야 수량·단가를 붙일 곳이 생깁니다.</div>
+      </div>
+      <div class="card span"><div class="lbl"><span class="no">3</span>완성된 ERD</div>
+        <div class="diagram">
+          <svg viewBox="0 0 740 300" role="img" aria-label="쇼핑몰 ERD">
+            <rect x="20" y="110" width="120" height="50" rx="4" fill="rgba(176,124,255,.18)" stroke="#b07cff"/>
+            <text x="80" y="141" text-anchor="middle" fill="#e6dcff" font-size="12.5">고객</text>
+            <rect x="250" y="110" width="120" height="50" rx="4" fill="rgba(176,124,255,.18)" stroke="#b07cff"/>
+            <text x="310" y="141" text-anchor="middle" fill="#e6dcff" font-size="12.5">주문</text>
+            <rect x="480" y="110" width="140" height="50" rx="4" fill="rgba(87,208,220,.18)" stroke="#57d0dc"/>
+            <text x="550" y="134" text-anchor="middle" fill="#d3f4f8" font-size="12.5">주문상세</text>
+            <text x="550" y="150" text-anchor="middle" fill="#8f85b8" font-size="10.5">(관계 → 개체)</text>
+            <rect x="480" y="230" width="140" height="50" rx="4" fill="rgba(176,124,255,.18)" stroke="#b07cff"/>
+            <text x="550" y="261" text-anchor="middle" fill="#e6dcff" font-size="12.5">상품</text>
+            <rect x="250" y="230" width="140" height="50" rx="4" fill="rgba(255,198,92,.16)" stroke="#ffc65c"/>
+            <text x="320" y="261" text-anchor="middle" fill="#fff2d4" font-size="12.5">카테고리</text>
+            <line x1="140" y1="135" x2="250" y2="135" stroke="#ff86b8"/>
+            <text x="195" y="127" text-anchor="middle" fill="#ff86b8" font-size="11">1 : N</text>
+            <line x1="370" y1="135" x2="480" y2="135" stroke="#ff86b8"/>
+            <text x="425" y="127" text-anchor="middle" fill="#ff86b8" font-size="11">1 : N</text>
+            <line x1="550" y1="160" x2="550" y2="230" stroke="#ff86b8"/>
+            <text x="572" y="198" fill="#ff86b8" font-size="11">N : 1</text>
+            <line x1="390" y1="255" x2="480" y2="255" stroke="#ffc65c"/>
+            <text x="435" y="247" text-anchor="middle" fill="#ffc65c" font-size="11">1 : N</text>
+            <text x="310" y="255" fill="#8f85b8" font-size="10.5">주문상세에 수량·단가가 붙는다</text>
+            <text x="550" y="212" text-anchor="middle" fill="#5fd39a" font-size="11">N:M 을 두 개의 1:N 으로 분해</text>
+            <text x="370" y="40" text-anchor="middle" fill="#efe9ff" font-size="13" font-weight="700">쇼핑몰 개념 ERD</text>
+            <text x="370" y="62" text-anchor="middle" fill="#8f85b8" font-size="11.5">개체 5개 · 관계 4개 · 다대다 1개를 중간 개체로 분해</text>
+          </svg>
+        </div>
+      </div>
+      <div class="card"><div class="lbl"><span class="no">4</span>개념 ERD → 논리 구조</div>
+        <div class="calc">고객(고객번호, 이름, 이메일, 연락처, 주소)
+주문(주문번호, 고객번호, 주문일시, 상태)
+주문상세(주문번호, 상품번호, 수량, 단가)
+상품(상품번호, 이름, 카테고리번호, 가격, 재고)
+카테고리(카테고리번호, 이름)</div>
+        <p class="src">밑줄 친 것이 키입니다. 이 변환 규칙과 키의 종류는 <a href="index.html">다음 편</a>에서 자세히 다룹니다.</p>
+      </div>
+      <div class="card"><div class="lbl"><span class="no">5</span>변환 규칙 요약</div>
+        <div class="twrap"><table class="t">
+          <thead><tr><th>개념 구조</th><th>릴레이션으로 옮기면</th></tr></thead>
+          <tbody>
+            <tr><td class="ts">개체</td><td>테이블 하나</td></tr>
+            <tr><td class="ts">1:N 관계</td><td>N쪽 테이블에 1쪽의 키를 <b>외래키</b>로 추가</td></tr>
+            <tr><td class="ts">1:1 관계</td><td>한쪽 테이블에 다른 쪽 키를 외래키로 추가(제약 UNIQUE)</td></tr>
+            <tr><td class="ts">N:M 관계</td><td>관계를 <b>별도 테이블</b>로 만들고 양쪽 키를 외래키로</td></tr>
+            <tr><td class="ts">관계의 속성</td><td>N:M이면 관계 테이블에, 1:N이면 N쪽 테이블에</td></tr>
+          </tbody>
+        </table></div>
+      </div>
+      <div class="card span quiz"><div class="lbl"><span class="no">✓</span>확인 문제</div>
+        <div class="q" data-ok="1" data-ex="1:N 관계는 N쪽 테이블에 1쪽의 기본키를 외래키로 추가하는 방식으로 변환합니다. 주문 여러 건이 같은 고객을 가리키게 됩니다.">
+          <p class="qt">Q6. 1:N 관계를 릴레이션으로 옮기는 방법은?</p>
+          <div class="opts"><button type="button" data-i="0">별도 테이블을 새로 만든다</button>
+            <button type="button" data-i="1">N쪽 테이블에 1쪽의 키를 외래키로 추가한다</button>
+            <button type="button" data-i="2">1쪽 테이블에 N쪽의 키를 외래키로 추가한다</button></div>
+          <p class="fb" aria-live="polite"></p></div>
+        <div class="q" data-ok="2" data-ex="N:M 관계는 관계 자체를 하나의 테이블로 만들고 양쪽 개체의 키를 외래키로 가져옵니다. 주문상세(order_item)가 그 예입니다.">
+          <p class="qt">Q7. 주문과 상품의 다대다 관계를 옮긴 테이블은?</p>
+          <div class="opts"><button type="button" data-i="0">고객</button>
+            <button type="button" data-i="1">카테고리</button><button type="button" data-i="2">주문상세</button></div>
+          <p class="fb" aria-live="polite"></p></div>
+        <p class="qscore">이 카드 점수 0 / 2</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="part" id="prompt">
+  <div class="wrap">
+    <div class="part-head"><div class="part-no">AI</div>
+      <h2>AI와 코드로 직접 해 보기 — 가이드 4종<span class="en">Prompt &amp; Code Guides</span></h2>
+      <p>목표: <b>업무 문장에서 개체·속성·관계를 뽑아 ERD를 만들고, 그것을 표로 옮기기.</b></p></div>
+    <div class="tabs" role="tablist">
+      <button class="tab" role="tab" aria-selected="true" data-tab="ai">생성형 AI 프롬프트</button>
+      <button class="tab" role="tab" aria-selected="false" data-tab="mysql">MySQL</button>
+      <button class="tab" role="tab" aria-selected="false" data-tab="pg">PostgreSQL</button>
+      <button class="tab" role="tab" aria-selected="false" data-tab="py">파이썬</button>
+    </div>
+
+    <div class="card tabpanel on" id="tab-ai">
+      <div class="lbl"><span class="no">G1</span>언제 쓰나</div>
+      <p>업무 담당자가 준 <b>산문 형태의 요구사항</b>에서 개체와 관계를 뽑아낼 때 씁니다. 인터뷰 기록을 그대로 붙여 넣어도 됩니다.</p>
+      <div class="lbl"><span class="no">G2</span>실행 순서</div>
+      <ol class="steps"><li><b>문장 수집</b>업무 설명·인터뷰·기존 문서를 모읍니다.</li><li><b>프롬프트 채우기</b>아래 <code>[ ]</code>를 채웁니다.</li>
+        <li><b>ERD 받기</b>개체·속성·관계와 다이어그램을 받습니다.</li><li><b>검증</b>빠진 개체와 잘못된 관계 유형을 직접 확인합니다.</li></ol>
+      <div class="lbl"><span class="no">G3</span>프롬프트 전체</div>
+      <div class="promptbox">
+        <div class="dlbar"><button class="btn primary" type="button" data-pcopy>프롬프트 복사</button>
+          <button class="btn" type="button" data-ptxt="db_prompt_week5.txt">⬇ .txt 받기</button></div>
+        <pre class="prompt-pre"># 역할
+너는 데이터 모델링과 E-R 모델을 가르치는 설계 튜터다.
+
+# 배경
+나는 아래 업무 설명에서 데이터베이스 설계의 출발점이 될 ERD를 만들려고 한다.
+- 업무 설명: [산문으로 붙여 넣기]
+- 이 시스템의 사용자: [예: 고객, 상담원, 관리자]
+- 지금 쓰는 문서·엑셀 양식: [있으면 붙여 넣기]
+- 나중에 답하고 싶은 질문: [예: 지난달 카테고리별 매출은? 재구매율은?]
+
+# 하고 싶은 일 (해당하는 번호만 남긴다)
+A. 개체 추출: 명사 중에서 독립적으로 관리할 대상을 개체로 뽑고, 왜 그것이 개체인지 근거를 적는다.
+B. 속성 분류: 각 개체의 속성을 단순/복합/단일값/다중값/유도/키 속성으로 분류한다.
+C. 관계 도출: 개체 사이의 관계를 찾아 1:1 / 1:N / N:M 을 판정하고, 그 근거가 되는 문장을 인용한다.
+D. 관계의 속성: 관계에 붙어야 하는 속성(수량·일자·금액 등)을 찾아 어디에 둘지 제안한다.
+E. ERD 텍스트 표기: Mermaid erDiagram 문법으로 ERD를 그린다.
+F. 논리 구조 변환: ERD를 릴레이션(테이블) 목록으로 옮기고, 각 테이블의 기본키 후보를 적는다.
+
+# 반드시 지킬 것
+1. 개체는 "여러 인스턴스가 있고 독립적으로 관리할 필요가 있는 것"만 뽑는다. 값의 목록(예: 성별 구분)은 개체가 아니라 코드다.
+2. 다중값 속성은 그대로 두지 말고 별도 개체로 분리하는 안을 함께 제시한다.
+3. 유도 속성(나이, 합계 등)은 저장하지 않는 것을 기본으로 하고, 저장이 필요한 경우 이유를 적는다.
+4. N:M 관계는 반드시 중간 개체로 분해하고, 그 개체의 이름을 제안한다.
+5. 모든 판정에 근거 문장을 인용한다. 근거가 없으면 "추정"이라고 표시한다.
+6. 지어내지 않는다. 내가 준 설명에 없는 개체·속성을 임의로 추가하지 않는다.
+7. 주석과 설명은 한국어로, 입문자도 따라올 수 있게 쓴다.
+
+# 답변 형식
+1. 한 줄 요약 (개체 수, 관계 수, 주의할 점)
+2. 개체 목록 표 (개체 / 근거 문장 / 대표 속성 / 키 후보)
+3. 관계 목록 표 (관계 / 유형 / 근거 문장 / 관계의 속성)
+4. Mermaid erDiagram 코드 블록
+5. 릴레이션 변환 표 (테이블 / 속성 / 기본키 / 외래키)
+6. 확인이 필요한 항목과 질문 목록
+
+# 업무 설명
+[여기에 산문을 붙여 넣는다]</pre>
+      </div>
+      <div class="lbl"><span class="no">G4</span>라인별 해설</div>
+      <div class="twrap"><table class="t"><thead><tr><th>문장</th><th>의도</th></tr></thead><tbody>
+        <tr><td class="ts">"값의 목록은 개체가 아니라 코드"</td><td>성별·등급 같은 것을 개체로 만들면 표가 쓸데없이 늘어납니다. 다만 <b>코드 테이블</b>로 관리할 값인지도 함께 판단해야 합니다.</td></tr>
+        <tr><td class="ts">"근거 문장을 인용"</td><td>추측으로 만든 관계는 나중에 반드시 틀립니다. 문장 인용을 요구하면 검증이 쉬워집니다.</td></tr>
+        <tr><td class="ts">"유도 속성은 저장하지 않는다"</td><td>나이·합계를 저장하면 원본이 바뀔 때 어긋납니다. 필요하면 뷰나 계산 열로 처리합니다.</td></tr>
+        <tr><td class="ts">"Mermaid erDiagram"</td><td>텍스트로 받아 두면 문서·깃에 넣고 버전 관리할 수 있습니다.</td></tr>
+      </tbody></table></div>
+      <div class="lbl"><span class="no">G5</span>흔한 오류와 해결</div>
+      <div class="twrap"><table class="t"><thead><tr><th>증상</th><th>원인</th><th>해결</th></tr></thead><tbody>
+        <tr><td class="ts">개체가 20개 넘게 나옴</td><td>모든 명사를 개체로 뽑음</td><td>"여러 인스턴스가 있고 독립 관리가 필요한가" 기준을 다시 강조합니다.</td></tr>
+        <tr><td class="ts">N:M이 그대로 남음</td><td>중간 개체 분해 누락</td><td>4번 조항을 강조하고 중간 개체 이름을 요청합니다.</td></tr>
+        <tr><td class="ts">관계 방향이 뒤집힘</td><td>근거 문장 미확인</td><td>근거 문장을 함께 출력하게 하고 직접 대조합니다.</td></tr>
+      </tbody></table></div>
+      <div class="lbl"><span class="no">G6</span>체크리스트</div>
+      <ul class="checklist"><li>모든 개체에 근거 문장이 있는가</li><li>N:M이 모두 분해됐는가</li>
+        <li>유도 속성이 저장 대상으로 들어가 있지 않은가</li><li>키 후보가 모든 개체에 있는가</li>
+        <li>"추정"으로 표시된 항목을 실제로 확인했는가</li></ul>
+      <div class="lbl"><span class="no">G7</span>미니 과제</div>
+      <div class="usecase"><b>과제</b>도서관 대출 업무를 산문 3~5문장으로 적고 위 프롬프트를 돌려 보세요. <b>회원·도서·대출</b>이 나오는지, 대출의 <b>반납일·연체료</b>가 어디에 붙었는지 확인해 보세요.</div>
+    </div>
+
+    <div class="card tabpanel" id="tab-mysql">
+      <div class="lbl"><span class="no">G1</span>언제 쓰나</div>
+      <p>ERD를 <b>실제 테이블로 옮기는</b> 단계입니다. 이 편에서는 관계와 외래키가 어떻게 표현되는지에 집중합니다.</p>
+      <div class="lbl"><span class="no">G2</span>실행 순서</div>
+      <ol class="steps"><li><b>개체 테이블</b>고객·카테고리·상품·주문을 만듭니다.</li><li><b>N:M 분해</b>주문상세 테이블을 만듭니다.</li>
+        <li><b>관계 확인</b>조인으로 관계가 실제로 동작하는지 봅니다.</li><li><b>제약</b>중복 주문을 막는 복합 기본키를 답니다.</li></ol>
+      <div class="lbl"><span class="no">G3</span>전체 코드</div>
+      <div class="codebox" data-name="mysql_week5" data-title="MySQL — ERD를 테이블로">
+        <button class="btn copy" type="button" data-copy="code-my-5">코드 복사</button>
+        <pre id="code-my-5"><code>USE shop;
+SET FOREIGN_KEY_CHECKS = 0;
+DROP TABLE IF EXISTS order_item, orders, product, category, customer;
+SET FOREIGN_KEY_CHECKS = 1;
+
+-- [1] 1쪽 개체들 먼저
+CREATE TABLE category (
+  category_id INT PRIMARY KEY AUTO_INCREMENT,
+  name        VARCHAR(40) NOT NULL UNIQUE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE customer (
+  customer_id INT PRIMARY KEY AUTO_INCREMENT,
+  name        VARCHAR(30) NOT NULL,
+  email       VARCHAR(120) NOT NULL UNIQUE,
+  addr        VARCHAR(200)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- [2] 1:N — N쪽(product)에 1쪽(category)의 키를 외래키로
+CREATE TABLE product (
+  product_id  INT PRIMARY KEY AUTO_INCREMENT,
+  name        VARCHAR(80) NOT NULL,
+  category_id INT,                                  -- FK
+  price       DECIMAL(10,2) NOT NULL,
+  stock       INT NOT NULL DEFAULT 0,
+  CONSTRAINT fk_product_category FOREIGN KEY (category_id)
+    REFERENCES category(category_id) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE orders (
+  order_id    INT PRIMARY KEY AUTO_INCREMENT,
+  customer_id INT NOT NULL,                         -- FK (1:N)
+  ordered_at  DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  status      VARCHAR(10) NOT NULL DEFAULT '신규',
+  CONSTRAINT fk_orders_customer FOREIGN KEY (customer_id)
+    REFERENCES customer(customer_id) ON DELETE RESTRICT
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- [3] N:M 분해 — 관계를 개체로 만든다. 수량·단가는 여기에 붙는다
+CREATE TABLE order_item (
+  order_id   INT NOT NULL,
+  product_id INT NOT NULL,
+  quantity   INT NOT NULL CHECK (quantity > 0),
+  unit_price DECIMAL(10,2) NOT NULL,      -- 주문 시점의 가격 (나중에 바뀌어도 보존)
+  PRIMARY KEY (order_id, product_id),     -- 복합 기본키: 같은 주문에 같은 상품 중복 금지
+  CONSTRAINT fk_oi_order   FOREIGN KEY (order_id)   REFERENCES orders(order_id)  ON DELETE CASCADE,
+  CONSTRAINT fk_oi_product FOREIGN KEY (product_id) REFERENCES product(product_id) ON DELETE RESTRICT
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- [4] 데이터 넣고 관계 확인
+INSERT INTO category (name) VALUES ('김밥류'), ('음료');
+INSERT INTO customer (name,email,addr) VALUES ('김철수','a@shop.com','서울');
+INSERT INTO product (name,category_id,price,stock) VALUES
+ ('삼각김밥',1,1400,50), ('아메리카노',2,1800,30);
+INSERT INTO orders (customer_id) VALUES (1);
+INSERT INTO order_item (order_id,product_id,quantity,unit_price) VALUES
+ (1,1,2,1400), (1,2,1,1800);
+
+-- 관계를 따라가 보기: 1:N 을 조인으로
+SELECT o.order_id, c.name AS 고객, o.ordered_at
+FROM orders o JOIN customer c ON c.customer_id = o.customer_id;
+
+-- N:M 을 양쪽에서 조인으로
+SELECT o.order_id, p.name AS 상품, i.quantity, i.unit_price,
+       i.quantity * i.unit_price AS 금액
+FROM order_item i
+JOIN orders  o ON o.order_id  = i.order_id
+JOIN product p ON p.product_id = i.product_id;</code></pre>
+      </div>
+      <div class="lbl"><span class="no">G4</span>라인별 해설</div>
+      <div class="twrap"><table class="t"><thead><tr><th>줄</th><th>설명</th></tr></thead><tbody>
+        <tr><td class="ts">생성 순서</td><td>1쪽 개체(category·customer)를 먼저 만들어야 N쪽이 참조할 수 있습니다.</td></tr>
+        <tr><td class="ts"><code>ON DELETE SET NULL</code></td><td>카테고리가 지워져도 상품은 남고 분류만 비워집니다. 관계의 의미에 따라 정책을 고릅니다.</td></tr>
+        <tr><td class="ts"><code>ON DELETE RESTRICT</code></td><td>주문이 있는 고객은 삭제 불가 — 실수로 이력이 사라지는 것을 막습니다.</td></tr>
+        <tr><td class="ts"><code>PRIMARY KEY (order_id, product_id)</code></td><td>N:M을 분해한 테이블의 <b>복합 기본키</b>. 같은 주문에 같은 상품이 두 번 들어가는 것을 막습니다.</td></tr>
+        <tr><td class="ts"><code>unit_price</code> 저장</td><td>상품 가격이 나중에 바뀌어도 <b>주문 당시 가격</b>을 보존합니다. 유도 속성을 저장하지 않는 원칙의 예외이며, 이유가 명확합니다.</td></tr>
+        <tr><td class="ts"><code>ON DELETE CASCADE</code></td><td>주문이 지워지면 그 상세도 함께 지웁니다. 고아 레코드를 막습니다.</td></tr>
+      </tbody></table></div>
+      <div class="lbl"><span class="no">G5</span>흔한 오류와 해결</div>
+      <div class="twrap"><table class="t"><thead><tr><th>오류</th><th>원인</th><th>해결</th></tr></thead><tbody>
+        <tr><td class="ts">ERROR 1215</td><td>참조 열 타입 불일치</td><td>양쪽을 <code>INT</code>로 통일합니다.</td></tr>
+        <tr><td class="ts">ERROR 1062 (복합키 중복)</td><td>같은 주문·상품을 두 번 넣음</td><td>정상 동작입니다. <code>ON DUPLICATE KEY UPDATE quantity = quantity + VALUES(quantity)</code>로 수량을 합칩니다.</td></tr>
+        <tr><td class="ts">ERROR 1451 (삭제 불가)</td><td>자식 행이 있는 부모 삭제</td><td>정책을 <code>CASCADE</code>로 바꾸거나 자식부터 정리합니다.</td></tr>
+        <tr><td class="ts">CHECK 제약 위반</td><td>수량 0 이하</td><td>입력값을 검증하거나 제약을 완화합니다.</td></tr>
+      </tbody></table></div>
+      <div class="lbl"><span class="no">G6</span>체크리스트</div>
+      <ul class="checklist"><li>생성 순서가 1쪽 → N쪽인가</li><li>N:M이 중간 테이블로 분해됐는가</li>
+        <li>복합 기본키를 정했는가</li><li>삭제·수정 정책을 관계마다 정했는가</li>
+        <li>주문 시점 가격처럼 보존해야 할 값이 저장됐는가</li></ul>
+      <div class="lbl"><span class="no">G7</span>미니 과제</div>
+      <div class="usecase"><b>과제</b>상품에 <code>할인율</code>을 추가하고, "실제 결제 금액"을 <b>유도 속성으로 계산</b>할지 <b>저장</b>할지 판단해 보세요. 판단 근거를 한 줄로 적으면 설계 감각이 자리 잡습니다.</div>
+    </div>
+
+    <div class="card tabpanel" id="tab-pg">
+      <div class="lbl"><span class="no">G1</span>언제 쓰나</div>
+      <p>같은 ERD를 PostgreSQL로 옮깁니다. PostgreSQL은 <b>부분 인덱스</b>와 <b>DEFERRABLE 제약</b>으로 ERD의 미묘한 요구를 그대로 표현할 수 있습니다.</p>
+      <div class="lbl"><span class="no">G2</span>실행 순서</div>
+      <ol class="steps"><li><b>스키마</b>지정</li><li><b>테이블</b>1쪽 → N쪽 순서</li>
+        <li><b>관계 실험</b>조인과 삭제 정책 확인</li><li><b>인덱스</b>관계 열에 인덱스 추가</li></ol>
+      <div class="lbl"><span class="no">G3</span>전체 코드</div>
+      <div class="codebox" data-name="pg_week5" data-title="PostgreSQL — ERD를 테이블로">
+        <button class="btn copy" type="button" data-copy="code-pg-5">코드 복사</button>
+        <pre id="code-pg-5"><code>CREATE SCHEMA IF NOT EXISTS shop;
+SET search_path TO shop, public;
+
+DROP TABLE IF EXISTS order_item, orders, product, category, customer CASCADE;
+
+CREATE TABLE category (
+  category_id integer GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  name varchar(40) NOT NULL UNIQUE
+);
+
+CREATE TABLE customer (
+  customer_id integer GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  name  varchar(30) NOT NULL,
+  email varchar(120) NOT NULL UNIQUE,
+  addr  varchar(200)
+);
+
+CREATE TABLE product (
+  product_id  integer GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  name        varchar(80) NOT NULL,
+  category_id integer REFERENCES category(category_id) ON DELETE SET NULL,
+  price       numeric(10,2) NOT NULL CHECK (price >= 0),   -- [차이] 금액은 numeric
+  stock       integer NOT NULL DEFAULT 0 CHECK (stock >= 0)
+);
+
+CREATE TABLE orders (
+  order_id    integer GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  customer_id integer NOT NULL REFERENCES customer(customer_id) ON DELETE RESTRICT,
+  ordered_at  timestamptz NOT NULL DEFAULT now(),
+  status      varchar(10) NOT NULL DEFAULT '신규'
+);
+
+CREATE TABLE order_item (
+  order_id   integer NOT NULL REFERENCES orders(order_id) ON DELETE CASCADE,
+  product_id integer NOT NULL REFERENCES product(product_id) ON DELETE RESTRICT,
+  quantity   integer NOT NULL CHECK (quantity > 0),
+  unit_price numeric(10,2) NOT NULL,
+  PRIMARY KEY (order_id, product_id)
+);
+
+-- [차이] 관계 열에 인덱스를 명시적으로 만든다 (PostgreSQL은 FK 인덱스를 자동 생성하지 않음)
+CREATE INDEX idx_product_category ON product(category_id);
+CREATE INDEX idx_orders_customer  ON orders(customer_id);
+CREATE INDEX idx_oi_product       ON order_item(product_id);
+
+-- [차이] 부분 인덱스 — 진행 중 주문만 빠르게 찾는다
+CREATE INDEX idx_orders_active ON orders(customer_id, ordered_at)
+WHERE status &lt;&gt; '완료';
+
+-- N:M 조인 (표준 SQL, 양쪽 동일)
+SELECT o.order_id, p.name AS 상품, i.quantity, i.unit_price,
+       i.quantity * i.unit_price AS 금액
+FROM order_item i
+JOIN orders  o ON o.order_id   = i.order_id
+JOIN product p ON p.product_id = i.product_id;</code></pre>
+      </div>
+      <div class="lbl"><span class="no">G4</span>MySQL ↔ PostgreSQL 대조표</div>
+      <div class="twrap"><table class="t"><thead><tr><th>하고 싶은 일</th><th>MySQL</th><th>PostgreSQL</th></tr></thead><tbody>
+        <tr><td class="ts">외래키 열 인덱스</td><td class="ok">자동 생성됨</td><td class="bad">직접 만들어야 함</td></tr>
+        <tr><td class="ts">금액 타입</td><td><code>DECIMAL(10,2)</code></td><td><code>numeric(10,2)</code></td></tr>
+        <tr><td class="ts">조건부 인덱스</td><td class="bad">불가</td><td><code>CREATE INDEX … WHERE</code></td></tr>
+        <tr><td class="ts">CHECK 제약</td><td>8.0.16부터 실제 동작</td><td>처음부터 완전 지원</td></tr>
+        <tr><td class="ts">여러 표 삭제</td><td><code>SET FOREIGN_KEY_CHECKS=0</code> 후 삭제</td><td><code>DROP TABLE a,b,c CASCADE</code></td></tr>
+        <tr><td class="ts">순환 참조 해결</td><td class="bad">불가</td><td><code>DEFERRABLE INITIALLY DEFERRED</code></td></tr>
+      </tbody></table></div>
+      <div class="lbl"><span class="no">G5</span>흔한 오류와 해결</div>
+      <div class="twrap"><table class="t"><thead><tr><th>오류</th><th>원인</th><th>해결</th></tr></thead><tbody>
+        <tr><td class="ts">relation "shop.orders" does not exist</td><td><code>search_path</code> 미설정</td><td><code>SET search_path TO shop, public;</code></td></tr>
+        <tr><td class="ts">cannot drop table … because other objects depend on it</td><td>외래키 의존</td><td><code>CASCADE</code>를 붙입니다.</td></tr>
+        <tr><td class="ts">FK 조회가 느림</td><td>외래키 열 인덱스 없음</td><td><code>CREATE INDEX</code>로 관계 열을 인덱싱합니다.</td></tr>
+        <tr><td class="ts">update violates foreign key</td><td>자식이 있는 부모 키 변경</td><td><code>ON UPDATE CASCADE</code>를 추가합니다.</td></tr>
+      </tbody></table></div>
+      <div class="lbl"><span class="no">G6</span>체크리스트</div>
+      <ul class="checklist"><li>외래키 열에 인덱스를 만들었는가</li><li>금액을 <code>numeric</code>으로 썼는가</li>
+        <li>CHECK 제약을 붙였는가</li><li>조건부 인덱스를 활용할 조회가 있는가</li></ul>
+      <div class="lbl"><span class="no">G7</span>미니 과제</div>
+      <div class="usecase"><b>과제</b><code>EXPLAIN (ANALYZE, BUFFERS)</code>로 인덱스가 있는 경우와 없는 경우의 조회 계획을 비교해 보세요. ERD의 관계가 <b>실행 계획</b>에 어떻게 나타나는지 보입니다.</div>
+    </div>
+
+    <div class="card tabpanel" id="tab-py">
+      <div class="lbl"><span class="no">G1</span>언제 쓰나</div>
+      <p>ERD를 <b>Mermaid 텍스트로 관리</b>하고, 코드로 검증·시각화할 때 씁니다. 문서와 스키마가 어긋나는 것을 막습니다.</p>
+      <div class="lbl"><span class="no">G2</span>실행 순서</div>
+      <ol class="steps"><li><b>ERD 작성</b>Mermaid 문자열로 씁니다.</li><li><b>검증</b>관계 문법이 맞는지 확인합니다.</li>
+        <li><b>파일로 저장</b>깃에 넣을 수 있게 저장합니다.</li><li><b>DB와 대조</b>실제 테이블 목록과 비교합니다.</li></ol>
+      <div class="lbl"><span class="no">G3</span>전체 코드</div>
+      <div class="codebox" data-name="py_week5" data-title="파이썬 — ERD를 텍스트로 관리하고 DB와 대조">
+        <button class="btn copy" type="button" data-copy="code-py-5">코드 복사</button>
+        <pre id="code-py-5"><code># -*- coding: utf-8 -*-
+"""5주차 실습 — ERD 텍스트 관리와 DB 대조"""
+import os, re
+import pandas as pd
+from sqlalchemy import create_engine
+
+# [1] ERD를 텍스트로 (Mermaid) — 깃으로 버전 관리할 수 있다
+ERD = """
+erDiagram
+    CATEGORY ||--o{ PRODUCT     : "분류한다"
+    CUSTOMER ||--o{ ORDERS      : "주문한다"
+    ORDERS   ||--|{ ORDER_ITEM  : "담는다"
+    PRODUCT  ||--o{ ORDER_ITEM  : "담긴다"
+
+    CATEGORY { int category_id PK
+               string name }
+    CUSTOMER { int customer_id PK
+               string name
+               string email }
+    PRODUCT  { int product_id PK
+               int category_id FK
+               string name
+               numeric price }
+    ORDERS   { int order_id PK
+               int customer_id FK
+               datetime ordered_at }
+    ORDER_ITEM { int order_id PK,FK
+                 int product_id PK,FK
+                 int quantity
+                 numeric unit_price }
+"""
+open("erd.mmd", "w", encoding="utf-8").write(ERD)
+print("erd.mmd 저장 완료")
+
+# [2] 텍스트에서 관계와 카디널리티 뽑아 검사
+rels = re.findall(r"^\s*(\w+)\s+(\|\|--o\{|\|\|--\| \{|\}o--o\{|\|\|--\|\{)\s+(\w+)", ERD, re.M)
+print("관계 목록:")
+for a, card, b in rels:
+    kind = "1:N" if "o{" in card else ("1:1" if card.count("|") == 4 else "N:M")
+    print(f"  {a:10s} {kind:4s} {b}")
+
+# [3] 다대다(N:M)가 남아 있는지 점검 — 남아 있으면 분해가 빠진 것
+nm = [r for r in rels if "}o--o{" in r[1]]
+print("분해되지 않은 N:M:", nm if nm else "없음 (정상)")
+
+# [4] 실제 DB와 대조 — ERD에 있는데 DB에 없는 테이블 찾기
+engine = create_engine(os.environ.get(
+    "SHOP_DB_URL",
+    "mysql+mysqlconnector://root:비밀번호@127.0.0.1:3306/shop?charset=utf8mb4"))
+
+db_tables = pd.read_sql("""
+    SELECT TABLE_NAME FROM information_schema.TABLES
+    WHERE TABLE_SCHEMA='shop' AND TABLE_TYPE='BASE TABLE'
+""", engine)["TABLE_NAME"].str.lower().tolist()
+
+erd_tables = [m.lower() for m in re.findall(r"^\s{4}(\w+)\s*\{", ERD, re.M)]
+print("ERD에만 있고 DB에 없음:", sorted(set(erd_tables) - set(db_tables)))
+print("DB에만 있고 ERD에 없음:", sorted(set(db_tables) - set(erd_tables)))
+
+# [5] 외래키가 실제로 걸려 있는지 확인 — ERD의 선이 DB에도 있는가
+fks = pd.read_sql("""
+    SELECT TABLE_NAME, COLUMN_NAME, REFERENCED_TABLE_NAME, REFERENCED_COLUMN_NAME
+    FROM information_schema.KEY_COLUMN_USAGE
+    WHERE TABLE_SCHEMA='shop' AND REFERENCED_TABLE_NAME IS NOT NULL
+""", engine)
+print(fks.to_string(index=False))</code></pre>
+      </div>
+      <div class="lbl"><span class="no">G4</span>라인별 해설</div>
+      <div class="twrap"><table class="t"><thead><tr><th>줄</th><th>설명</th></tr></thead><tbody>
+        <tr><td class="ts">Mermaid 문법</td><td><code>||--o{</code>는 1:N(선택 참여), <code>||--|{</code>는 1:N(필수 참여)입니다. 참여도까지 표현됩니다.</td></tr>
+        <tr><td class="ts">정규식으로 관계 추출</td><td>ERD를 <b>검사 가능한 텍스트</b>로 다루는 것이 핵심입니다. 그림만 있으면 자동 검사가 불가능합니다.</td></tr>
+        <tr><td class="ts">N:M 잔존 점검</td><td>설계 리뷰에서 가장 먼저 확인할 항목입니다.</td></tr>
+        <tr><td class="ts">테이블 대조</td><td>문서와 실제 DB가 어긋나는 것을 자동으로 잡아냅니다.</td></tr>
+        <tr><td class="ts"><code>KEY_COLUMN_USAGE</code></td><td>데이터 사전에서 <b>외래키 목록</b>을 읽습니다. ERD의 선이 DB에 실제로 있는지 확인합니다.</td></tr>
+      </tbody></table></div>
+      <div class="lbl"><span class="no">G5</span>흔한 오류와 해결</div>
+      <div class="twrap"><table class="t"><thead><tr><th>증상</th><th>원인</th><th>해결</th></tr></thead><tbody>
+        <tr><td class="ts">관계 목록이 비어 있음</td><td>Mermaid 관계 줄의 들여쓰기·문법 불일치</td><td>정규식을 ERD 문법에 맞게 조정합니다.</td></tr>
+        <tr><td class="ts">ERD에만 있고 DB에 없음: [...]</td><td>설계 후 테이블 생성 누락</td><td>마이그레이션 스크립트를 실행합니다.</td></tr>
+        <tr><td class="ts">DB에만 있고 ERD에 없음: [...]</td><td>ERD 갱신 누락</td><td>ERD를 다시 그리고 커밋합니다.</td></tr>
+        <tr><td class="ts">한글 표시 깨짐</td><td>터미널 인코딩</td><td>파일은 utf-8로 저장하고 콘솔 인코딩을 확인합니다.</td></tr>
+      </tbody></table></div>
+      <div class="lbl"><span class="no">G6</span>체크리스트</div>
+      <ul class="checklist"><li>ERD가 텍스트로 저장소에 있는가</li><li>N:M 잔존 점검이 자동화됐는가</li>
+        <li>ERD와 DB 테이블 목록을 대조했는가</li><li>외래키 목록을 실제로 확인했는가</li></ul>
+      <div class="lbl"><span class="no">G7</span>미니 과제</div>
+      <div class="usecase"><b>과제</b>도서관 ERD(회원·도서·대출)를 Mermaid로 쓰고 위 스크립트로 검사해 보세요. 대출의 <b>반납 여부</b>가 어디에 붙어야 하는지도 함께 판단해 보세요.</div>
+    </div>
+  </div>
+</section>
+
+<section class="part" id="glossary">
+  <div class="wrap">
+    <div class="part-head"><div class="part-no">Aa</div><h2>용어 사전 — 비유로 보기<span class="en">Glossary</span></h2></div>
+    <div class="gl-group"><h4>개체와 속성</h4>
+      <div class="gl-grid">
+        <div class="gl-card" id="g-개체"><b>개체 (Entity)</b>
+          <p class="gl-an"><span>비유</span>서류함에 따로 보관할 만한 것. 이름표를 붙일 수 있고 여러 개가 있습니다.</p>
+          <p class="gl-mean"><span>뜻</span>현실 세계에서 독립적으로 존재하는 대상. 개체 타입(틀)과 개체 인스턴스(실제 값)로 나뉩니다.</p></div>
+        <div class="gl-card" id="g-속성"><b>속성 (Attribute)</b>
+          <p class="gl-an"><span>비유</span>인물 카드에 적는 항목 — 이름, 나이, 주소.</p>
+          <p class="gl-mean"><span>뜻</span>개체가 가지는 특성. 단순·복합·단일값·다중값·유도·키 속성으로 나뉩니다.</p></div>
+        <div class="gl-card" id="g-복합"><b>복합 속성</b>
+          <p class="gl-an"><span>비유</span>"주소"라고 적었지만 실제로는 시·구·동 세 칸입니다.</p>
+          <p class="gl-mean"><span>뜻</span>여러 개의 단순 속성으로 나눌 수 있는 속성.</p></div>
+        <div class="gl-card" id="g-유도"><b>유도 속성</b>
+          <p class="gl-an"><span>비유</span>계산으로 나오는 값. 적어 두지 않아도 언제든 다시 계산할 수 있습니다.</p>
+          <p class="gl-mean"><span>뜻</span>다른 속성 값에서 계산되는 속성(나이, 합계). ERD에서 점선 타원으로 표기합니다.</p></div>
+        <div class="gl-card" id="g-null"><b>NULL값</b>
+          <p class="gl-an"><span>비유</span>빈칸과 0은 다릅니다. "모른다"와 "없다"도 다릅니다.</p>
+          <p class="gl-mean"><span>뜻</span>값을 모르거나 적합한 값이 없는 경우를 표시하는 특별한 값.</p></div>
+      </div>
+    </div>
+    <div class="gl-group"><h4>관계와 모델</h4>
+      <div class="gl-grid">
+        <div class="gl-card" id="g-관계"><b>관계 (Relationship)</b>
+          <p class="gl-an"><span>비유</span>두 서류함 사이를 잇는 실. 그 실에 이름표와 값이 붙을 수 있습니다.</p>
+          <p class="gl-mean"><span>뜻</span>개체와 개체 사이의 뜻 있는 연결. 1:1, 1:N, N:M으로 나뉘고 자체 속성을 가질 수 있습니다.</p></div>
+        <div class="gl-card" id="g-카디널리티"><b>관계 유형 (카디널리티)</b>
+          <p class="gl-an"><span>비유</span>한 사람이 여러 장을 가질 수 있는지, 서로 여러 개인지.</p>
+          <p class="gl-mean"><span>뜻</span>연결되는 개체 인스턴스의 수 관계. 1:1 / 1:N / N:M.</p></div>
+        <div class="gl-card" id="g-참여도"><b>참여도</b>
+          <p class="gl-an"><span>비유</span>반드시 있어야 하는 참가자인지, 있어도 되고 없어도 되는지.</p>
+          <p class="gl-mean"><span>뜻</span>전체 참여(모든 개체가 반드시 참여)와 부분 참여(일부만 참여)로 구분합니다.</p></div>
+        <div class="gl-card" id="g-erd"><b>ERD</b>
+          <p class="gl-an"><span>비유</span>건물을 짓기 전의 배치도. 아직 벽은 없지만 어디에 무엇이 놓일지 정해져 있습니다.</p>
+          <p class="gl-mean"><span>뜻</span>개체-관계 다이어그램. 개체·속성·관계를 그림으로 표현한 개념적 구조.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="part" id="author-sec">
+  <div class="wrap">
+    <div class="part-head"><div class="part-no">E-1</div><h2>저자 소개<span class="en">About the Author</span></h2></div>
+    <div class="author"><img class="ph" data-src="ch_doc_front" alt="박사"><div class="ai">
+      <h3>안상선</h3><p>(주)M-Robo 대표 · 데이터베이스 설계 강의 담당</p><p>logix44@hanmail.net</p>
+      <p style="margin-top:10px">4주차 교안의 데이터 모델링·개체관계 모델·논리적 데이터 모델 부분을 재구성했습니다. 참고 교재: 김연희, 『데이터베이스 개론』(3판) — 커리큘럼의 순서 및 주요 용어의 정의, 예시의 설명 등을 참고했습니다.</p>
+    </div></div>
+    <div class="callout info" style="margin-top:16px"><b>교육자 안내</b>
+      확인 문제 총 7문항. 정답·해설·배점은 <a href="answers.html">교육자용 정답 페이지</a>에 있습니다.</div>
+  </div>
+</section>
+
+<section class="part" id="outro">
+  <div class="wrap outro">
+    <h2>수고하셨습니다!</h2>
+    <p>개체와 속성, 관계의 세 유형, 세 가지 논리적 모델을 지나 쇼핑몰 ERD까지 완성했습니다. 다음 편에서는 이 ERD를 <b>키와 무결성</b>이라는 규칙으로 단단하게 만듭니다.</p>
+    <div class="hbtns" style="justify-content:center">
+      <a class="pbtn primary" href="index.html">다음 · 관계 데이터 모델</a>
+      <a class="pbtn" href="answers.html">교육자용 정답</a><a class="pbtn" href="index.html">처음 화면</a>
+    </div>
+  </div>
+</section>

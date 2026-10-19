@@ -1,0 +1,1003 @@
+<header class="hero" id="top">
+  <div class="hwrap">
+    <div class="crumb">데이터베이스 설계 · 2주차 · <b>데이터와 데이터베이스</b></div>
+    <h1>데이터는 그냥 값,<br>정보는 <em>쓸 수 있게 만든 값</em></h1>
+    <p class="lead">영수증 한 장에는 몇 개의 데이터가 들어 있을까요? 이 편에서는 현실에서 수집한 값이 어떻게 의사결정에 쓰이는 정보가 되는지, 그리고 그 정보를 담아 두는 그릇인 데이터베이스가 무엇인지 살펴봅니다.</p>
+    <div class="hbtns">
+      <a class="pbtn primary" href="#problem">도입 문제부터</a>
+      <a class="pbtn" href="#prompt">코드 가이드</a>
+      <a class="pbtn" href="#glossary">용어 사전</a>
+      <a class="pbtn" href="index.html">처음 화면</a>
+    </div>
+    <div class="hero-keys">
+      <span class="kchip">데이터 vs 정보</span><span class="kchip">정보처리 · 정보시스템</span>
+      <span class="kchip">데이터베이스의 4가지 정의</span><span class="kchip">정형 · 반정형 · 비정형</span>
+      <span class="kchip">범주형 · 수치형</span><span class="kchip">파이썬 데이터 구조</span>
+    </div>
+  </div>
+</header>
+
+<section class="part" id="problem">
+  <div class="wrap">
+    <div class="part-head">
+      <div class="part-no">00</div>
+      <h2>도입 문제 — 영수증 한 장<span class="en">Problem</span></h2>
+      <p>오늘 오후 3시 12분, 편의점에서 삼각김밥 2개와 커피 1잔을 샀습니다. 영수증에는 이런 값들이 찍혀 있습니다.</p>
+    </div>
+    <div class="grid">
+      <div class="card"><div class="lbl"><span class="no">가</span>영수증에 찍힌 것</div>
+        <div class="calc">2026-10-18  15:12:07
+삼각김밥  1,400 × 2
+아메리카노 1,800 × 1
+합계      4,600
+카드      ****-1234</div>
+        <p>날짜, 시각, 상품명, 단가, 수량, 합계, 카드번호 — 모두 <b>현실에서 관찰하거나 측정해 수집한 값</b>입니다. 이것이 데이터입니다.</p>
+      </div>
+      <div class="card"><div class="lbl"><span class="no">나</span>여기서 무엇을 알 수 있나</div>
+        <ul>
+          <li>오늘 오후 3시대 매출은 <b>4,600원</b>이다.</li>
+          <li>삼각김밥이 커피보다 <b>많이 팔렸다</b>(2개 vs 1개).</li>
+          <li>이 카드 사용자는 <b>점심 직후에 편의점을 자주 온다</b>.</li>
+        </ul>
+        <p>이 세 문장은 영수증에 <b>직접 적혀 있지 않습니다.</b> 값들을 모으고, 세고, 비교해서 만들어 낸 결과입니다. 이것이 <b>정보</b>입니다.</p>
+      </div>
+      <div class="card span"><div class="lbl"><span class="no">다</span>그래서 이 편의 질문</div>
+        <p>데이터와 정보는 무엇이 다르고, 그 사이에서 벌어지는 일을 무엇이라고 부를까요? 그리고 그렇게 만들어진 정보를 <b>여러 사람이 오래 함께 쓰려면</b> 어디에 어떻게 담아 두어야 할까요? — 이 질문에 답하는 것이 이번 편입니다.</p>
+      </div>
+    </div>
+    <div class="cameo robo">
+      <img alt="M-Robo" data-src="ch_robo_point">
+      <div class="bub"><div class="who">M-Robo</div>
+      <p>삐빅 — 영수증은 <b>데이터</b>이고, "점심에 잘 팔린다"는 <b>정보</b>입니다, 휴먼. 같은 값에서 여러 정보가 나옵니다. 박사님, 정리 완료입니다.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="part" id="m1">
+  <div class="wrap">
+    <div class="part-head">
+      <div class="part-no">01</div>
+      <h2>데이터와 정보<span class="en">Data and Information</span></h2>
+      <p>두 낱말은 자주 섞여 쓰이지만, 데이터베이스를 배울 때는 반드시 갈라 놓아야 합니다.</p>
+    </div>
+    <div class="grid">
+      <div class="card"><div class="lbl"><span class="no">1</span>정의</div>
+        <div class="facts">
+          <div class="fact"><span>데이터</span>현실에서 관찰하거나 측정해 수집한 값</div>
+          <div class="fact"><span>정보</span>데이터를 의사결정에 유용하게 활용할 수 있도록 처리해 체계적으로 조직한 결과물</div>
+        </div>
+        <div class="callout key"><b>한 줄 구분</b>
+          데이터는 <b>날것(raw)</b>, 정보는 <b>쓸 수 있게 만든 것</b>. 데이터는 그 자체로는 의사결정에 바로 쓸 수 없고, 정보는 바로 쓸 수 있습니다.</div>
+      </div>
+      <div class="card"><div class="lbl"><span class="no">2</span>비교</div>
+        <div class="twrap"><table class="t">
+          <thead><tr><th>구분</th><th>데이터</th><th>정보</th></tr></thead>
+          <tbody>
+            <tr><td class="ts">성격</td><td>관찰·측정한 값</td><td>가공·조직한 결과</td></tr>
+            <tr><td class="ts">예</td><td>온도 31.2℃, 4,600원</td><td>"폭염이다", "점심 매출이 늘었다"</td></tr>
+            <tr><td class="ts">의사결정</td><td class="bad">그대로는 어려움</td><td class="ok">바로 활용 가능</td></tr>
+            <tr><td class="ts">가공 횟수</td><td>0회</td><td>1회 이상</td></tr>
+            <tr><td class="ts">저장 위치</td><td>데이터베이스</td><td>보고서·대시보드·판단</td></tr>
+          </tbody>
+        </table></div>
+      </div>
+      <div class="card span"><div class="lbl"><span class="no">3</span>데이터 → 정보 단계 애니메이션</div>
+        <div class="anim">
+          <div class="anim-stage">
+            <div class="anim-layer">
+              <div class="calc">수집 →  [ 1,400 · 1,400 · 1,800 ]
+정리 →  [ 삼각김밥 ×2, 아메리카노 ×1 ]
+집계 →  합계 4,600원
+해석 →  "점심 직후 편의점 매출 발생"</div>
+              <p class="sub" style="margin:0">아직 아무것도 하지 않은 상태입니다. 영수증에 찍힌 <b>날것의 값</b>만 있습니다.</p>
+            </div>
+            <div class="anim-layer">
+              <div class="calc">수집 →  [ 1,400 · 1,400 · 1,800 ]   <em>← 이 단계</em>
+정리 →  [ 삼각김밥 ×2, 아메리카노 ×1 ]
+집계 →  합계 4,600원
+해석 →  "점심 직후 편의점 매출 발생"</div>
+              <p class="sub" style="margin:0"><b>수집</b>: 같은 종류의 값을 한곳에 모읍니다. 아직 의미는 없지만 <b>모으는 순간 비교가 가능해집니다.</b></p>
+            </div>
+            <div class="anim-layer">
+              <div class="calc">수집 →  [ 1,400 · 1,400 · 1,800 ]
+정리 →  [ 삼각김밥 ×2, 아메리카노 ×1 ]   <em>← 이 단계</em>
+집계 →  합계 4,600원
+해석 →  "점심 직후 편의점 매출 발생"</div>
+              <p class="sub" style="margin:0"><b>정리</b>: 값에 이름을 붙이고 묶습니다. 같은 상품을 하나로 합치면 <b>개수</b>라는 새 값이 생깁니다.</p>
+            </div>
+            <div class="anim-layer">
+              <div class="calc">수집 →  [ 1,400 · 1,400 · 1,800 ]
+정리 →  [ 삼각김밥 ×2, 아메리카노 ×1 ]
+집계 →  합계 4,600원   <em>← 이 단계</em>
+해석 →  "점심 직후 편의점 매출 발생"</div>
+              <p class="sub" style="margin:0"><b>집계</b>: 더하고 세어 하나의 숫자로 만듭니다. 이 숫자는 원래 영수증 어디에도 없습니다.</p>
+            </div>
+            <div class="anim-layer">
+              <div class="calc">수집 →  [ 1,400 · 1,400 · 1,800 ]
+정리 →  [ 삼각김밥 ×2, 아메리카노 ×1 ]
+집계 →  합계 4,600원
+해석 →  "점심 직후 편의점 매출 발생"   <em>← 이 단계</em></div>
+              <p class="sub" style="margin:0"><b>해석</b>: 숫자에 뜻을 붙입니다. 여기서부터 <b>의사결정에 쓸 수 있는 정보</b>가 됩니다 — "오후 3시에 삼각김밥 재고를 늘리자".</p>
+            </div>
+          </div>
+          <div class="anim-ctl">
+            <button class="btn" type="button" data-anim-prev>◀ 이전</button>
+            <button class="btn primary" type="button" data-anim-play>▶ 자동 재생</button>
+            <button class="btn" type="button" data-anim-next>다음 ▶</button>
+            <span class="step-txt">1 / 5</span>
+          </div>
+          <ul class="anim-steps">
+            <li>① 원시 데이터 — 손대지 않은 값</li>
+            <li>② 수집 — 비교할 수 있게 모으기</li>
+            <li>③ 정리 — 이름 붙이고 묶기</li>
+            <li>④ 집계 — 더하고 세기</li>
+            <li>⑤ 해석 — 뜻을 붙여 정보로</li>
+          </ul>
+          <p class="anim-cap">같은 영수증에서 다섯 단계를 거쳐 정보가 만들어집니다.</p>
+        </div>
+      </div>
+      <div class="card span quiz"><div class="lbl"><span class="no">✓</span>확인 문제</div>
+        <div class="q" data-ok="2" data-ex="데이터는 관찰·측정해 수집한 값이고, 정보는 그것을 의사결정에 쓸 수 있도록 처리·조직한 결과물입니다. 가공 여부가 갈림길입니다.">
+          <p class="qt">Q1. 데이터와 정보를 가르는 가장 정확한 기준은?</p>
+          <div class="opts">
+            <button type="button" data-i="0">값의 크기가 큰가 작은가</button>
+            <button type="button" data-i="1">컴퓨터에 저장되어 있는가 아닌가</button>
+            <button type="button" data-i="2">의사결정에 쓸 수 있도록 처리·조직되었는가</button>
+          </div>
+          <p class="fb" aria-live="polite"></p>
+        </div>
+        <div class="q" data-ok="1" data-ex="'이번 달 평균 구매액 4만 2천 원'은 개별 결제 값을 모아 계산한 결과이므로 정보입니다. 나머지는 가공 전의 데이터입니다.">
+          <p class="qt">Q2. 다음 중 <b>정보</b>에 해당하는 것은?</p>
+          <div class="opts">
+            <button type="button" data-i="0">2026-10-18 15:12:07</button>
+            <button type="button" data-i="1">이번 달 고객 1인당 평균 구매액 42,000원</button>
+            <button type="button" data-i="2">카드번호 ****-1234</button>
+          </div>
+          <p class="fb" aria-live="polite"></p>
+        </div>
+        <p class="qscore">이 카드 점수 0 / 2</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="part" id="m2">
+  <div class="wrap">
+    <div class="part-head">
+      <div class="part-no">02</div>
+      <h2>정보처리와 정보시스템<span class="en">Information Processing · Information System</span></h2>
+      <p>데이터가 정보가 되는 과정과, 그 과정을 조직 차원에서 떠받치는 시스템을 봅니다.</p>
+    </div>
+    <div class="grid">
+      <div class="card"><div class="lbl"><span class="no">1</span>정보처리</div>
+        <div class="eq">정보처리 = "데이터에서 정보를 추출하는 과정 또는 방법"</div>
+        <p>앞의 애니메이션에서 본 <b>수집 → 정리 → 집계 → 해석</b>이 곧 정보처리입니다. 사람이 손으로 해도 되고, 프로그램이 해도 됩니다. 중요한 것은 <b>어떤 데이터를 어떤 순서로 처리할지</b>를 정하는 일이 설계라는 점입니다.</p>
+        <div class="callout info"><b>데이터베이스 설계와의 연결</b>
+          정보처리의 순서를 정하려면 "나중에 무엇을 물어볼 것인가"를 먼저 알아야 합니다. 그래서 설계는 <b>질문을 먼저 적고 표를 나중에 그리는</b> 순서로 진행합니다.</div>
+      </div>
+      <div class="card"><div class="lbl"><span class="no">2</span>정보시스템</div>
+        <div class="facts">
+          <div class="fact"><span>정의</span>조직 운영에 필요한 데이터를 수집해 저장해 뒀다가, 의사결정에 필요할 때 처리해 유용한 정보를 만들어 주는 수단</div>
+        </div>
+        <div class="flow">
+          <div class="fbox"><b>수집</b>데이터 입력</div><span class="farr">→</span>
+          <div class="fbox hot"><b>저장</b>데이터베이스</div><span class="farr">→</span>
+          <div class="fbox"><b>처리</b>질의·집계</div><span class="farr">→</span>
+          <div class="fbox"><b>제공</b>정보·보고서</div>
+        </div>
+        <p class="src">이 네 칸 중 <b>저장</b>을 담당하는 부품이 데이터베이스입니다. 나머지 세 칸은 데이터베이스를 둘러싼 응용 프로그램의 몫입니다.</p>
+      </div>
+      <div class="card"><div class="lbl"><span class="no">3</span>경영정보 시스템</div>
+        <p>기업이라는 시스템의 관점에서, 경영시스템의 목표인 <b>이익 창출</b>을 위해 다른 하위 시스템이 효율적으로 작동하도록 지원하는 경영 지원 시스템입니다.</p>
+        <div class="usecase"><b>재고관리 시스템으로 보면</b>
+          판매 데이터(데이터) → 재고 차감(처리) → "이 상품은 3일 뒤 품절"(정보) → 발주 결정(의사결정). 이 한 줄이 정보시스템이 하는 일의 전부입니다.</div>
+      </div>
+      <div class="card"><div class="lbl"><span class="no">4</span>세 층으로 정리</div>
+        <div class="diagram">
+          <svg viewBox="0 0 460 200" role="img" aria-label="데이터에서 경영정보시스템까지의 세 층">
+            <defs><linearGradient id="g2a" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0" stop-color="#b07cff" stop-opacity=".35"/><stop offset="1" stop-color="#57d0dc" stop-opacity=".25"/></linearGradient></defs>
+            <rect x="10" y="16" width="440" height="46" rx="10" fill="url(#g2a)" stroke="#4d3f8c"/>
+            <text x="26" y="38" fill="#efe9ff" font-size="14" font-weight="700">정보시스템</text>
+            <text x="26" y="54" fill="#b5abd6" font-size="12">수집 · 저장 · 처리 · 제공의 전체 장치</text>
+            <rect x="10" y="76" width="440" height="46" rx="10" fill="rgba(255,198,92,.10)" stroke="#4d3f8c"/>
+            <text x="26" y="98" fill="#efe9ff" font-size="14" font-weight="700">경영정보 시스템 (MIS)</text>
+            <text x="26" y="114" fill="#b5abd6" font-size="12">경영 목표(이익)를 위해 하위 시스템을 지원하는 경영 지원 시스템</text>
+            <rect x="10" y="136" width="440" height="46" rx="10" fill="rgba(87,208,220,.10)" stroke="#4d3f8c"/>
+            <text x="26" y="158" fill="#efe9ff" font-size="14" font-weight="700">데이터베이스</text>
+            <text x="26" y="174" fill="#b5abd6" font-size="12">정보시스템의 저장 층 — 이 강의에서 설계할 대상</text>
+          </svg>
+          <p class="dcap">넓은 개념 안에서 데이터베이스가 어디에 놓이는지</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="part" id="m3">
+  <div class="wrap">
+    <div class="part-head">
+      <div class="part-no">03</div>
+      <h2>데이터베이스의 정의<span class="en">Definition of Database</span></h2>
+      <p>데이터베이스는 "데이터를 모아 둔 것"이 아닙니다. 네 가지 조건을 모두 만족해야 데이터베이스라고 부릅니다.</p>
+    </div>
+    <div class="grid">
+      <div class="card"><div class="lbl"><span class="no">1</span>네 가지 데이터</div>
+        <div class="facts">
+          <div class="fact"><span>공유 데이터</span>여러 사용자가 함께 소유하고 이용하는 데이터</div>
+          <div class="fact"><span>통합 데이터</span>중복을 최소화해 허용하는 데이터 (통제 가능성)</div>
+          <div class="fact"><span>저장 데이터</span>컴퓨터가 접근할 수 있는 데이터</div>
+          <div class="fact"><span>운영 데이터</span>지속적으로 유지·관리되는 데이터</div>
+        </div>
+        <div class="callout warn"><b>중복은 "없애는 것"이 아니라 "통제하는 것"</b>
+          통합 데이터는 중복을 <b>0으로</b> 만드는 것이 아니라 <b>허용하되 통제 가능한 수준</b>으로 관리한다는 뜻입니다. 성능을 위해 일부러 중복을 남기는 설계(반정규화)도 이 조건 안에서 이루어집니다.</div>
+      </div>
+      <div class="card"><div class="lbl"><span class="no">2</span>하나씩 뜯어 보기</div>
+        <div class="twrap"><table class="t">
+          <caption>쇼핑몰 데이터베이스를 이 기준으로 검사하면</caption>
+          <thead><tr><th>조건</th><th>쇼핑몰에서는</th><th>판정</th></tr></thead>
+          <tbody>
+            <tr><td class="ts">공유</td><td>고객·상품·주문 데이터를 여러 부서가 함께 조회</td><td class="ts ok">○</td></tr>
+            <tr><td class="ts">통합</td><td>고객 주소는 customer 한 곳에만, orders는 참조만</td><td class="ts ok">○</td></tr>
+            <tr><td class="ts">저장</td><td>디스크에 파일로 저장되어 SQL로 접근</td><td class="ts ok">○</td></tr>
+            <tr><td class="ts">운영</td><td>매일 새 주문이 쌓이고 상태가 바뀜</td><td class="ts ok">○</td></tr>
+          </tbody>
+        </table></div>
+        <p class="src">네 조건이 모두 ○이어야 데이터베이스입니다. 엑셀 파일 하나를 부서별로 복사해 쓰는 것은 <b>공유·통합</b>에서 이미 어긋납니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="part" id="m4">
+  <div class="wrap">
+    <div class="part-head">
+      <div class="part-no">04</div>
+      <h2>데이터베이스의 특징<span class="en">Characteristics</span></h2>
+      <p>네 문장으로 요약됩니다. 각 문장은 나중에 배울 기술과 하나씩 연결됩니다.</p>
+    </div>
+    <div class="grid three">
+      <div class="card"><div class="lbl"><span class="no">1</span>실시간 접근</div>
+        <p>데이터베이스는 <b>실시간 접근이 가능</b>합니다. 요청한 순간의 값을 곧바로 돌려줍니다.</p>
+        <div class="usecase"><b>연결되는 기술</b>인덱스와 질의처리기(4편). 밤에 배치로 돌리는 파일 처리와 갈리는 지점입니다.</div>
+      </div>
+      <div class="card"><div class="lbl"><span class="no">2</span>계속 변화</div>
+        <p>데이터베이스는 <b>계속 변화</b>합니다. 삽입·수정·삭제가 끊이지 않습니다.</p>
+        <div class="usecase"><b>연결되는 기술</b>트랜잭션과 회복(12~13장). 변하는 도중에 사고가 나도 값을 지켜야 합니다.</div>
+      </div>
+      <div class="card"><div class="lbl"><span class="no">3</span>동시 공유</div>
+        <p>데이터베이스는 <b>동시 공유가 가능</b>합니다. 여러 사용자가 같은 순간에 같은 데이터를 다룹니다.</p>
+        <div class="usecase"><b>연결되는 기술</b>동시성 제어와 잠금. 3편의 "동시 공유 기능 부족" 문제와 정확히 대응됩니다.</div>
+      </div>
+      <div class="card"><div class="lbl"><span class="no">4</span>내용으로 참조</div>
+        <p>데이터베이스는 <b>내용으로 참조가 가능</b>합니다. 주소(물리적 위치)가 아니라 <b>값의 조건</b>으로 찾습니다.</p>
+        <div class="usecase"><b>연결되는 기술</b>SQL. "파일 3번째 블록"이 아니라 "이름이 김철수인 고객"이라고 묻습니다.</div>
+      </div>
+      <div class="card span"><div class="lbl"><span class="no">5</span>네 특징을 한 장으로</div>
+        <div class="diagram">
+          <svg viewBox="0 0 700 190" role="img" aria-label="데이터베이스의 네 가지 특징">
+            <rect x="8" y="60" width="150" height="66" rx="10" fill="rgba(176,124,255,.16)" stroke="#b07cff"/>
+            <text x="83" y="88" text-anchor="middle" fill="#efe9ff" font-size="14" font-weight="700">실시간 접근</text>
+            <text x="83" y="108" text-anchor="middle" fill="#b5abd6" font-size="11.5">요청 즉시 응답</text>
+            <rect x="184" y="60" width="150" height="66" rx="10" fill="rgba(87,208,220,.16)" stroke="#57d0dc"/>
+            <text x="259" y="88" text-anchor="middle" fill="#efe9ff" font-size="14" font-weight="700">계속 변화</text>
+            <text x="259" y="108" text-anchor="middle" fill="#b5abd6" font-size="11.5">삽입·수정·삭제</text>
+            <rect x="360" y="60" width="150" height="66" rx="10" fill="rgba(255,134,184,.16)" stroke="#ff86b8"/>
+            <text x="435" y="88" text-anchor="middle" fill="#efe9ff" font-size="14" font-weight="700">동시 공유</text>
+            <text x="435" y="108" text-anchor="middle" fill="#b5abd6" font-size="11.5">여러 사용자 동시</text>
+            <rect x="536" y="60" width="156" height="66" rx="10" fill="rgba(255,198,92,.16)" stroke="#ffc65c"/>
+            <text x="614" y="88" text-anchor="middle" fill="#efe9ff" font-size="14" font-weight="700">내용으로 참조</text>
+            <text x="614" y="108" text-anchor="middle" fill="#b5abd6" font-size="11.5">값의 조건으로 검색</text>
+            <text x="350" y="30" text-anchor="middle" fill="#8f85b8" font-size="12">데이터베이스의 네 가지 특징</text>
+            <text x="350" y="166" text-anchor="middle" fill="#8f85b8" font-size="12">네 특징은 각각 인덱스 · 트랜잭션 · 동시성 제어 · SQL로 이어집니다</text>
+          </svg>
+        </div>
+      </div>
+      <div class="card span quiz"><div class="lbl"><span class="no">✓</span>확인 문제</div>
+        <div class="q" data-ok="0" data-ex="'이름이 김철수인 고객'처럼 값의 조건으로 찾는 것이 내용 참조입니다. 파일 번호나 블록 주소로 찾는 것은 위치 참조입니다.">
+          <p class="qt">Q3. "내용으로 참조가 가능하다"의 뜻으로 가장 알맞은 것은?</p>
+          <div class="opts">
+            <button type="button" data-i="0">파일 이름이나 블록 주소가 아니라 값의 조건으로 검색한다</button>
+            <button type="button" data-i="1">데이터의 내용을 문서로 출력할 수 있다</button>
+            <button type="button" data-i="2">데이터의 내용이 자주 바뀐다</button>
+          </div>
+          <p class="fb" aria-live="polite"></p>
+        </div>
+        <div class="q" data-ok="1" data-ex="통합 데이터는 중복을 없애는 것이 아니라, 중복을 최소화하되 통제 가능한 수준으로 허용한다는 뜻입니다.">
+          <p class="qt">Q4. 데이터베이스의 '통합 데이터' 조건을 바르게 설명한 것은?</p>
+          <div class="opts">
+            <button type="button" data-i="0">중복 데이터를 하나도 허용하지 않는다</button>
+            <button type="button" data-i="1">중복을 최소화하되 통제 가능한 수준으로 허용한다</button>
+            <button type="button" data-i="2">모든 데이터를 하나의 파일에 모아 저장한다</button>
+          </div>
+          <p class="fb" aria-live="polite"></p>
+        </div>
+        <p class="qscore">이 카드 점수 0 / 2</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="part" id="m5">
+  <div class="wrap">
+    <div class="part-head">
+      <div class="part-no">05</div>
+      <h2>형태에 따른 데이터의 분류<span class="en">Structured · Semi-structured · Unstructured</span></h2>
+      <p>데이터베이스가 다루는 대상은 표뿐이 아닙니다. <b>구조가 얼마나 미리 정해져 있는가</b>로 세 갈래로 나눕니다.</p>
+    </div>
+    <div class="grid three">
+      <div class="card"><div class="lbl"><span class="no">1</span>정형 데이터</div>
+        <p><b>미리 정해진 구조에 따라 저장된 데이터.</b> 열의 이름과 타입이 처음부터 정해져 있습니다.</p>
+        <div class="calc">customer
+┌────┬────────┬──────────────┐
+│ id │ name   │ email        │  ← 구조 고정
+├────┼────────┼──────────────┤
+│  1 │ 김철수 │ a@shop.com   │
+│  2 │ 이영희 │ b@shop.com   │
+└────┴────────┴──────────────┘</div>
+        <p class="sub">관계형 데이터베이스의 주 무대입니다.</p>
+      </div>
+      <div class="card"><div class="lbl"><span class="no">2</span>반정형 데이터</div>
+        <p><b>구조에 따라 저장된 데이터 + 데이터 안에 구조에 대한 설명이 존재.</b> 값 자체가 자기 구조를 들고 다닙니다.</p>
+        <div class="calc">{ "name": "김철수",
+  "tags": ["vip","서울"],
+  "memo": null }        ← 이름표를 스스로 가짐</div>
+        <p class="sub">JSON·XML·HTML이 대표적입니다. 열이 늘어도 스키마를 고치지 않습니다.</p>
+      </div>
+      <div class="card"><div class="lbl"><span class="no">3</span>비정형 데이터</div>
+        <p><b>정해진 구조가 없이 저장된 데이터.</b> 안을 열어 보기 전에는 무엇이 들어 있는지 알 수 없습니다.</p>
+        <div class="calc">[ 사진.jpg ]  [ 통화녹음.mp3 ]
+[ 계약서.pdf ]  [ 로그.txt ]   ← 구조 없음</div>
+        <p class="sub">텍스트·이미지·영상·음성. 별도 검색 기술이나 NoSQL과 함께 다룹니다.</p>
+      </div>
+      <div class="card span"><div class="lbl"><span class="no">4</span>세 갈래를 한눈에</div>
+        <div class="twrap"><table class="t">
+          <thead><tr><th>구분</th><th>구조</th><th>구조 설명의 위치</th><th>대표 예</th><th>주로 쓰는 저장소</th></tr></thead>
+          <tbody>
+            <tr><td class="ts">정형</td><td>미리 정해짐</td><td>데이터 바깥(스키마)</td><td>회원 명부, 주문 내역, 센서 수치</td><td>관계형 DBMS (MySQL, PostgreSQL)</td></tr>
+            <tr><td class="ts">반정형</td><td>데이터마다 다름</td><td>데이터 안에 포함</td><td>JSON, XML, HTML, 로그</td><td>문서형 NoSQL, JSONB 열</td></tr>
+            <tr><td class="ts">비정형</td><td>없음</td><td>없음</td><td>이미지, 음성, 영상, 자유 문서</td><td>객체 스토리지 + 메타데이터 색인</td></tr>
+          </tbody>
+        </table></div>
+        <div class="callout tip"><b>실무에서는 섞어 씁니다</b>
+          쇼핑몰에서도 고객·주문은 정형으로, 상품 상세 옵션은 JSONB 열로, 상품 이미지는 객체 스토리지에 두고 경로만 정형으로 저장합니다. <b>한 데이터베이스 안에서 세 형태가 공존</b>하는 것이 보통입니다.</div>
+      </div>
+      <div class="card span quiz"><div class="lbl"><span class="no">✓</span>확인 문제</div>
+        <div class="q" data-ok="1" data-ex="JSON은 값과 함께 이름표(키)를 스스로 들고 있어, 데이터 안에 구조에 대한 설명이 존재합니다. 그래서 반정형입니다.">
+          <p class="qt">Q5. 아래 JSON 문서가 <b>반정형</b> 데이터인 이유는?</p>
+          <div class="opts">
+            <button type="button" data-i="0">사람이 읽을 수 있는 문자이기 때문</button>
+            <button type="button" data-i="1">데이터 안에 구조에 대한 설명(키)이 함께 들어 있기 때문</button>
+            <button type="button" data-i="2">구조가 전혀 없기 때문</button>
+          </div>
+          <p class="fb" aria-live="polite"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="part" id="m6">
+  <div class="wrap">
+    <div class="part-head">
+      <div class="part-no">06</div>
+      <h2>특성에 따른 데이터의 분류<span class="en">Categorical · Numerical</span></h2>
+      <p>같은 표 안에서도 열마다 성격이 다릅니다. 이 구분이 나중에 <b>데이터 타입과 제약 조건</b>을 정하는 근거가 됩니다.</p>
+    </div>
+    <div class="grid">
+      <div class="card"><div class="lbl"><span class="no">1</span>큰 갈래 — 범주형 vs 수치형</div>
+        <p><b>범주형 자료</b>는 질적 특성을 나타내는 자료로 개체를 분류하는 데 사용됩니다. <b>수치형 자료</b>는 양적 특성을 나타내며 측정이나 계산이 가능한 값을 갖습니다. 범주형 자료는 통계적 분석에 제한이 있지만, 수치형 자료는 다양한 수학적 연산과 통계 분석이 가능합니다.</p>
+        <div class="diagram">
+          <svg viewBox="0 0 520 250" role="img" aria-label="변수의 유형 분류">
+            <text x="260" y="22" text-anchor="middle" fill="#efe9ff" font-size="13.5" font-weight="700">데이터 분석에서 사용하는 변수의 유형</text>
+            <rect x="150" y="38" width="220" height="30" rx="8" fill="rgba(255,134,184,.18)" stroke="#ff86b8"/>
+            <text x="260" y="58" text-anchor="middle" fill="#ffd6e8" font-size="12.5">변수</text>
+            <line x1="260" y1="68" x2="130" y2="94" stroke="#4d3f8c"/><line x1="260" y1="68" x2="390" y2="94" stroke="#4d3f8c"/>
+            <rect x="20" y="94" width="220" height="30" rx="8" fill="rgba(176,124,255,.18)" stroke="#b07cff"/>
+            <text x="130" y="114" text-anchor="middle" fill="#e6dcff" font-size="12.5">범주형 (질적·비계량)</text>
+            <rect x="280" y="94" width="220" height="30" rx="8" fill="rgba(87,208,220,.18)" stroke="#57d0dc"/>
+            <text x="390" y="114" text-anchor="middle" fill="#d3f4f8" font-size="12.5">수치형 (양적·계량)</text>
+            <rect x="10" y="146" width="112" height="46" rx="8" fill="rgba(38,30,69,.9)" stroke="#4d3f8c"/>
+            <text x="66" y="166" text-anchor="middle" fill="#efe9ff" font-size="12">명목변수</text>
+            <text x="66" y="182" text-anchor="middle" fill="#8f85b8" font-size="10.5">성별·종교</text>
+            <rect x="130" y="146" width="112" height="46" rx="8" fill="rgba(38,30,69,.9)" stroke="#4d3f8c"/>
+            <text x="186" y="166" text-anchor="middle" fill="#efe9ff" font-size="12">순서변수</text>
+            <text x="186" y="182" text-anchor="middle" fill="#8f85b8" font-size="10.5">선호도·만족도</text>
+            <rect x="276" y="146" width="112" height="46" rx="8" fill="rgba(38,30,69,.9)" stroke="#4d3f8c"/>
+            <text x="332" y="166" text-anchor="middle" fill="#efe9ff" font-size="12">등간변수</text>
+            <text x="332" y="182" text-anchor="middle" fill="#8f85b8" font-size="10.5">IQ·온도</text>
+            <rect x="396" y="146" width="112" height="46" rx="8" fill="rgba(38,30,69,.9)" stroke="#4d3f8c"/>
+            <text x="452" y="166" text-anchor="middle" fill="#efe9ff" font-size="12">비율변수</text>
+            <text x="452" y="182" text-anchor="middle" fill="#8f85b8" font-size="10.5">연령·무게·거리</text>
+            <rect x="130" y="204" width="112" height="40" rx="8" fill="rgba(38,30,69,.9)" stroke="#4d3f8c"/>
+            <text x="186" y="222" text-anchor="middle" fill="#efe9ff" font-size="12">이산형</text>
+            <text x="186" y="237" text-anchor="middle" fill="#8f85b8" font-size="10.5">점수·빈도수</text>
+            <rect x="276" y="204" width="112" height="40" rx="8" fill="rgba(38,30,69,.9)" stroke="#4d3f8c"/>
+            <text x="332" y="222" text-anchor="middle" fill="#efe9ff" font-size="12">연속형</text>
+            <text x="332" y="237" text-anchor="middle" fill="#8f85b8" font-size="10.5">실수·키·몸무게</text>
+          </svg>
+        </div>
+      </div>
+      <div class="card"><div class="lbl"><span class="no">2</span>네 가지 척도, 하나씩</div>
+        <div class="twrap"><table class="t">
+          <thead><tr><th>변수</th><th>할 수 있는 것</th><th>예</th><th>주의</th></tr></thead>
+          <tbody>
+            <tr><td class="ts">명목</td><td>같다/다르다 구분</td><td>성별, 종교, 혈액형</td><td class="bad">크기 비교 불가</td></tr>
+            <tr><td class="ts">순서</td><td>구분 + 순서</td><td>학력 수준, 만족도</td><td class="bad">간격의 크기 측정 불가</td></tr>
+            <tr><td class="ts">등간</td><td>순서 + 일정한 간격</td><td>IQ, 섭씨 온도</td><td class="bad">절대 영점이 없음</td></tr>
+            <tr><td class="ts">비율</td><td>간격 + 비율 계산</td><td>연령, 무게, 거리, 시간</td><td class="ok">사칙연산 모두 가능</td></tr>
+          </tbody>
+        </table></div>
+        <div class="callout warn"><b>온도의 함정</b>
+          섭씨 100도가 50도보다 "2배 뜨겁다"고 말할 수 없습니다. 0도가 "열이 없음"이 아니라 그냥 물이 어는 점이기 때문입니다. 절대 영점이 없으면 <b>비율 계산이 불가능</b>합니다. 켈빈으로 바꾸면 비율변수가 됩니다.</div>
+      </div>
+      <div class="card"><div class="lbl"><span class="no">3</span>이산형과 연속형</div>
+        <div class="facts">
+          <div class="fact"><span>연속형</span>시간에 대해 행동과 상태가 유한차원 벡터공간 — 주가 수익률, 자동차의 운행거리</div>
+          <div class="fact"><span>이산형</span>시간에 대해 행동과 상태가 원소 형태의 값을 갖는다 — {라이트를 켠다, 라이트를 끈다, 매도한다, 매수한다}</div>
+        </div>
+        <div class="calc">연속형 : 수익률  →  0.0127, 0.0131, ...  (사이 값이 존재)
+이산형 : 전원 상태 →  ON / OFF            (사이 값이 없음)</div>
+      </div>
+      <div class="card"><div class="lbl"><span class="no">4</span>이 분류가 설계에서 하는 일</div>
+        <div class="twrap"><table class="t">
+          <thead><tr><th>분류</th><th>DB 설계에서</th></tr></thead>
+          <tbody>
+            <tr><td class="ts">명목</td><td><code>VARCHAR</code> + 코드 테이블(또는 <code>ENUM</code>). 정렬은 의미 없음</td></tr>
+            <tr><td class="ts">순서</td><td><code>SMALLINT</code>로 순위를 저장 + 코드 테이블에 순서값</td></tr>
+            <tr><td class="ts">등간·비율</td><td><code>DECIMAL</code>(금액·정확도 필요) 또는 <code>DOUBLE</code>(측정값)</td></tr>
+            <tr><td class="ts">이산</td><td><code>INT</code> 또는 <code>BOOLEAN</code>·<code>ENUM</code></td></tr>
+            <tr><td class="ts">연속</td><td><code>DECIMAL(p,s)</code> — 소수 자릿수를 미리 정한다</td></tr>
+          </tbody>
+        </table></div>
+        <p class="src">금액에 <code>FLOAT</code>를 쓰면 0.1 + 0.2 문제로 합계가 어긋납니다. 금액은 언제나 <code>DECIMAL</code>입니다.</p>
+      </div>
+      <div class="card span quiz"><div class="lbl"><span class="no">✓</span>확인 문제</div>
+        <div class="q" data-ok="2" data-ex="비율변수는 절대 영점이 있어 '2배' 같은 비율 계산이 가능합니다. 연령·무게·거리·시간이 여기 해당하고, IQ와 섭씨 온도는 등간변수입니다.">
+          <p class="qt">Q6. 다음 중 <b>비율변수</b>에 해당하는 것은?</p>
+          <div class="opts">
+            <button type="button" data-i="0">혈액형</button>
+            <button type="button" data-i="1">섭씨 온도</button>
+            <button type="button" data-i="2">고객의 나이</button>
+          </div>
+          <p class="fb" aria-live="polite"></p>
+        </div>
+        <div class="q" data-ok="0" data-ex="만족도는 '매우 불만족 &lt; 불만족 &lt; 보통 &lt; 만족'처럼 순서는 있지만 간격의 크기를 정확히 측정할 수 없으므로 순서변수입니다.">
+          <p class="qt">Q7. 5점 척도 만족도 조사 결과는 어떤 변수인가요?</p>
+          <div class="opts">
+            <button type="button" data-i="0">순서변수 (범주형)</button>
+            <button type="button" data-i="1">비율변수 (수치형)</button>
+            <button type="button" data-i="2">명목변수 (범주형)</button>
+          </div>
+          <p class="fb" aria-live="polite"></p>
+        </div>
+        <p class="qscore">이 카드 점수 0 / 2</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="part" id="lab">
+  <div class="wrap">
+    <div class="part-head">
+      <div class="part-no">LAB</div>
+      <h2>실습 — 파이썬의 데이터 구조<span class="en">Python Data Structures</span></h2>
+      <p>2주차 실습은 코랩에서 진행했습니다. 같은 데이터를 <b>리스트 · 배열 · 데이터프레임</b> 세 가지 그릇에 담아 보면, 왜 데이터베이스가 표(테이블)를 기본 단위로 삼는지가 자연스럽게 이해됩니다.</p>
+    </div>
+    <div class="grid">
+      <div class="card"><div class="lbl"><span class="no">1</span>세 그릇 비교</div>
+        <div class="twrap"><table class="t">
+          <thead><tr><th>그릇</th><th>생김새</th><th>열 이름</th><th>타입</th><th>잘 맞는 일</th></tr></thead>
+          <tbody>
+            <tr><td class="ts">리스트</td><td>값을 순서대로 나열</td><td class="bad">없음</td><td>섞여도 됨</td><td>한 종류 값의 나열</td></tr>
+            <tr><td class="ts">배열</td><td>같은 타입을 격자로</td><td class="bad">없음</td><td>하나로 고정</td><td>수치 계산</td></tr>
+            <tr><td class="ts">데이터프레임</td><td>행 × 열 표</td><td class="ok">있음</td><td>열마다 다름</td><td class="tacc">데이터베이스 테이블과 같은 모양</td></tr>
+          </tbody>
+        </table></div>
+        <div class="callout info"><b>데이터프레임 = 메모리 위의 테이블</b>
+          열 이름과 열마다 다른 타입, 행 단위 레코드 — 데이터베이스 테이블과 거의 같은 구조입니다. 그래서 <code>pandas.read_sql()</code>로 조회 결과를 그대로 받아올 수 있습니다.</div>
+      </div>
+      <div class="card"><div class="lbl"><span class="no">2</span>같은 데이터, 세 가지 담기</div>
+        <div class="codebox" data-name="py_struct" data-title="리스트 · 배열 · 데이터프레임">
+          <button class="btn copy" type="button" data-copy="code-py-struct">코드 복사</button>
+          <pre id="code-py-struct"><code># [1] 리스트 — 순서만 있고 열 이름이 없다
+names = ["김철수", "이영희", "박민수"]
+ages  = [34, 28, 41]
+
+# [2] 넘파이 배열 — 같은 타입만, 계산에 강하다
+import numpy as np
+age_arr = np.array(ages)
+print("평균 나이:", age_arr.mean())        # 34.33...
+
+# [3] 데이터프레임 — 열 이름 + 열마다 다른 타입 = 테이블
+import pandas as pd
+df = pd.DataFrame({
+    "name":  ["김철수", "이영희", "박민수"],   # 문자형 (명목변수)
+    "age":   [34, 28, 41],                   # 정수형 (비율변수, 이산)
+    "grade": ["VIP", "일반", "VIP"],          # 범주형 (명목변수)
+    "score": [0.91, 0.77, 0.85],             # 실수형 (비율변수, 연속)
+})
+print(df.dtypes)      # 열마다 타입이 다르다
+print(df.shape)       # (3, 4) — 3행 4열 = 3레코드 4속성</code></pre>
+        </div>
+        <p class="src">실행하면 <code>object / int64 / object / float64</code>가 나옵니다. <b>열마다 타입이 다르다</b>는 점이 데이터프레임과 배열의 결정적 차이이고, 데이터베이스 테이블이 열마다 타입을 따로 정하는 이유이기도 합니다.</p>
+      </div>
+      <div class="card"><div class="lbl"><span class="no">3</span>질문을 코드로 옮기기</div>
+        <div class="codebox plain" data-name="py_query" data-title="리스트로 하면 길어지고, 데이터프레임으로 하면 한 줄">
+          <button class="btn copy" type="button" data-copy="code-py-q">코드 복사</button>
+          <pre id="code-py-q"><code># 질문: VIP 고객 중 나이가 30 이상인 사람은?
+vip_over_30 = df[(df["grade"] == "VIP") & (df["age"] &gt;= 30)]
+print(vip_over_30[["name", "age"]])
+
+# 같은 질문을 SQL로 쓰면
+# SELECT name, age FROM customer WHERE grade = 'VIP' AND age &gt;= 30;
+
+# 리스트로 직접 하면
+result = []
+for i in range(len(names)):
+    if df["grade"][i] == "VIP" and ages[i] &gt;= 30:
+        result.append((names[i], ages[i]))
+print(result)</code></pre>
+        </div>
+        <div class="callout key"><b>3주차 예고</b>
+          데이터프레임의 조건 필터가 곧 SQL의 <code>WHERE</code>입니다. 파일(리스트)로 직접 짜면 코드가 길어지고 구조가 바뀌면 전부 고쳐야 하지만, 표로 다루면 질문만 바꾸면 됩니다. — <b>이 차이가 3주차의 주제</b>입니다.</div>
+      </div>
+      <div class="card span quiz"><div class="lbl"><span class="no">✓</span>확인 문제</div>
+        <div class="q" data-ok="1" data-ex="데이터프레임은 열 이름을 갖고 열마다 타입이 다를 수 있어 데이터베이스 테이블과 가장 닮았습니다. 넘파이 배열은 단일 타입만 담습니다.">
+          <p class="qt">Q8. 데이터베이스 테이블과 가장 닮은 파이썬 구조는?</p>
+          <div class="opts">
+            <button type="button" data-i="0">리스트 (list)</button>
+            <button type="button" data-i="1">데이터프레임 (DataFrame)</button>
+            <button type="button" data-i="2">집합 (set)</button>
+          </div>
+          <p class="fb" aria-live="polite"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="part" id="prompt">
+  <div class="wrap">
+    <div class="part-head">
+      <div class="part-no">AI</div>
+      <h2>AI와 코드로 직접 해 보기 — 가이드 4종<span class="en">Prompt &amp; Code Guides</span></h2>
+      <p>탭을 눌러 네 가지 가이드를 오갑니다. 이번 편에서는 <b>쇼핑몰 예제의 첫 테이블</b>을 만들고, 데이터 분류를 코드로 확인합니다.</p>
+    </div>
+    <div class="tabs" role="tablist">
+      <button class="tab" role="tab" aria-selected="true" data-tab="ai">생성형 AI 프롬프트</button>
+      <button class="tab" role="tab" aria-selected="false" data-tab="mysql">MySQL</button>
+      <button class="tab" role="tab" aria-selected="false" data-tab="pg">PostgreSQL</button>
+      <button class="tab" role="tab" aria-selected="false" data-tab="py">파이썬</button>
+    </div>
+
+    <div class="card tabpanel on" id="tab-ai">
+      <div class="lbl"><span class="no">G1</span>언제 쓰나</div>
+      <p>손에 있는 데이터(엑셀·CSV·메모)를 <b>데이터베이스로 옮기기 전에</b>, 각 열이 어떤 유형인지 정리하고 표를 어떻게 나눌지 상의할 때 씁니다.</p>
+      <div class="lbl"><span class="no">G2</span>실행 순서</div>
+      <ol class="steps">
+        <li><b>데이터 준비</b>첫 줄이 열 이름인 CSV 또는 엑셀 파일을 준비합니다.</li>
+        <li><b>프롬프트 복사</b>아래 내용을 복사해 <code>[ ]</code> 칸을 채웁니다.</li>
+        <li><b>붙여 넣고 요청</b>AI 도우미에게 붙여 넣고 데이터도 함께 올립니다.</li>
+        <li><b>검증</b>AI가 정한 유형을 6장의 기준(명목·순서·등간·비율)으로 다시 확인합니다.</li>
+      </ol>
+      <div class="lbl"><span class="no">G3</span>프롬프트 전체</div>
+      <div class="promptbox">
+        <div class="dlbar">
+          <button class="btn primary" type="button" data-pcopy>프롬프트 복사</button>
+          <button class="btn" type="button" data-ptxt="db_prompt_week2.txt">⬇ .txt 받기</button>
+        </div>
+        <pre class="prompt-pre"># 역할
+너는 데이터베이스 설계를 가르치는 튜터이자 데이터 분류 전문가다.
+
+# 배경
+나는 아래 데이터를 데이터베이스로 옮기려고 한다. 먼저 각 열의 성격을 정리하고 싶다.
+- 데이터: [파일 이름], 행 수 [ ], 열 수 [ ]
+- 열 이름과 뜻: [예: name(고객 이름), age(나이), grade(등급), score(점수)]
+- 이 데이터로 나중에 답하고 싶은 질문: [예: VIP 고객 중 30세 이상은 몇 명인가]
+- 쓰는 DBMS: [MySQL 8.x / PostgreSQL 16 / 아직 모름]
+
+# 하고 싶은 일 (해당하는 번호만 남긴다)
+A. 열 유형 분류: 각 열을 명목/순서/등간/비율 중 하나로 분류하고, 이산형·연속형도 표시한다.
+B. 저장 형태 분류: 각 열을 정형/반정형/비정형 중 하나로 분류한다.
+C. 타입 제안: 각 열에 알맞은 데이터 타입(문자/정수/실수/날짜/불리언)과 길이를 제안한다.
+D. 표 나누기 초안: 이 데이터를 몇 개의 테이블로 나눌지, 왜 그렇게 나누는지 제안한다.
+E. 확인 질문 만들기: 이 데이터의 유형을 묻는 3지선다 문제 5개를 해설과 함께 만든다.
+
+# 반드시 지킬 것
+1. 분류의 근거를 한 줄씩 적는다. "왜 명목인가"를 값의 예와 함께 설명한다.
+2. 절대 영점이 있는지 없는지를 근거로 등간/비율을 가른다.
+3. 금액과 수량은 실수(float)가 아니라 정확한 수(decimal)로 저장할 것을 제안한다.
+4. 날짜와 시간은 문자열이 아니라 날짜 타입으로 저장할 것을 제안한다.
+5. 확실하지 않은 열은 "확인 필요"라고 표시하고, 무엇을 물어봐야 하는지 적는다.
+6. 지어내지 않는다. 내가 준 데이터에 없는 열을 임의로 추가하지 않는다.
+7. 주석과 설명은 한국어로, 입문자도 따라올 수 있게 쓴다.
+
+# 답변 형식
+1. 한 줄 요약 (몇 개 열, 어떤 문제가 보이는지)
+2. 열별 분류 표 (열 이름 / 값 예 / 유형 / 이산·연속 / 저장 형태 / 제안 타입 / 근거)
+3. 표를 나누는 초안과 이유 3~5줄
+4. 주의할 점 (중복, 결측, 타입 혼입 신호)
+5. 다음에 해 볼 일 2~3가지
+
+# 데이터
+[여기에 CSV의 첫 20행이나 열 설명을 붙여 넣는다]</pre>
+      </div>
+      <div class="lbl"><span class="no">G4</span>라인별 해설</div>
+      <div class="twrap"><table class="t">
+        <thead><tr><th>프롬프트 문장</th><th>왜 필요한가</th></tr></thead>
+        <tbody>
+          <tr><td class="ts">"이 데이터로 나중에 답하고 싶은 질문"</td><td>질문을 먼저 적어야 표를 나누는 기준이 생깁니다. 설계는 질문에서 시작합니다.</td></tr>
+          <tr><td class="ts">"절대 영점이 있는지로 등간/비율을 가른다"</td><td>가장 많이 틀리는 지점입니다. 온도·IQ를 비율로 잘못 분류하면 통계 해석이 무너집니다.</td></tr>
+          <tr><td class="ts">"금액은 decimal"</td><td>부동소수점 오차로 합계가 1원 어긋나는 사고를 막습니다.</td></tr>
+          <tr><td class="ts">"지어내지 않는다"</td><td>AI가 없는 열을 만들어 설계를 부풀리는 것을 막는 안전장치입니다.</td></tr>
+        </tbody>
+      </table></div>
+      <div class="lbl"><span class="no">G5</span>흔한 오류와 해결</div>
+      <div class="twrap"><table class="t">
+        <thead><tr><th>증상</th><th>원인</th><th>해결</th></tr></thead>
+        <tbody>
+          <tr><td class="ts">등급을 비율변수라고 답함</td><td>문자열 코드를 숫자로 바꿔 저장하는 관행 때문</td><td>순서만 있는지 확인. 순서뿐이면 순서변수입니다.</td></tr>
+          <tr><td class="ts">전화번호를 정수형으로 제안</td><td>값이 전부 숫자라서</td><td>앞의 0이 사라지고 계산 대상이 아니므로 <code>VARCHAR</code>가 맞습니다.</td></tr>
+          <tr><td class="ts">열 목록에 없는 열이 생김</td><td>AI의 추측</td><td>"지어내지 않는다" 조항을 강조하고 원본 열 목록을 다시 붙입니다.</td></tr>
+        </tbody>
+      </table></div>
+      <div class="lbl"><span class="no">G6</span>체크리스트</div>
+      <ul class="checklist">
+        <li>모든 열에 값 예시가 하나씩 붙어 있는가</li>
+        <li>금액·수량이 정확한 수 타입인가</li>
+        <li>날짜·시간이 문자열로 남아 있지 않은가</li>
+        <li>전화번호·우편번호처럼 앞자리 0이 의미 있는 열이 문자형인가</li>
+        <li>"확인 필요"로 표시된 열을 실제로 확인했는가</li>
+      </ul>
+      <div class="lbl"><span class="no">G7</span>미니 과제</div>
+      <div class="usecase"><b>과제</b>영수증 예시(도입 문제)의 값들을 열로 바꾸어 10행짜리 CSV를 직접 만들고, 위 프롬프트로 유형 분류를 받아 보세요. 그다음 "이 표를 두 개로 나눈다면 어떻게 나눌까"를 물어보면 3주차 중복 문제의 씨앗이 보입니다.</div>
+    </div>
+
+    <div class="card tabpanel" id="tab-mysql">
+      <div class="lbl"><span class="no">G1</span>언제 쓰나</div>
+      <p>분류가 끝난 데이터를 <b>실제로 담아 보는</b> 단계입니다. 이번 편에서는 쇼핑몰 예제의 첫 테이블 <code>customer</code>만 만듭니다. 실행 환경은 MySQL 8.0 이상입니다.</p>
+      <div class="lbl"><span class="no">G2</span>실행 순서</div>
+      <ol class="steps">
+        <li><b>데이터베이스 만들기</b>문자 집합을 utf8mb4로 지정합니다.</li>
+        <li><b>테이블 만들기</b>열마다 타입과 제약을 지정합니다.</li>
+        <li><b>값 넣기</b>샘플 고객 3명을 넣습니다.</li>
+        <li><b>확인</b>타입과 저장 결과를 확인합니다.</li>
+      </ol>
+      <div class="lbl"><span class="no">G3</span>전체 코드</div>
+      <div class="codebox" data-name="mysql_week2" data-title="MySQL — 첫 테이블 만들기">
+        <button class="btn copy" type="button" data-copy="code-my-1">코드 복사</button>
+        <pre id="code-my-1"><code>-- [1] 데이터베이스 만들기 (한글이 깨지지 않도록 utf8mb4)
+CREATE DATABASE IF NOT EXISTS shop
+  CHARACTER SET utf8mb4
+  COLLATE utf8mb4_0900_ai_ci;
+USE shop;
+
+-- [2] 고객 테이블 만들기
+CREATE TABLE customer (
+  customer_id INT          NOT NULL AUTO_INCREMENT,   -- 대리키: 자동 증가
+  name        VARCHAR(30)  NOT NULL,                  -- 명목변수(문자)
+  email       VARCHAR(120) NOT NULL,                  -- 명목변수(문자)
+  phone       VARCHAR(20)  NULL,                      -- 숫자처럼 보여도 문자!
+  address     VARCHAR(200) NULL,
+  grade       VARCHAR(10)  NOT NULL DEFAULT '일반',    -- 명목변수(코드)
+  created_at  DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (customer_id),
+  UNIQUE KEY uq_customer_email (email),
+  CONSTRAINT ck_customer_grade CHECK (grade IN ('VIP','일반','휴면'))
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- [3] 샘플 데이터
+INSERT INTO customer (name, email, phone, address, grade) VALUES
+ ('김철수', 'chulsoo@shop.com', '010-1234-5678', '서울시 마포구', 'VIP'),
+ ('이영희', 'younghee@shop.com', '010-2222-3333', '부산시 해운대구', '일반'),
+ ('박민수', 'minsoo@shop.com',  NULL,            '대전시 유성구',  '일반');
+
+-- [4] 확인 — 열의 타입을 먼저 본다
+DESCRIBE customer;
+SELECT customer_id, name, phone, grade FROM customer;
+
+-- [5] 유형별 집계 — 6장의 분류가 그대로 질의가 된다
+SELECT grade, COUNT(*) AS 고객수
+FROM customer
+GROUP BY grade;</code></pre>
+      </div>
+      <div class="lbl"><span class="no">G4</span>라인별 해설</div>
+      <div class="twrap"><table class="t">
+        <thead><tr><th>줄</th><th>설명</th></tr></thead>
+        <tbody>
+          <tr><td class="ts">utf8mb4</td><td>한글은 물론 이모지까지 저장 가능한 문자 집합입니다. 생략하면 한글이 깨질 수 있습니다.</td></tr>
+          <tr><td class="ts">AUTO_INCREMENT</td><td>값을 넣지 않아도 1,2,3…으로 자동 증가합니다. <b>대리키</b>를 만드는 가장 흔한 방법입니다.</td></tr>
+          <tr><td class="ts">phone VARCHAR(20)</td><td>전화번호는 계산 대상이 아니고 앞의 0이 의미를 가지므로 <b>문자형</b>이 정답입니다.</td></tr>
+          <tr><td class="ts">CHECK (grade IN …)</td><td>명목변수는 정해진 값만 들어오게 막아야 합니다. MySQL은 8.0.16부터 실제로 동작합니다.</td></tr>
+          <tr><td class="ts">UNIQUE KEY</td><td>이메일이 중복 저장되지 않게 합니다. 데이터베이스가 <b>통합 데이터</b>를 지키는 장치입니다.</td></tr>
+          <tr><td class="ts">ENGINE=InnoDB</td><td>트랜잭션과 외래키를 지원하는 스토리지 엔진입니다. 기본값이지만 명시하는 습관을 들입니다.</td></tr>
+        </tbody>
+      </table></div>
+      <div class="lbl"><span class="no">G5</span>흔한 오류와 해결</div>
+      <div class="twrap"><table class="t">
+        <thead><tr><th>오류 메시지</th><th>원인</th><th>해결</th></tr></thead>
+        <tbody>
+          <tr><td class="ts">Incorrect string value: '\xEC\xA0\x9C…'</td><td>문자 집합이 utf8(3바이트)로 되어 있음</td><td>DB·테이블을 utf8mb4로 다시 만들고 접속 시 <code>charset=utf8mb4</code> 지정</td></tr>
+          <tr><td class="ts">ERROR 1062: Duplicate entry … for key 'uq_customer_email'</td><td>같은 이메일을 두 번 넣음</td><td>정상 동작입니다. <code>INSERT … ON DUPLICATE KEY UPDATE</code>로 갱신으로 바꿉니다.</td></tr>
+          <tr><td class="ts">ERROR 3819: Check constraint … is violated</td><td>grade에 허용되지 않은 값을 넣음</td><td>CHECK 목록에 값을 추가하거나 입력값을 고칩니다.</td></tr>
+          <tr><td class="ts">ERROR 1045: Access denied for user</td><td>권한 또는 비밀번호 문제</td><td>계정 권한을 확인하고 <code>GRANT</code>로 권한을 부여합니다.</td></tr>
+        </tbody>
+      </table></div>
+      <div class="lbl"><span class="no">G6</span>체크리스트</div>
+      <ul class="checklist">
+        <li>데이터베이스와 테이블의 문자 집합이 utf8mb4인가</li>
+        <li>모든 열에 타입과 NULL 허용 여부를 정했는가</li>
+        <li>기본키를 정했는가</li>
+        <li>명목변수에 CHECK 또는 코드 테이블을 붙였는가</li>
+        <li>한글 데이터를 실제로 넣어 깨지지 않는지 확인했는가</li>
+      </ul>
+      <div class="lbl"><span class="no">G7</span>미니 과제</div>
+      <div class="usecase"><b>과제</b><code>customer</code>에 <code>birth_date DATE</code>를 추가하고, "20대 고객 수"를 구하는 쿼리를 써 보세요. <code>TIMESTAMPDIFF(YEAR, birth_date, CURDATE())</code>를 쓰면 됩니다. — 나이가 <b>비율변수</b>라서 뺄셈이 가능하다는 점을 확인해 보세요.</div>
+    </div>
+
+    <div class="card tabpanel" id="tab-pg">
+      <div class="lbl"><span class="no">G1</span>언제 쓰나</div>
+      <p>같은 <code>customer</code> 테이블을 PostgreSQL 16 이상에서 만듭니다. <b>MySQL과 무엇이 다른지</b>를 나란히 보는 것이 이 탭의 목적입니다.</p>
+      <div class="lbl"><span class="no">G2</span>실행 순서</div>
+      <ol class="steps">
+        <li><b>스키마 만들기</b>PostgreSQL은 데이터베이스 안에 스키마를 한 겹 더 둡니다.</li>
+        <li><b>테이블 만들기</b>자동 증가는 <code>IDENTITY</code>로 씁니다.</li>
+        <li><b>값 넣기</b><code>RETURNING</code>으로 방금 들어간 값을 바로 받습니다.</li>
+        <li><b>확인</b><code>\d+</code>로 구조를 봅니다.</li>
+      </ol>
+      <div class="lbl"><span class="no">G3</span>전체 코드</div>
+      <div class="codebox" data-name="pg_week2" data-title="PostgreSQL — 첫 테이블 만들기">
+        <button class="btn copy" type="button" data-copy="code-pg-1">코드 복사</button>
+        <pre id="code-pg-1"><code>-- [1] 스키마 만들기 (MySQL의 '데이터베이스'와 비슷하지만 한 겹 더 안쪽)
+CREATE SCHEMA IF NOT EXISTS shop;
+SET search_path TO shop, public;   -- 이후 이름은 shop 안에서 찾는다
+
+-- [2] 고객 테이블 (MySQL과 다른 부분에 주석을 달았다)
+CREATE TABLE customer (
+  customer_id integer      GENERATED ALWAYS AS IDENTITY,  -- [차이] AUTO_INCREMENT 대신
+  name        varchar(30)  NOT NULL,
+  email       varchar(120) NOT NULL,
+  phone       varchar(20),                                -- 여기도 문자형
+  address     varchar(200),
+  grade       varchar(10)  NOT NULL DEFAULT '일반',
+  created_at  timestamptz  NOT NULL DEFAULT now(),         -- [차이] DATETIME 대신 timestamptz
+  CONSTRAINT pk_customer PRIMARY KEY (customer_id),
+  CONSTRAINT uq_customer_email UNIQUE (email),
+  CONSTRAINT ck_customer_grade CHECK (grade IN ('VIP','일반','휴면'))
+);
+
+-- [3] 샘플 데이터 + 방금 만들어진 키를 돌려받기
+INSERT INTO customer (name, email, phone, address, grade) VALUES
+ ('김철수', 'chulsoo@shop.com', '010-1234-5678', '서울시 마포구', 'VIP'),
+ ('이영희', 'younghee@shop.com', '010-2222-3333', '부산시 해운대구', '일반'),
+ ('박민수', 'minsoo@shop.com',  NULL,             '대전시 유성구',  '일반')
+RETURNING customer_id, name;   -- [차이] MySQL에는 없는 기능
+
+-- [4] 확인 — psql 전용 명령
+-- \d+ customer
+
+-- [5] 유형별 집계
+SELECT grade, count(*) AS "고객수"
+FROM customer
+GROUP BY grade;</code></pre>
+      </div>
+      <div class="lbl"><span class="no">G4</span>MySQL ↔ PostgreSQL 대조표</div>
+      <div class="twrap"><table class="t">
+        <caption>같은 설계를 두 방언으로 쓸 때 달라지는 곳</caption>
+        <thead><tr><th>하고 싶은 일</th><th>MySQL</th><th>PostgreSQL</th></tr></thead>
+        <tbody>
+          <tr><td class="ts">자동 증가 키</td><td><code>AUTO_INCREMENT</code></td><td><code>GENERATED ALWAYS AS IDENTITY</code></td></tr>
+          <tr><td class="ts">날짜·시간</td><td><code>DATETIME</code> / <code>TIMESTAMP</code></td><td><code>timestamp</code> / <code>timestamptz</code></td></tr>
+          <tr><td class="ts">참/거짓</td><td><code>TINYINT(1)</code></td><td><code>boolean</code></td></tr>
+          <tr><td class="ts">부호 없는 정수</td><td><code>INT UNSIGNED</code></td><td class="bad">없음 → <code>CHECK (col &gt;= 0)</code></td></tr>
+          <tr><td class="ts">중복 무시 삽입</td><td><code>INSERT IGNORE</code></td><td><code>ON CONFLICT DO NOTHING</code></td></tr>
+          <tr><td class="ts">삽입한 값 돌려받기</td><td class="bad">불가(별도 조회)</td><td><code>RETURNING</code></td></tr>
+          <tr><td class="ts">구조 보기</td><td><code>DESCRIBE t</code></td><td><code>\d+ t</code></td></tr>
+          <tr><td class="ts">문자열 연결</td><td><code>CONCAT(a,b)</code></td><td><code>a || b</code></td></tr>
+          <tr><td class="ts">NULL 대체</td><td><code>IFNULL(x,y)</code></td><td><code>COALESCE(x,y)</code></td></tr>
+          <tr><td class="ts">식별자 표기</td><td><code>`name`</code> (백틱)</td><td><code>"name"</code> (큰따옴표) · 소문자 권장</td></tr>
+        </tbody>
+      </table></div>
+      <div class="lbl"><span class="no">G5</span>흔한 오류와 해결</div>
+      <div class="twrap"><table class="t">
+        <thead><tr><th>오류 메시지</th><th>원인</th><th>해결</th></tr></thead>
+        <tbody>
+          <tr><td class="ts">relation "customer" does not exist</td><td><code>search_path</code>에 스키마가 없음</td><td><code>SET search_path TO shop, public;</code></td></tr>
+          <tr><td class="ts">column "Name" does not exist</td><td>따옴표 없는 식별자는 소문자로 바뀜</td><td>만들 때부터 소문자로 통일하고, 인용이 필요하면 큰따옴표</td></tr>
+          <tr><td class="ts">cannot insert a non-DEFAULT value into column "customer_id"</td><td><code>GENERATED ALWAYS</code> 열에 값을 넣음</td><td>INSERT 열 목록에서 빼거나 <code>GENERATED BY DEFAULT</code>로 만듭니다.</td></tr>
+          <tr><td class="ts">duplicate key value violates unique constraint</td><td>이메일 중복</td><td><code>ON CONFLICT (email) DO UPDATE SET …</code></td></tr>
+        </tbody>
+      </table></div>
+      <div class="lbl"><span class="no">G6</span>체크리스트</div>
+      <ul class="checklist">
+        <li><code>search_path</code>를 지정했는가</li>
+        <li>식별자를 전부 소문자로 통일했는가</li>
+        <li>IDENTITY 열에 값을 직접 넣지 않았는가</li>
+        <li>시간대가 필요한 열에 <code>timestamptz</code>를 썼는가</li>
+        <li>한글·이모지가 정상 저장되는가(기본 UTF-8)</li>
+      </ul>
+      <div class="lbl"><span class="no">G7</span>미니 과제</div>
+      <div class="usecase"><b>과제</b>같은 INSERT 문을 <code>ON CONFLICT (email) DO UPDATE SET name = EXCLUDED.name</code>으로 바꿔 두 번 실행해 보세요. MySQL의 <code>ON DUPLICATE KEY UPDATE</code>와 결과가 같은지 비교해 보면 "upsert"의 개념이 잡힙니다.</div>
+    </div>
+
+    <div class="card tabpanel" id="tab-py">
+      <div class="lbl"><span class="no">G1</span>언제 쓰나</div>
+      <p>CSV로 받은 원시 데이터를 읽어 <b>유형을 확인하고</b>, 데이터베이스에 넣기 전에 정리할 때 씁니다. 실행 환경은 Python 3.11 이상입니다.</p>
+      <div class="lbl"><span class="no">G2</span>실행 순서</div>
+      <ol class="steps">
+        <li><b>읽기</b>CSV를 데이터프레임으로 읽습니다.</li>
+        <li><b>살펴보기</b>행·열 수, 타입, 결측치를 확인합니다.</li>
+        <li><b>정리</b>타입을 바로잡고 중복을 찾습니다.</li>
+        <li><b>저장</b>정리된 표를 다시 CSV로 내보냅니다.</li>
+      </ol>
+      <div class="lbl"><span class="no">G3</span>전체 코드</div>
+      <div class="codebox" data-name="py_week2" data-title="파이썬 — 데이터 유형 점검과 정리">
+        <button class="btn copy" type="button" data-copy="code-py-2">코드 복사</button>
+        <pre id="code-py-2"><code># -*- coding: utf-8 -*-
+"""2주차 실습 — 데이터 유형 점검과 정리 (pandas)"""
+import pandas as pd
+
+# [1] 읽기 — CSV를 데이터프레임으로
+df = pd.read_csv("customer_raw.csv", encoding="utf-8")
+print("행·열:", df.shape)
+
+# [2] 타입과 결측치 한 번에 보기
+print(df.dtypes)          # 열마다 타입이 다르다 = 테이블의 속성 타입
+print(df.isna().sum())    # 열별 결측치 개수
+
+# [3] 타입 바로잡기 — 전화번호가 숫자로 읽혔다면 되돌린다
+#     (앞자리 0이 사라지고, 계산 대상이 아니므로 문자형이 맞다)
+df["phone"] = df["phone"].astype("string")
+
+# [4] 날짜 열은 날짜 타입으로
+df["created_at"] = pd.to_datetime(df["created_at"], errors="coerce")
+
+# [5] 유형별 점검 — 명목변수에 허용값만 있는지
+allowed = {"VIP", "일반", "휴면"}
+bad = df.loc[~df["grade"].isin(allowed), "grade"].unique()
+print("허용되지 않은 등급:", bad)      # 빈 배열이면 정상
+
+# [6] 중복 점검 — 데이터베이스의 UNIQUE 제약이 막아 줄 값들
+dup_email = df[df.duplicated("email", keep=False)]
+print("이메일 중복 행:", len(dup_email))
+
+# [7] 정리 결과 내보내기 (데이터베이스에 넣을 준비)
+df.to_csv("customer_clean.csv", index=False, encoding="utf-8-sig")
+print("저장 완료:", df.shape)</code></pre>
+      </div>
+      <div class="lbl"><span class="no">G4</span>라인별 해설</div>
+      <div class="twrap"><table class="t">
+        <thead><tr><th>줄</th><th>설명</th></tr></thead>
+        <tbody>
+          <tr><td class="ts"><code>df.dtypes</code></td><td>열별 타입을 봅니다. 여기서 <code>object</code>로 나오는 열이 문자형입니다.</td></tr>
+          <tr><td class="ts"><code>astype("string")</code></td><td>전화번호를 되돌립니다. 판다스의 <code>string</code>은 결측치를 <code>&lt;NA&gt;</code>로 다뤄 안전합니다.</td></tr>
+          <tr><td class="ts"><code>pd.to_datetime(..., errors="coerce")</code></td><td>날짜로 바꾸지 못한 값은 예외를 내지 않고 결측치로 만듭니다. 원본을 잃지 않고 문제 지점을 찾는 방법입니다.</td></tr>
+          <tr><td class="ts"><code>isin(allowed)</code></td><td>SQL의 <code>CHECK (grade IN …)</code>을 미리 흉내 내 봅니다. 넣기 전에 걸러 내면 오류 메시지를 덜 봅니다.</td></tr>
+          <tr><td class="ts"><code>duplicated("email")</code></td><td>UNIQUE 제약에 걸릴 행을 미리 찾습니다. 실무에서 가장 자주 쓰는 사전 점검입니다.</td></tr>
+          <tr><td class="ts"><code>encoding="utf-8-sig"</code></td><td>엑셀에서 열었을 때 한글이 깨지지 않도록 BOM을 붙여 저장합니다.</td></tr>
+        </tbody>
+      </table></div>
+      <div class="lbl"><span class="no">G5</span>흔한 오류와 해결</div>
+      <div class="twrap"><table class="t">
+        <thead><tr><th>오류 메시지</th><th>원인</th><th>해결</th></tr></thead>
+        <tbody>
+          <tr><td class="ts">UnicodeDecodeError: 'utf-8' codec can't decode…</td><td>파일이 CP949로 저장됨</td><td><code>encoding="cp949"</code>로 읽거나 원본을 UTF-8로 다시 저장</td></tr>
+          <tr><td class="ts">KeyError: 'phone'</td><td>열 이름 앞뒤 공백이나 BOM</td><td><code>df.columns = df.columns.str.strip()</code></td></tr>
+          <tr><td class="ts">SettingWithCopyWarning</td><td>슬라이스 결과에 값을 대입</td><td><code>df = df.copy()</code>로 명시적 복사</td></tr>
+          <tr><td class="ts">전화번호 앞의 0이 사라짐</td><td>정수형으로 읽힘</td><td><code>dtype={"phone": "string"}</code>으로 읽기 단계에서 지정</td></tr>
+        </tbody>
+      </table></div>
+      <div class="lbl"><span class="no">G6</span>체크리스트</div>
+      <ul class="checklist">
+        <li>읽을 때 인코딩을 지정했는가</li>
+        <li>열 이름의 공백을 제거했는가</li>
+        <li>전화번호·우편번호가 문자형인가</li>
+        <li>날짜 열이 날짜 타입인가</li>
+        <li>중복·결측을 확인했는가</li>
+      </ul>
+      <div class="lbl"><span class="no">G7</span>미니 과제</div>
+      <div class="usecase"><b>과제</b>직접 만든 영수증 CSV로 위 스크립트를 돌려 보세요. 4단계에서 만든 <code>customer_clean.csv</code>는 다음 편(3주차)에서 그대로 다시 씁니다.</div>
+    </div>
+  </div>
+</section>
+
+<section class="part" id="glossary">
+  <div class="wrap">
+    <div class="part-head">
+      <div class="part-no">Aa</div>
+      <h2>용어 사전 — 비유로 보기<span class="en">Glossary</span></h2>
+      <p>본문에서 점선 밑줄이 있는 낱말을 누르면 같은 비유가 뜹니다. 여기서는 한꺼번에 훑어볼 수 있습니다.</p>
+    </div>
+    <div class="gl-group"><h4>데이터와 정보</h4>
+      <div class="gl-grid">
+        <div class="gl-card" id="g-데이터"><b>데이터</b>
+          <p class="gl-an"><span>비유</span>장바구니에 담긴 재료. 아직 요리는 아니지만, 이것 없이는 아무것도 못 만듭니다.</p>
+          <p class="gl-mean"><span>뜻</span>현실에서 관찰하거나 측정해 수집한 값.</p></div>
+        <div class="gl-card" id="g-정보"><b>정보</b>
+          <p class="gl-an"><span>비유</span>재료로 만든 한 그릇의 요리. 바로 먹을 수 있습니다.</p>
+          <p class="gl-mean"><span>뜻</span>데이터를 의사결정에 유용하게 활용할 수 있도록 처리해 체계적으로 조직한 결과물.</p></div>
+        <div class="gl-card" id="g-정보처리"><b>정보처리</b>
+          <p class="gl-an"><span>비유</span>재료를 다듬고 볶고 간하는 요리 과정 전체.</p>
+          <p class="gl-mean"><span>뜻</span>데이터에서 정보를 추출하는 과정 또는 방법.</p></div>
+        <div class="gl-card" id="g-정보시스템"><b>정보시스템</b>
+          <p class="gl-an"><span>비유</span>주방 전체 — 재료를 사 오고, 보관하고, 조리해 내보내는 설비 일체.</p>
+          <p class="gl-mean"><span>뜻</span>조직 운영에 필요한 데이터를 수집해 저장해 두었다가, 의사결정에 필요할 때 처리해 유용한 정보를 만들어 주는 수단.</p></div>
+      </div>
+    </div>
+    <div class="gl-group"><h4>데이터베이스의 조건</h4>
+      <div class="gl-grid">
+        <div class="gl-card" id="g-공유데이터"><b>공유 데이터</b>
+          <p class="gl-an"><span>비유</span>사무실 공용 냉장고. 여러 사람이 함께 넣고 함께 꺼냅니다.</p>
+          <p class="gl-mean"><span>뜻</span>여러 사용자가 함께 소유하고 이용하는 데이터.</p></div>
+        <div class="gl-card" id="g-통합데이터"><b>통합 데이터</b>
+          <p class="gl-an"><span>비유</span>같은 우유를 냉장고 두 칸에 나눠 넣지 않기. 중복은 줄이되, 필요하면 한 칸에 두고 <b>규칙</b>으로 관리합니다.</p>
+          <p class="gl-mean"><span>뜻</span>중복성을 최소화해서 허용하는 데이터. 통제 가능성이 핵심입니다.</p></div>
+        <div class="gl-card" id="g-저장데이터"><b>저장 데이터</b>
+          <p class="gl-an"><span>비유</span>머릿속 레시피가 아니라, 종이에 적어 둔 레시피.</p>
+          <p class="gl-mean"><span>뜻</span>컴퓨터가 접근할 수 있는 데이터.</p></div>
+        <div class="gl-card" id="g-운영데이터"><b>운영 데이터</b>
+          <p class="gl-an"><span>비유</span>매일 갱신되는 재고 장부. 한 번 적고 끝나는 게 아닙니다.</p>
+          <p class="gl-mean"><span>뜻</span>지속적으로 유지·관리되는 데이터.</p></div>
+      </div>
+    </div>
+    <div class="gl-group"><h4>데이터의 분류</h4>
+      <div class="gl-grid">
+        <div class="gl-card" id="g-정형"><b>정형 데이터</b>
+          <p class="gl-an"><span>비유</span>칸이 그려진 계란판. 어디에 무엇을 넣을지 이미 정해져 있습니다.</p>
+          <p class="gl-mean"><span>뜻</span>미리 정해진 구조에 따라 저장된 데이터.</p></div>
+        <div class="gl-card" id="g-반정형"><b>반정형 데이터</b>
+          <p class="gl-an"><span>비유</span>이름표를 달고 다니는 택배 상자. 겉에 내용물 이름이 적혀 있습니다.</p>
+          <p class="gl-mean"><span>뜻</span>구조에 따라 저장된 데이터이면서 데이터 안에 구조에 대한 설명이 존재하는 데이터.</p></div>
+        <div class="gl-card" id="g-비정형"><b>비정형 데이터</b>
+          <p class="gl-an"><span>비유</span>포장도 이름표도 없는 상자. 열어 봐야 압니다.</p>
+          <p class="gl-mean"><span>뜻</span>정해진 구조가 없이 저장된 데이터.</p></div>
+        <div class="gl-card" id="g-명목"><b>명목변수</b>
+          <p class="gl-an"><span>비유</span>옷의 색 이름표. 빨강이 파랑보다 "크다"고 말할 수 없습니다.</p>
+          <p class="gl-mean"><span>뜻</span>개체나 사람의 특성만 구분하는 변수(성별, 종교, 혈액형).</p></div>
+        <div class="gl-card" id="g-순서"><b>순서변수</b>
+          <p class="gl-an"><span>비유</span>달리기 순위. 1등이 2등보다 앞이지만, "두 배 빨랐다"고는 못 합니다.</p>
+          <p class="gl-mean"><span>뜻</span>측정 대상 간 선호를 부여하는 변수(선호도, 만족도, 학력 수준).</p></div>
+        <div class="gl-card" id="g-등간"><b>등간변수</b>
+          <p class="gl-an"><span>비유</span>눈금이 일정한 자. 다만 0이 "없음"을 뜻하지는 않습니다.</p>
+          <p class="gl-mean"><span>뜻</span>순서 + 값 사이의 간격이 일정한 변수(IQ, 섭씨 온도). 절대 영점이 없습니다.</p></div>
+        <div class="gl-card" id="g-비율"><b>비율변수</b>
+          <p class="gl-an"><span>비유</span>무게. 2kg은 1kg의 두 배라고 말할 수 있습니다.</p>
+          <p class="gl-mean"><span>뜻</span>측정 대상 간에 비율 계산이 가능한 변수(연령, 무게, 거리, 시간).</p></div>
+        <div class="gl-card" id="g-이산연속"><b>이산형 · 연속형</b>
+          <p class="gl-an"><span>비유</span>계단식과 경사로. 계단은 중간에 설 수 없고, 경사로는 어디든 설 수 있습니다.</p>
+          <p class="gl-mean"><span>뜻</span>이산형은 원소 형태의 값을(스위치 ON/OFF), 연속형은 유한차원 벡터공간의 값을 갖습니다(수익률, 운행거리).</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="part" id="author-sec">
+  <div class="wrap">
+    <div class="part-head"><div class="part-no">E-1</div>
+      <h2>저자 소개<span class="en">About the Author</span></h2></div>
+    <div class="author">
+      <img class="ph" data-src="ch_doc_front" alt="박사">
+      <div class="ai">
+        <h3>안상선</h3>
+        <p>(주)M-Robo 대표 · 데이터베이스 설계 강의 담당</p>
+        <p>logix44@hanmail.net</p>
+        <p style="margin-top:10px">이 편은 2주차 교안을 웹에서 따라올 수 있도록 재구성한 것입니다. 참고 교재: 김연희, 『데이터베이스 개론』(3판) — 커리큘럼의 순서 및 주요 용어의 정의, 예시의 설명 등을 참고했습니다.</p>
+      </div>
+    </div>
+    <div class="callout info" style="margin-top:16px"><b>교육자 안내</b>
+      이 편의 확인 문제는 총 8문항이며, 정답·해설·배점 기준은 <a href="answers.html">교육자용 정답 페이지</a>에 정리해 두었습니다.</div>
+  </div>
+</section>
+
+<section class="part" id="outro">
+  <div class="wrap outro">
+    <h2>수고하셨습니다!</h2>
+    <p>데이터와 정보를 갈랐고, 데이터베이스의 네 가지 조건과 네 가지 특징을 익혔고, 데이터를 세 가지 형태와 네 가지 척도로 나눠 봤습니다. 다음 편에서는 이 데이터를 <b>파일로 관리하면 무엇이 무너지는지</b>를 봅니다.</p>
+    <div class="hbtns" style="justify-content:center">
+      <a class="pbtn primary" href="index.html">다음 · 데이터베이스 관리 시스템</a>
+      <a class="pbtn" href="answers.html">교육자용 정답</a>
+      <a class="pbtn" href="index.html">처음 화면</a>
+    </div>
+  </div>
+</section>

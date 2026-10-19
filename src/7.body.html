@@ -1,0 +1,1081 @@
+<header class="hero" id="top">
+  <div class="hwrap">
+    <div class="crumb">데이터베이스 설계 · 4주차 사례 · <b>실무 프로젝트</b></div>
+    <h1>RPG 용사의 전설 —<br><em>설계자의 실무 기록</em></h1>
+    <p class="lead">파일 시스템의 한계를 겪은 게임 개발팀이 DBMS를 도입하고, 캐릭터·아이템·전투·퀘스트 시스템을 설계하기까지. 실제 프로젝트의 10단계를 그대로 따라가며 앞선 다섯 편의 이론이 어떻게 쓰이는지 확인합니다.</p>
+    <div class="hbtns">
+      <a class="pbtn primary" href="#m1">1단계부터</a>
+      <a class="pbtn" href="#m9">성능 최적화</a>
+      <a class="pbtn" href="#prompt">코드 가이드</a>
+      <a class="pbtn" href="index.html">처음 화면</a>
+    </div>
+    <div class="hero-keys"><span class="kchip">10단계 프로젝트</span><span class="kchip">캐릭터·아이템·전투·퀘스트</span>
+      <span class="kchip">인덱싱 전략</span><span class="kchip">장애 사례 3초→0.1초</span></div>
+  </div>
+</header>
+
+<section class="part" id="m1">
+  <div class="wrap">
+    <div class="part-head"><div class="part-no">01</div>
+      <h2>프로젝트 개요와 10단계<span class="en">Project Overview</span></h2>
+      <p>본 강의는 '용사의 전설' 같은 일본 스타일 RPG 게임 개발 시 데이터베이스 설계자의 실무와 도전 과제를 다룹니다. 캐릭터·아이템·전투·NPC·퀘스트 등 복잡한 게임 요소들의 효율적인 데이터 관리 방법을 실무 중심으로 학습합니다.</p></div>
+    <div class="grid">
+      <div class="card"><div class="lbl"><span class="no">1</span>프로젝트 목표</div>
+        <div class="eq">"대규모 RPG 게임의 복잡한 데이터를 효율적으로 관리하여 안정적인 게임 서비스와 향후 확장성 보장"</div>
+        <div class="facts">
+          <div class="fact"><span>다루는 것</span>캐릭터/전투/퀘스트 시스템 설계</div>
+          <div class="fact"><span>난제</span>대규모 스토리 분기점 관리</div>
+          <div class="fact"><span>결과</span>성능 최적화 및 확장성 전략, 실무 경험에서 얻은 교훈</div>
+        </div>
+      </div>
+      <div class="card"><div class="lbl"><span class="no">2</span>10단계</div>
+        <ol class="steps">
+          <li><b>파일 시스템의 한계 분석</b></li>
+          <li><b>DBMS 도입 결정 과정</b></li>
+          <li><b>DBMS 주요 기능과 활용</b></li>
+          <li><b>DBMS 실무적 평가</b></li>
+          <li><b>3단계 아키텍처 설계</b></li>
+          <li><b>캐릭터 시스템 설계</b></li>
+          <li><b>아이템/인벤토리 설계</b></li>
+          <li><b>NPC/전투/퀘스트 시스템</b></li>
+          <li><b>성능 최적화 전략</b></li>
+          <li><b>프로젝트 회고 및 실무 팁</b></li>
+        </ol>
+      </div>
+      <div class="card span"><div class="lbl"><span class="no">3</span>앞선 다섯 편과의 연결</div>
+        <div class="twrap"><table class="t">
+          <thead><tr><th>단계</th><th>앞선 편에서 배운 것</th></tr></thead>
+          <tbody>
+            <tr><td class="ts">1~2단계</td><td><a href="index.html">3편</a> 파일 시스템의 다섯 문제 · DBMS의 등장 배경</td></tr>
+            <tr><td class="ts">3~4단계</td><td><a href="index.html">3편</a> 정의·조작·제어와 DBMS의 장단점</td></tr>
+            <tr><td class="ts">5단계</td><td><a href="index.html">4편</a> 3단계 스키마와 데이터 독립성</td></tr>
+            <tr><td class="ts">6~8단계</td><td><a href="index.html">5편</a> ERD · <a href="index.html">6편</a> 키와 무결성</td></tr>
+            <tr><td class="ts">9~10단계</td><td>인덱스·정규화·캐싱 (11장 이후 심화)</td></tr>
+          </tbody>
+        </table></div>
+      </div>
+      <div class="card span quiz"><div class="lbl"><span class="no">✓</span>확인 문제</div>
+        <div class="q" data-ok="1" data-ex="이 프로젝트의 목표는 '대규모 RPG 게임의 복잡한 데이터를 효율적으로 관리하여 안정적인 게임 서비스와 향후 확장성 보장'입니다. 확장성이 처음부터 목표에 들어 있습니다.">
+          <p class="qt">Q1. 'RPG 용사의 전설' 프로젝트의 목표로 가장 알맞은 것은?</p>
+          <div class="opts"><button type="button" data-i="0">게임 그래픽 품질 향상</button>
+            <button type="button" data-i="1">복잡한 데이터의 효율적 관리와 향후 확장성 보장</button>
+            <button type="button" data-i="2">개발 인력의 축소</button></div>
+          <p class="fb" aria-live="polite"></p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="part" id="m2">
+  <div class="wrap">
+    <div class="part-head"><div class="part-no">02</div>
+      <h2>파일 시스템의 한계에서 DBMS 도입까지<span class="en">Steps 1~2</span></h2></div>
+    <div class="grid">
+      <div class="card"><div class="lbl"><span class="no">1</span>초기 단계의 문제점</div>
+        <div class="facts">
+          <div class="fact"><span>데이터 중복</span>캐릭터·아이템 정보가 여러 파일에 중복 저장</div>
+          <div class="fact"><span>데이터 종속성</span>속성 변경 시 연관 파일 모두 수정 필요</div>
+          <div class="fact"><span>동시 접근 불가</span>개발자 간 동시 작업 시 충돌 발생</div>
+          <div class="fact"><span>확장성 부족</span>신규 기능 추가 시 전체 구조 수정 필요</div>
+        </div>
+        <div class="cameo"><img alt="초파리 연구원" data-src="ch_fly_crying">
+          <div class="bub"><div class="who">개발자의 고민</div>
+          <p>"프로젝트가 커지면서 파일이 너무 많아졌어요. 최신 버전 관리도 어렵고 팀원들과 작업 시 충돌이 계속됩니다."</p></div></div>
+      </div>
+      <div class="card"><div class="lbl"><span class="no">2</span>프로젝트 리더의 결정</div>
+        <div class="cameo robo"><img alt="M-Robo" data-src="ch_robo_warn">
+          <div class="bub"><div class="who">프로젝트 리더</div>
+          <p>"이 방식으로는 용사의 전설에 필요한 수백 개의 아이템과 퀘스트를 관리할 수 없습니다. 데이터베이스 시스템이 필요합니다."</p></div></div>
+        <div class="facts">
+          <div class="fact"><span>데이터 일관성</span>캐릭터·아이템 정보 중복 문제 해결</div>
+          <div class="fact"><span>동시 접근성</span>개발자들의 동시 작업 지원</div>
+          <div class="fact"><span>복구 체계</span>게임 데이터 손상 방지 시스템</div>
+        </div>
+        <div class="cameo"><img alt="조수" data-src="ch_asst_sparkle">
+          <div class="bub"><div class="who">기술 검토 결과 · 팀 피드백</div>
+          <p>"용사의 전설에서 필요한 복잡한 캐릭터 성장 시스템을 위해 관계형 DB 도입이 필수적입니다." → "DBMS 도입으로 <b>개발 속도가 30% 향상</b>되었습니다."</p></div></div>
+      </div>
+      <div class="card span"><div class="lbl"><span class="no">3</span>DBMS의 3대 기능과 실제 활용</div>
+        <div class="grid three">
+          <div class="card"><div class="lbl"><span class="no">정의</span>Define · DDL</div>
+            <p>RPG 게임의 세계관을 구축하는 기초 작업입니다. 캐릭터·아이템·스킬·NPC 등의 데이터 구조를 정의하고, 복잡한 캐릭터-직업-스킬 간의 관계를 설정합니다.</p></div>
+          <div class="card"><div class="lbl"><span class="no">조작</span>Manipulate · DML</div>
+            <p>게임 진행에 따른 실시간 데이터 관리입니다. 레벨업·스탯 변화·퀘스트 진행 등 상태를 업데이트하고, 아이템 획득/거래/사용에 따른 인벤토리를 변경합니다.</p></div>
+          <div class="card"><div class="lbl"><span class="no">제어</span>Control · DCL</div>
+            <p>게임 데이터 안전성과 일관성을 보장합니다. 접근 권한을 관리하고(개발/QA/운영팀), 동시 작업 시 충돌을 방지하며 데이터 무결성을 유지합니다.</p></div>
+        </div>
+        <div class="callout tip"><b>영웅전설 개발팀의 실제 활용</b>
+          🔷 <b>캐릭터 성장 시스템</b> — 레벨업에 따른 스탯 자동 계산과 직업별 차등 적용 로직을 DB 프로시저로 구현<br>
+          🔷 <b>전투 밸런싱</b> — 몬스터/캐릭터 데이터 분석을 통해 게임 난이도를 조절하고, 쿼리로 데이터 검증<br>
+          🔷 <b>다중 개발자 협업</b> — 트랜잭션 관리로 여러 개발자가 동시에 수정해도 충돌 없음<br>
+          🔷 <b>컨텐츠 확장</b> — 새로운 DLC 추가 시 기존 구조 변경 없이 데이터만 추가</div>
+        <p class="src">"DBMS 도입 후 게임 데이터 관리 시간이 <b>60% 감소</b>했고, 개발자들은 실제 게임플레이 개선에 더 집중할 수 있었습니다." — 프로젝트 리드</p>
+      </div>
+      <div class="card span"><div class="lbl"><span class="no">4</span>실무적 평가 — 이점과 과제</div>
+        <div class="feat">
+          <div class="pro"><b>개발팀에게 주는 이점</b>
+            <ul>
+              <li><b>데이터 통합 관리</b> — 캐릭터·아이템·스킬 데이터의 중복 방지</li>
+              <li><b>시스템 확장성</b> — DLC·신규 퀘스트·아이템 추가가 용이</li>
+              <li><b>계정 보안</b> — 플레이어 데이터 안전성 확보</li>
+              <li><b>시스템 복구</b> — 서버 장애 발생 시 데이터 롤백 가능</li>
+              <li><b>동시 접속 처리</b> — 다중 서버에서 데이터 일관성 유지</li>
+            </ul></div>
+          <div class="con"><b>개발팀이 마주하는 과제</b>
+            <ul>
+              <li><b>개발 비용 증가</b> — DB 전문 인력과 고성능 서버 인프라 필요</li>
+              <li><b>백업/유지보수</b> — 정기적 백업과 DB 최적화 작업 필수</li>
+              <li><b>시스템 의존성</b> — DB 장애 시 전체 게임 서비스 중단 가능성</li>
+              <li><b>초기 설계의 중요성</b> — 라이브 서비스 후 스키마 변경의 어려움</li>
+            </ul></div>
+        </div>
+        <div class="callout key"><b>개발팀 실무 인사이트</b>
+          "영웅전설 같은 대규모 RPG 개발에서 DBMS는 선택이 아닌 필수입니다. 특히 복잡한 퀘스트 시스템과 NPC 관리에 효율성을 크게 높여줍니다."<br>
+          → 일본식 RPG 개발에서는 게임 규모와 서비스 계획에 따라 적합한 DB 솔루션을 선택해야 합니다.</div>
+      </div>
+      <div class="card span quiz"><div class="lbl"><span class="no">✓</span>확인 문제</div>
+        <div class="q" data-ok="2" data-ex="DBMS 도입의 과제로는 개발 비용 증가, 백업·유지보수 부담, 시스템 의존성(DB 장애 시 서비스 전체 중단), 초기 설계의 중요성이 있습니다. '데이터 중복 방지'는 이점입니다.">
+          <p class="qt">Q2. DBMS 도입의 <b>과제(단점)</b>에 해당하지 않는 것은?</p>
+          <div class="opts"><button type="button" data-i="0">DB 장애 시 전체 게임 서비스 중단 가능성</button>
+            <button type="button" data-i="1">라이브 서비스 후 스키마 변경의 어려움</button>
+            <button type="button" data-i="2">캐릭터·아이템 데이터의 중복 방지</button></div>
+          <p class="fb" aria-live="polite"></p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="part" id="m5">
+  <div class="wrap">
+    <div class="part-head"><div class="part-no">03</div>
+      <h2>3단계 아키텍처 설계<span class="en">Step 5</span></h2>
+      <p>용사의 전설 개발에서는 데이터 관리 효율성을 위해 3단계 아키텍처를 적용했습니다.</p></div>
+    <div class="grid three">
+      <div class="card"><div class="lbl"><span class="no">1</span>외부 스키마</div>
+        <p>사용자/개발자 인터페이스 계층</p>
+        <div class="facts"><div class="fact"><span>역할</span>UI 컴포넌트 및 뷰 테이블 관리</div></div></div>
+      <div class="card"><div class="lbl"><span class="no">2</span>개념 스키마</div>
+        <p>논리적 데이터 모델링 계층</p>
+        <div class="facts"><div class="fact"><span>역할</span>게임 엔티티와 관계 정의</div></div></div>
+      <div class="card"><div class="lbl"><span class="no">3</span>내부 스키마</div>
+        <p>물리적 데이터 저장 계층</p>
+        <div class="facts"><div class="fact"><span>역할</span>최적화된 스토리지 구조</div></div></div>
+      <div class="card span"><div class="lbl"><span class="no">4</span>실무 적용 사례</div>
+        <div class="callout tip"><b>성과</b>
+          용사의 전설 개발 중 <b>UI 변경 시에도 내부 데이터 구조 수정 없이 개발 기간 30% 단축</b>했습니다. 개념 스키마의 안정성으로 데이터 독립성을 확보했습니다.</div>
+        <div class="diagram">
+          <svg viewBox="0 0 720 200" role="img" aria-label="게임 3단계 아키텍처">
+            <rect x="20" y="24" width="200" height="52" rx="9" fill="rgba(176,124,255,.16)" stroke="#b07cff"/>
+            <text x="120" y="46" text-anchor="middle" fill="#e6dcff" font-size="12.5">① 외부 스키마</text>
+            <text x="120" y="64" text-anchor="middle" fill="#b5abd6" font-size="11">UI · 뷰 테이블</text>
+            <rect x="250" y="24" width="220" height="52" rx="9" fill="rgba(87,208,220,.16)" stroke="#57d0dc"/>
+            <text x="360" y="46" text-anchor="middle" fill="#d3f4f8" font-size="12.5">② 개념 스키마</text>
+            <text x="360" y="64" text-anchor="middle" fill="#b5abd6" font-size="11">게임 엔티티 · 관계</text>
+            <rect x="500" y="24" width="200" height="52" rx="9" fill="rgba(255,198,92,.14)" stroke="#ffc65c"/>
+            <text x="600" y="46" text-anchor="middle" fill="#fff2d4" font-size="12.5">③ 내부 스키마</text>
+            <text x="600" y="64" text-anchor="middle" fill="#b5abd6" font-size="11">스토리지 · 인덱스</text>
+            <line x1="220" y1="50" x2="250" y2="50" stroke="#b07cff"/><line x1="470" y1="50" x2="500" y2="50" stroke="#57d0dc"/>
+            <text x="360" y="108" text-anchor="middle" fill="#efe9ff" font-size="12.5" font-weight="700">UI를 바꿔도 ②③은 그대로 · 저장 구조를 바꿔도 ①②는 그대로</text>
+            <text x="360" y="132" text-anchor="middle" fill="#8f85b8" font-size="11.5">→ 개발 기간 30% 단축, 데이터 독립성 확보</text>
+            <text x="360" y="170" text-anchor="middle" fill="#5fd39a" font-size="12">이것이 4편에서 배운 논리적·물리적 데이터 독립성의 실무 결과입니다</text>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="part" id="m6">
+  <div class="wrap">
+    <div class="part-head"><div class="part-no">04</div>
+      <h2>캐릭터 시스템 설계<span class="en">Step 6</span></h2></div>
+    <div class="grid">
+      <div class="card"><div class="lbl"><span class="no">1</span>캐릭터 기본 테이블</div>
+        <div class="twrap"><table class="t">
+          <thead><tr><th>필드명</th><th>데이터 타입</th><th>설명</th></tr></thead>
+          <tbody>
+            <tr><td class="ts pk">character_id</td><td class="ts">INT (PK)</td><td>캐릭터 고유 식별자</td></tr>
+            <tr><td class="ts">name</td><td class="ts">VARCHAR(50)</td><td>캐릭터 이름</td></tr>
+            <tr><td class="ts fk">job_id</td><td class="ts">INT (FK)</td><td>직업 테이블 참조</td></tr>
+            <tr><td class="ts">level</td><td class="ts">SMALLINT</td><td>현재 레벨</td></tr>
+            <tr><td class="ts">exp</td><td class="ts">INT</td><td>현재 경험치</td></tr>
+          </tbody>
+        </table></div>
+        <p class="src">프로젝트에서는 필요 시 <code>max_hp</code>, <code>max_mp</code>, <code>created_at</code> 등 추가 필드로 확장합니다.</p>
+      </div>
+      <div class="card"><div class="lbl"><span class="no">2</span>캐릭터 스탯 테이블</div>
+        <div class="twrap"><table class="t">
+          <thead><tr><th>character_stats</th><th>설명</th></tr></thead>
+          <tbody>
+            <tr><td class="ts pk">character_id (PK, FK)</td><td>캐릭터 참조</td></tr>
+            <tr><td class="ts">strength</td><td>힘 (물리공격)</td></tr>
+            <tr><td class="ts">intelligence</td><td>지능 (마법)</td></tr>
+            <tr><td class="ts">dexterity</td><td>민첩 (회피/명중)</td></tr>
+            <tr><td class="ts">vitality</td><td>체력 (HP)</td></tr>
+          </tbody>
+        </table></div>
+        <div class="facts">
+          <div class="fact"><span>분리 이유</span>캐릭터-스탯 테이블 분리로 성능 최적화</div>
+          <div class="fact"><span>트랜잭션</span>레벨업 시 스탯 계산 트랜잭션 필요</div>
+          <div class="fact"><span>인덱싱</span>캐릭터ID + 능력치 복합 인덱스</div>
+        </div>
+      </div>
+      <div class="card"><div class="lbl"><span class="no">3</span>테이블 간 관계</div>
+        <div class="twrap"><table class="t">
+          <thead><tr><th>대상</th><th>관계</th></tr></thead>
+          <tbody>
+            <tr><td class="ts">character_stats</td><td class="tacc">1 : 1</td></tr>
+            <tr><td class="ts">character_items</td><td class="tacc">1 : N</td></tr>
+            <tr><td class="ts">character_skills</td><td class="tacc">N : M</td></tr>
+            <tr><td class="ts">character_quests</td><td class="tacc">1 : N</td></tr>
+          </tbody>
+        </table></div>
+        <p class="src">용사의 전설에서는 캐릭터 성장 시스템을 위해 별도 테이블을 연계하여 진화/전직 시스템을 지원합니다.</p>
+      </div>
+      <div class="card"><div class="lbl"><span class="no">4</span>직업별 스탯 배분 예</div>
+        <div class="twrap"><table class="t">
+          <thead><tr><th>직업</th><th>기본 스탯 배분</th></tr></thead>
+          <tbody>
+            <tr><td class="ts">마법검사</td><td>힘 — 높음 (체력/공격) · 지능 — 중간 (마법)</td></tr>
+            <tr><td class="ts">현자</td><td>지능 — 매우 높음 · 체력 — 낮음</td></tr>
+          </tbody>
+        </table></div>
+        <div class="callout key"><b>설계 포인트</b>
+          스탯을 <b>저장하지 않고</b> 직업·레벨에서 계산하는 방식(유도 속성)과, <b>저장</b>하는 방식이 있습니다. 용사의 전설은 레벨업 시 <b>트랜잭션으로 계산해 저장</b>하는 쪽을 택했습니다 — 조회가 압도적으로 많기 때문입니다.</div>
+      </div>
+      <div class="card span quiz"><div class="lbl"><span class="no">✓</span>확인 문제</div>
+        <div class="q" data-ok="0" data-ex="캐릭터와 스탯을 별도 테이블로 분리한 이유는 성능 최적화입니다. 자주 조회되는 기본 정보와 자주 바뀌지 않는 상세 스탯을 나누어 관리합니다. 레벨업 시에는 스탯 계산을 트랜잭션으로 처리합니다.">
+          <p class="qt">Q3. 캐릭터-스탯 테이블을 분리한 주된 이유는?</p>
+          <div class="opts"><button type="button" data-i="0">성능 최적화</button>
+            <button type="button" data-i="1">스토리 분기 관리</button>
+            <button type="button" data-i="2">아이템 희귀도 표현</button></div>
+          <p class="fb" aria-live="polite"></p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="part" id="m7">
+  <div class="wrap">
+    <div class="part-head"><div class="part-no">05</div>
+      <h2>아이템 &amp; 인벤토리 시스템<span class="en">Step 7</span></h2></div>
+    <div class="grid">
+      <div class="card"><div class="lbl"><span class="no">1</span>items 테이블</div>
+        <div class="twrap"><table class="t">
+          <thead><tr><th>필드명</th><th>데이터 타입</th><th>설명</th></tr></thead>
+          <tbody>
+            <tr><td class="ts pk">item_id</td><td class="ts">INT</td><td>PK</td></tr>
+            <tr><td class="ts">name</td><td class="ts">VARCHAR(50)</td><td>아이템 이름</td></tr>
+            <tr><td class="ts fk">type_id</td><td class="ts">TINYINT</td><td>유형 (FK)</td></tr>
+            <tr><td class="ts">rarity</td><td class="ts">TINYINT</td><td>희귀도</td></tr>
+          </tbody>
+        </table></div>
+      </div>
+      <div class="card"><div class="lbl"><span class="no">2</span>inventories 테이블</div>
+        <div class="twrap"><table class="t">
+          <thead><tr><th>필드명</th><th>데이터 타입</th><th>설명</th></tr></thead>
+          <tbody>
+            <tr><td class="ts pk">inventory_id</td><td class="ts">INT</td><td>PK</td></tr>
+            <tr><td class="ts fk">character_id</td><td class="ts">INT</td><td>FK</td></tr>
+            <tr><td class="ts fk">item_id</td><td class="ts">INT</td><td>FK</td></tr>
+            <tr><td class="ts">quantity</td><td class="ts">INT</td><td>수량</td></tr>
+          </tbody>
+        </table></div>
+      </div>
+      <div class="card"><div class="lbl"><span class="no">3</span>ERD 구조</div>
+        <div class="calc">characters (1) ── (N) inventories (N) ── (1) items
+items (1) ── (N) item_stats</div>
+        <div class="callout info"><b>N:M 관계의 교과서적 처리</b>
+          캐릭터와 아이템의 다대다 관계를 <code>inventories</code>라는 <b>중간 개체</b>로 분해했습니다. 5편에서 배운 규칙 그대로입니다. <code>quantity</code>는 관계의 속성입니다.</div>
+      </div>
+      <div class="card"><div class="lbl"><span class="no">4</span>실제 구현 코드</div>
+        <div class="codebox plain" data-name="rpg_items" data-title="아이템 유형 테이블과 인덱스">
+          <button class="btn copy" type="button" data-copy="code-rpg-items">코드 복사</button>
+          <pre id="code-rpg-items"><code>CREATE TABLE item_types (
+  type_id   TINYINT PRIMARY KEY,
+  type_name VARCHAR(30) NOT NULL
+);
+
+CREATE INDEX idx_items_type ON items(type_id);</code></pre>
+        </div>
+        <div class="facts">
+          <div class="fact"><span>확장성</span>아이템 속성은 별도 테이블로 분리</div>
+          <div class="fact"><span>성능</span>인벤토리 조회 시 JOIN 최소화 설계</div>
+          <div class="fact"><span>트랜잭션</span>거래/교환 시 데이터 일관성 유지</div>
+        </div>
+      </div>
+      <div class="card span quiz"><div class="lbl"><span class="no">✓</span>확인 문제</div>
+        <div class="q" data-ok="1" data-ex="characters(1)─(N)inventories(N)─(1)items 구조로, 캐릭터와 아이템의 다대다 관계를 inventories라는 중간 테이블로 분해했습니다. 수량은 관계의 속성으로 inventories에 저장됩니다.">
+          <p class="qt">Q4. 캐릭터와 아이템의 다대다 관계를 해결한 방법은?</p>
+          <div class="opts"><button type="button" data-i="0">items 테이블에 캐릭터ID를 직접 추가</button>
+            <button type="button" data-i="1">inventories 중간 테이블로 분해</button>
+            <button type="button" data-i="2">아이템 속성을 전부 JSON으로 저장</button></div>
+          <p class="fb" aria-live="polite"></p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="part" id="m8">
+  <div class="wrap">
+    <div class="part-head"><div class="part-no">06</div>
+      <h2>NPC · 전투 · 퀘스트 시스템<span class="en">Step 8</span></h2></div>
+    <div class="grid">
+      <div class="card"><div class="lbl"><span class="no">1</span>NPC와 다이얼로그</div>
+        <div class="twrap"><table class="t">
+          <thead><tr><th>NPC_TABLE</th><th>타입</th></tr></thead>
+          <tbody>
+            <tr><td class="ts pk">npc_id (PK)</td><td class="ts">INT</td></tr>
+            <tr><td class="ts">name</td><td class="ts">VARCHAR(50)</td></tr>
+            <tr><td class="ts fk">location_id (FK)</td><td class="ts">INT</td></tr>
+            <tr><td class="ts">role_type</td><td class="ts">ENUM</td></tr>
+            <tr><td class="ts">is_interactive</td><td class="ts">BOOLEAN</td></tr>
+          </tbody>
+        </table></div>
+        <div class="twrap"><table class="t">
+          <thead><tr><th>DIALOGUE_TABLE</th><th>타입</th></tr></thead>
+          <tbody>
+            <tr><td class="ts pk">dialogue_id (PK)</td><td class="ts">INT</td></tr>
+            <tr><td class="ts fk">npc_id (FK)</td><td class="ts">INT</td></tr>
+            <tr><td class="ts">dialogue_text</td><td class="ts">TEXT</td></tr>
+            <tr><td class="ts fk">next_dialogue_id</td><td class="ts">INT</td></tr>
+            <tr><td class="ts">condition_flag</td><td class="ts">VARCHAR(100)</td></tr>
+          </tbody>
+        </table></div>
+        <div class="callout warn"><b>설계 팁</b> NPC 타입별로 별도 테이블 분리(상인, 퀘스트 제공자 등).</div>
+      </div>
+      <div class="card"><div class="lbl"><span class="no">2</span>전투 시스템</div>
+        <div class="twrap"><table class="t">
+          <thead><tr><th>battle_stats</th><th>설명</th></tr></thead>
+          <tbody>
+            <tr><td class="ts pk">character_id</td><td>캐릭터 ID (PK)</td></tr>
+            <tr><td class="ts">turn_order</td><td>행동순서</td></tr>
+            <tr><td class="ts">current_hp</td><td>현재 생명력</td></tr>
+            <tr><td class="ts">current_mp</td><td>현재 마나</td></tr>
+            <tr><td class="ts">status_effects</td><td>상태이상 효과 (<b>JSON</b>)</td></tr>
+          </tbody>
+        </table></div>
+        <div class="twrap"><table class="t">
+          <thead><tr><th>battle_log</th><th>설명</th></tr></thead>
+          <tbody>
+            <tr><td class="ts pk">log_id</td><td>로그 ID (PK)</td></tr>
+            <tr><td class="ts fk">battle_id</td><td>전투 ID (FK)</td></tr>
+            <tr><td class="ts">action_type</td><td>행동유형(공격/스킬)</td></tr>
+          </tbody>
+        </table></div>
+        <div class="codebox plain" data-name="rpg_battle" data-title="턴제 배틀 행동순서 갱신">
+          <button class="btn copy" type="button" data-copy="code-rpg-battle">코드 복사</button>
+          <pre id="code-rpg-battle"><code>-- 턴제 배틀 행동순서 갱신
+UPDATE battle_stats
+SET turn_order = turn_order - 1
+WHERE battle_id = ? AND turn_order &gt; 0;</code></pre>
+        </div>
+      </div>
+      <div class="card"><div class="lbl"><span class="no">3</span>스킬 시스템</div>
+        <div class="twrap"><table class="t">
+          <thead><tr><th>skills</th><th>설명</th></tr></thead>
+          <tbody>
+            <tr><td class="ts pk">skill_id</td><td>스킬 ID (PK)</td></tr>
+            <tr><td class="ts">name</td><td>스킬 이름</td></tr>
+            <tr><td class="ts">type</td><td>물리/마법/지원</td></tr>
+            <tr><td class="ts">element</td><td>속성(화/수/풍/토)</td></tr>
+            <tr><td class="ts">base_power</td><td>기본 위력</td></tr>
+            <tr><td class="ts">mp_cost</td><td>MP 소모량</td></tr>
+          </tbody>
+        </table></div>
+        <div class="facts">
+          <div class="fact"><span>매핑</span>캐릭터-스킬 매핑 — 각 캐릭터별 스킬셋 관리</div>
+          <div class="fact"><span>콤보</span>연계기 발동 조건 및 효과</div>
+          <div class="fact"><span>성능</span>전투 데이터 캐싱 처리</div>
+        </div>
+      </div>
+      <div class="card"><div class="lbl"><span class="no">4</span>퀘스트와 스토리 분기</div>
+        <div class="twrap"><table class="t">
+          <thead><tr><th>quests</th><th>타입</th><th>설명</th></tr></thead>
+          <tbody>
+            <tr><td class="ts pk">quest_id</td><td class="ts">INT</td><td>퀘스트 고유 ID (PK)</td></tr>
+            <tr><td class="ts">title</td><td class="ts">VARCHAR</td><td>퀘스트 제목</td></tr>
+            <tr><td class="ts">type</td><td class="ts">ENUM</td><td>메인/서브/히든</td></tr>
+            <tr><td class="ts fk">prereq_quest_id</td><td class="ts">INT</td><td>선행 퀘스트 (FK)</td></tr>
+            <tr><td class="ts fk">npc_giver_id</td><td class="ts">INT</td><td>퀘스트 제공 NPC (FK)</td></tr>
+            <tr><td class="ts">reward_exp</td><td class="ts">INT</td><td>보상 경험치</td></tr>
+          </tbody>
+        </table></div>
+        <div class="twrap"><table class="t">
+          <thead><tr><th>quest_progress</th><th>타입</th><th>설명</th></tr></thead>
+          <tbody>
+            <tr><td class="ts pk">player_id</td><td class="ts">INT</td><td>플레이어 ID (PK, FK)</td></tr>
+            <tr><td class="ts pk">quest_id</td><td class="ts">INT</td><td>퀘스트 ID (PK, FK)</td></tr>
+            <tr><td class="ts">status</td><td class="ts">ENUM</td><td>미발견/진행중/완료/실패</td></tr>
+            <tr><td class="ts">current_step</td><td class="ts">INT</td><td>현재 진행 단계</td></tr>
+            <tr><td class="ts">choices_made</td><td class="ts">JSON</td><td>플레이어의 선택 기록</td></tr>
+          </tbody>
+        </table></div>
+      </div>
+      <div class="card span"><div class="lbl"><span class="no">5</span>다중 스토리 분기점 설계와 고려사항</div>
+        <div class="feat">
+          <div class="pro"><b>분기 설계</b>
+            <ul>
+              <li><code>quest_outcome</code> 테이블로 스토리 분기 관리</li>
+              <li>플래그 시스템으로 특정 선택지 기억</li>
+              <li>선택지별 다른 후속 퀘스트 트리거</li>
+            </ul></div>
+          <div class="pro"><b>기술적 고려사항</b>
+            <ul>
+              <li><b>트랜잭션 처리</b> — 퀘스트 완료 시 보상 지급과 상태 업데이트를 단일 트랜잭션으로</li>
+              <li><b>인덱싱 전략</b> — <code>player_id + status</code> 복합 인덱스로 활성 퀘스트 목록 빠르게 조회</li>
+              <li><b>퀘스트 의존성</b> — 그래프 구조로 선행/후행 관계 관리</li>
+              <li><b>스토리 변수</b> — 선택에 따른 월드 상태 변경을 <code>flags</code> 테이블로 관리</li>
+              <li><b>성능 최적화</b> — 자주 조회되는 퀘스트 데이터를 메모리 캐시에 저장</li>
+            </ul></div>
+        </div>
+        <p class="src">"RPG 용사의 전설에서는 대화 시스템이 스토리 진행의 핵심이었습니다. 복잡한 분기 처리를 위해 조건부 트리거와 이벤트 시스템을 통합했으며, 플래그 기반 진행을 위해 JSON 형식을 활용했습니다." — 데이터베이스 설계 팀</p>
+      </div>
+      <div class="card span quiz"><div class="lbl"><span class="no">✓</span>확인 문제</div>
+        <div class="q" data-ok="2" data-ex="활성 퀘스트 목록을 빠르게 조회하기 위해 player_id + status 복합 인덱스를 사용했습니다. 선행/후행 관계는 그래프 구조로 관리하고, 선택 기록은 JSON으로 저장했습니다.">
+          <p class="qt">Q5. 활성 퀘스트 목록 조회를 빠르게 하기 위해 쓴 인덱스 전략은?</p>
+          <div class="opts"><button type="button" data-i="0">quest_id 단일 인덱스</button>
+            <button type="button" data-i="1">reward_exp 인덱스</button>
+            <button type="button" data-i="2">player_id + status 복합 인덱스</button></div>
+          <p class="fb" aria-live="polite"></p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="part" id="m9">
+  <div class="wrap">
+    <div class="part-head"><div class="part-no">07</div>
+      <h2>성능 최적화 및 인덱싱 전략<span class="en">Step 9</span></h2></div>
+    <div class="grid">
+      <div class="card"><div class="lbl"><span class="no">1</span>네 가지 핵심 전략</div>
+        <div class="facts">
+          <div class="fact"><span>인덱스 설계</span>플레이어ID·아이템ID·퀘스트ID 등 자주 검색되는 필드에 우선 적용</div>
+          <div class="fact"><span>적절한 정규화</span>캐릭터-장비 관계는 정규화, 전투 로그는 비정규화 적용</div>
+          <div class="fact"><span>캐싱 시스템</span>레벨 정보·아이템 속성 등 자주 조회되는 데이터는 메모리 캐싱</div>
+          <div class="fact"><span>샤딩 전략</span>월드/서버별 데이터 분리로 대규모 동시접속 처리</div>
+        </div>
+        <div class="callout key"><b>정규화와 비정규화를 섞는 기준</b>
+          <b>갱신이 잦고 일관성이 중요한 곳</b>은 정규화(캐릭터-장비), <b>쓰기는 한 번이고 읽기가 폭발적인 곳</b>은 비정규화(전투 로그)입니다. 3편에서 배운 "중복을 통제한다"의 실무 적용입니다.</div>
+      </div>
+      <div class="card"><div class="lbl"><span class="no">2</span>인덱스 적용 우선순위 (실전 사례)</div>
+        <div class="twrap"><table class="t">
+          <thead><tr><th>테이블</th><th>인덱스 필드</th><th>효과</th></tr></thead>
+          <tbody>
+            <tr><td class="ts">Characters</td><td class="ts">player_id, level</td><td class="tacc">캐릭터 검색 300% 향상</td></tr>
+            <tr><td class="ts">Items</td><td class="ts">type, rarity</td><td class="tacc">아이템 필터링 250% 향상</td></tr>
+            <tr><td class="ts">Quest_Progress</td><td class="ts">character_id, status</td><td class="tacc">퀘스트 로딩 500% 향상</td></tr>
+          </tbody>
+        </table></div>
+        <p class="src">수치는 해당 프로젝트에서 측정한 값입니다. 인덱스는 공짜가 아니므로 <b>쓰기 비용과 저장공간</b>을 함께 고려해야 합니다.</p>
+      </div>
+      <div class="card"><div class="lbl"><span class="no">3</span>최적화 체크리스트</div>
+        <ul class="checklist">
+          <li>쿼리 실행계획 분석 및 병목지점 식별</li>
+          <li>조인 쿼리 최적화 (특히 전투 로그와 아이템 드롭)</li>
+          <li>캐릭터 인벤토리 조회 성능 개선 (복합 인덱스)</li>
+          <li>몬스터/NPC 데이터 메모리 캐싱 구현</li>
+        </ul>
+        <div class="callout info"><b>다음 단계</b> "전투 중 실시간 데이터는 NoSQL 병행 검토"</div>
+      </div>
+      <div class="card"><div class="lbl"><span class="no">4</span>실제 장애 사례</div>
+        <div class="cameo robo"><img alt="M-Robo" data-src="ch_robo_warn">
+          <div class="bub"><div class="who">장애 기록</div>
+          <p>"신규 서버 오픈 당일, <b>동시접속자 5만 명</b> 상황에서 <b>인벤토리 조회 쿼리 지연</b>으로 전체 서비스 마비. 인덱스 추가 및 조회 로직 개선으로 <b>응답시간 3초 → 0.1초</b>로 단축"</p></div></div>
+        <div class="calc">장애 타임라인
+  ① 오픈 직후 5만 동시접속
+  ② 인벤토리 조회가 풀 스캔으로 실행
+  ③ DB 커넥션 풀 고갈 → 전체 API 지연
+  ④ 인덱스 추가 + 조회 로직 개선
+  ⑤ 응답시간 3.0초 → 0.1초 (30배)</div>
+        <div class="callout warn"><b>교훈</b>
+          인덱스 하나가 서비스 전체의 생사를 가릅니다. 그리고 <b>라이브 서비스 후 스키마·인덱스 변경은 매우 어렵기</b> 때문에 초기 설계에서 조회 패턴을 미리 정해 두어야 합니다.</div>
+      </div>
+      <div class="card span quiz"><div class="lbl"><span class="no">✓</span>확인 문제</div>
+        <div class="q" data-ok="1" data-ex="신규 서버 오픈 당일 동시접속자 5만 명 상황에서 인벤토리 조회 쿼리 지연으로 전체 서비스가 마비되었고, 인덱스 추가 및 조회 로직 개선으로 응답시간이 3초에서 0.1초로 단축되었습니다.">
+          <p class="qt">Q6. 장애 사례에서 응답시간이 단축된 폭은?</p>
+          <div class="opts"><button type="button" data-i="0">3초 → 1초</button>
+            <button type="button" data-i="1">3초 → 0.1초</button>
+            <button type="button" data-i="2">10초 → 3초</button></div>
+          <p class="fb" aria-live="polite"></p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="part" id="m10">
+  <div class="wrap">
+    <div class="part-head"><div class="part-no">08</div>
+      <h2>프로젝트 회고와 실무 팁<span class="en">Step 10</span></h2></div>
+    <div class="grid">
+      <div class="card"><div class="lbl"><span class="no">1</span>베스트 프랙티스</div>
+        <ul class="checklist">
+          <li><b>ERD 문서화</b> — 모든 테이블 관계와 스키마 명확화</li>
+          <li><b>확장성 고려</b> — 신규 콘텐츠 대비 메타데이터 구조</li>
+          <li><b>명명 규칙 통일</b> — 일관된 컬럼명 (item_id, character_id)</li>
+          <li><b>기획팀 협업</b> — 초기 단계부터 요구사항 명확화</li>
+        </ul>
+      </div>
+      <div class="card"><div class="lbl"><span class="no">2</span>흔한 실수와 해결책</div>
+        <div class="twrap"><table class="t">
+          <thead><tr><th>실수</th><th>해결책</th></tr></thead>
+          <tbody>
+            <tr><td class="ts">과도한 정규화</td><td>성능 중요 부분은 적절히 비정규화</td></tr>
+            <tr><td class="ts">인덱스 부족</td><td>자주 조회하는 필드에 인덱스 추가</td></tr>
+            <tr><td class="ts">확장성 미고려</td><td>초기부터 DLC·확장팩 고려</td></tr>
+          </tbody>
+        </table></div>
+        <div class="cameo"><img alt="초파리 연구원" data-src="ch_fly_clipboard">
+          <div class="bub"><div class="who">개발 팀 조언</div>
+          <p>"자주 변경되는 데이터와 고정 데이터를 분리하세요. 특히 RPG 게임에서는 <b>데이터 수정 이력 추적 시스템</b>이 필수적입니다."</p></div></div>
+      </div>
+      <div class="card"><div class="lbl"><span class="no">3</span>프로젝트 완료 성과</div>
+        <div class="tiles">
+          <div class="tile"><span class="tn">100%</span><p>프로젝트 완료율</p></div>
+          <div class="tile"><span class="tn">30%</span><p>개발 기간 단축 (3단계 아키텍처)</p></div>
+          <div class="tile"><span class="tn">60%</span><p>게임 데이터 관리 시간 감소</p></div>
+          <div class="tile"><span class="tn">30배</span><p>조회 응답시간 개선 (3초→0.1초)</p></div>
+        </div>
+        <div class="facts">
+          <div class="fact"><span>성과 1</span>데이터 중복 제거를 통한 저장공간 최적화</div>
+          <div class="fact"><span>성과 2</span>3계층 아키텍처를 통한 유지보수성 향상</div>
+          <div class="fact"><span>성과 3</span>테이블 간 관계 정의로 데이터 일관성 보장</div>
+          <div class="fact"><span>성과 4</span>인덱스 설계를 통한 쿼리 성능 최적화</div>
+        </div>
+      </div>
+      <div class="card"><div class="lbl"><span class="no">4</span>실무 적용 방안과 향후 과제</div>
+        <div class="feat">
+          <div class="pro"><b>실무 적용 방안</b>
+            <ul>
+              <li>ORM(Object-Relational Mapping) 연동 코드 작성</li>
+              <li>데이터베이스 마이그레이션 도구 구현</li>
+              <li>백업 및 복구 프로세스 구축</li>
+              <li>로그 분석 시스템과의 연동</li>
+              <li>운영팀 대상 데이터베이스 관리 교육</li>
+            </ul></div>
+          <div class="pro"><b>향후 기술 과제</b>
+            <ul>
+              <li>NoSQL 통합 — 비정형 데이터에 MongoDB 검토</li>
+              <li>실시간 분석 — 게임 밸런싱을 위한 데이터 분석</li>
+              <li>클라우드 마이그레이션 — 글로벌 서비스 확장 준비</li>
+            </ul></div>
+        </div>
+        <div class="callout key"><b>설계자의 경험 공유</b>
+          "관계형 데이터베이스 설계에서 가장 중요한 것은 <b>미래의 확장성</b>입니다. 게임 업데이트에 따른 변경사항을 수용할 수 있는 유연한 구조가 핵심입니다."</div>
+      </div>
+      <div class="card span quiz"><div class="lbl"><span class="no">✓</span>확인 문제</div>
+        <div class="q" data-ok="0" data-ex="설계자는 '관계형 데이터베이스 설계에서 가장 중요한 것은 미래의 확장성'이라고 강조했습니다. 게임 업데이트에 따른 변경사항을 수용할 수 있는 유연한 구조가 핵심입니다.">
+          <p class="qt">Q7. 이 프로젝트의 설계자가 강조한 가장 중요한 설계 원칙은?</p>
+          <div class="opts"><button type="button" data-i="0">미래의 확장성을 고려한 유연한 구조</button>
+            <button type="button" data-i="1">최대한 많은 테이블 만들기</button>
+            <button type="button" data-i="2">모든 데이터를 한 테이블에 넣기</button></div>
+          <p class="fb" aria-live="polite"></p></div>
+        <div class="q" data-ok="1" data-ex="흔한 실수로는 과도한 정규화, 인덱스 부족, 확장성 미고려가 제시되었습니다. 해결책은 각각 적절한 비정규화, 자주 조회하는 필드 인덱싱, 초기부터 DLC·확장팩 고려입니다.">
+          <p class="qt">Q8. '흔한 실수와 해결책'에 포함되지 <b>않는</b> 것은?</p>
+          <div class="opts"><button type="button" data-i="0">과도한 정규화</button>
+            <button type="button" data-i="1">지나치게 자세한 ERD 문서화</button>
+            <button type="button" data-i="2">확장성 미고려</button></div>
+          <p class="fb" aria-live="polite"></p></div>
+        <p class="qscore">이 카드 점수 0 / 2</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="part" id="prompt">
+  <div class="wrap">
+    <div class="part-head"><div class="part-no">AI</div>
+      <h2>AI와 코드로 직접 해 보기 — 가이드 4종<span class="en">Prompt &amp; Code Guides</span></h2>
+      <p>목표: <b>게임 도메인 스키마를 만들고, 인덱스 유무에 따른 성능 차이를 직접 측정하기.</b></p></div>
+    <div class="tabs" role="tablist">
+      <button class="tab" role="tab" aria-selected="true" data-tab="ai">생성형 AI 프롬프트</button>
+      <button class="tab" role="tab" aria-selected="false" data-tab="mysql">MySQL</button>
+      <button class="tab" role="tab" aria-selected="false" data-tab="pg">PostgreSQL</button>
+      <button class="tab" role="tab" aria-selected="false" data-tab="py">파이썬</button>
+    </div>
+
+    <div class="card tabpanel on" id="tab-ai">
+      <div class="lbl"><span class="no">G1</span>언제 쓰나</div>
+      <p>게임·앱처럼 <b>도메인 규칙이 복잡한</b> 시스템의 스키마를 설계하거나, 기존 스키마를 실무 관점에서 리뷰받을 때 씁니다.</p>
+      <div class="lbl"><span class="no">G2</span>실행 순서</div>
+      <ol class="steps"><li><b>게임 규칙 정리</b>캐릭터·아이템·전투·퀘스트의 규칙을 적습니다.</li><li><b>프롬프트 채우기</b></li>
+        <li><b>스키마 받기</b>DDL과 인덱스 전략을 받습니다.</li><li><b>측정</b>인덱스 유무의 성능 차이를 직접 재 봅니다.</li></ol>
+      <div class="lbl"><span class="no">G3</span>프롬프트 전체</div>
+      <div class="promptbox">
+        <div class="dlbar"><button class="btn primary" type="button" data-pcopy>프롬프트 복사</button>
+          <button class="btn" type="button" data-ptxt="db_prompt_week7.txt">⬇ .txt 받기</button></div>
+        <pre class="prompt-pre"># 역할
+너는 대규모 서비스(게임/커머스)의 데이터베이스 설계를 리뷰하는 실무 설계자다.
+
+# 배경
+나는 아래 도메인의 데이터베이스를 설계하려고 한다.
+- 도메인: [예: 턴제 RPG — 캐릭터, 아이템, 인벤토리, 전투 로그, 퀘스트 진행]
+- 핵심 규칙:
+  [예]
+  · 캐릭터는 직업과 레벨을 가지며, 레벨업 시 스탯이 재계산된다
+  · 아이템은 유형과 희귀도가 있고, 캐릭터는 여러 아이템을 여러 개 가질 수 있다
+  · 퀘스트는 선행 퀘스트가 있으며, 플레이어의 선택에 따라 분기된다
+  · 전투 로그는 초당 수백 건이 쌓인다
+- 예상 규모: 동시접속 [ ], 캐릭터 [ ]명, 로그 하루 [ ]건
+- 자주 하는 조회: [예: 캐릭터 인벤토리 조회, 활성 퀘스트 목록, 서버별 랭킹]
+- 쓰는 DBMS: [MySQL / PostgreSQL]
+
+# 하고 싶은 일 (해당하는 번호만 남긴다)
+A. 스키마 설계: 테이블·열·타입·키·제약을 포함한 전체 DDL을 만든다.
+B. 관계 검증: 모든 다대다 관계가 중간 테이블로 분해되었는지 확인하고, 누락분을 고친다.
+C. 인덱스 전략: 자주 하는 조회를 기준으로 인덱스를 설계하고, 각 인덱스의 근거를 적는다.
+D. 정규화 판단: 어디를 정규화하고 어디를 비정규화할지 결정하고 이유를 적는다.
+E. 성능 측정: 인덱스 유무에 따른 실행계획과 예상 비용 차이를 설명하고, 측정용 SQL을 만든다.
+F. 확장성 리뷰: 6개월 뒤 기능이 추가될 때 스키마를 고치지 않아도 되는 부분과 고쳐야 하는 부분을 나눈다.
+
+# 반드시 지킬 것
+1. 모든 테이블에 기본키를 둔다. 자연키가 부적합하면 대리키를 쓰고 이유를 적는다.
+2. 다대다 관계는 반드시 중간 테이블로 분해한다.
+3. 자주 바뀌는 값(현재 HP, 진행 단계)과 거의 안 바뀌는 값(직업, 아이템 유형)을 분리한다.
+4. 로그처럼 쓰기가 폭발적인 테이블은 비정규화를 검토하고, 그 이유를 적는다.
+5. 인덱스는 "어떤 쿼리를 위해" 만드는지 반드시 적는다. 근거 없는 인덱스는 만들지 않는다.
+6. 성능 수치를 말할 때는 측정 방법을 함께 적는다. 측정하지 않은 수치를 만들지 않는다.
+7. 지어내지 않는다. 내가 준 규칙에 없는 기능을 임의로 추가하지 않는다.
+8. 주석과 설명은 한국어로, 입문자도 따라올 수 있게 쓴다.
+
+# 답변 형식
+1. 한 줄 요약 (테이블 수, 가장 위험한 지점)
+2. 전체 DDL (스키마 → 테이블 → 제약 → 인덱스 순서)
+3. 조회별 인덱스 근거 표 (조회 / 사용 인덱스 / 근거 / 예상 효과)
+4. 정규화·비정규화 결정 표
+5. 확장성 리뷰 (고치지 않아도 되는 부분 / 고쳐야 하는 부분)
+6. 측정용 SQL과 읽는 법
+
+# 도메인 규칙
+[여기에 규칙과 규모, 자주 하는 조회를 붙여 넣는다]</pre>
+      </div>
+      <div class="lbl"><span class="no">G4</span>라인별 해설</div>
+      <div class="twrap"><table class="t"><thead><tr><th>문장</th><th>의도</th></tr></thead><tbody>
+        <tr><td class="ts">"자주 하는 조회"를 먼저 적는다</td><td>인덱스는 조회 패턴에서 나옵니다. 조회를 모르면 인덱스 설계가 불가능합니다.</td></tr>
+        <tr><td class="ts">"자주 바뀌는 값과 안 바뀌는 값 분리"</td><td>게임에서 현재 HP·진행 단계는 초당 바뀝니다. 캐시와 저장소를 나누는 기준입니다.</td></tr>
+        <tr><td class="ts">"로그는 비정규화 검토"</td><td>쓰기 폭발 테이블에 정규화를 강요하면 조인이 병목이 됩니다.</td></tr>
+        <tr><td class="ts">"측정하지 않은 수치를 만들지 않는다"</td><td>이 편의 "300% 향상" 같은 수치는 실제 측정값입니다. 근거 없는 수치는 설계 문서를 망칩니다.</td></tr>
+      </tbody></table></div>
+      <div class="lbl"><span class="no">G5</span>흔한 오류와 해결</div>
+      <div class="twrap"><table class="t"><thead><tr><th>증상</th><th>원인</th><th>해결</th></tr></thead><tbody>
+        <tr><td class="ts">모든 열에 인덱스를 만듦</td><td>조회 패턴을 안 줬기 때문</td><td>자주 하는 조회 목록을 반드시 함께 제공합니다.</td></tr>
+        <tr><td class="ts">로그 테이블이 3정규형으로 쪼개짐</td><td>비정규화 판단 누락</td><td>"쓰기 폭발 테이블"이라는 정보를 명시합니다.</td></tr>
+        <tr><td class="ts">현재 HP를 캐릭터 테이블에 넣음</td><td>변경 빈도 미고려</td><td>변경 빈도를 알려 주고 분리하게 합니다.</td></tr>
+        <tr><td class="ts">근거 없는 "성능 N배"</td><td>일반론</td><td>"측정 방법을 함께 적는다" 조항을 강조합니다.</td></tr>
+      </tbody></table></div>
+      <div class="lbl"><span class="no">G6</span>체크리스트</div>
+      <ul class="checklist"><li>모든 테이블에 기본키가 있는가</li><li>N:M이 모두 분해됐는가</li>
+        <li>인덱스마다 근거 쿼리가 적혀 있는가</li><li>비정규화 결정에 이유가 있는가</li>
+        <li>성능 수치에 측정 방법이 붙어 있는가</li></ul>
+      <div class="lbl"><span class="no">G7</span>미니 과제</div>
+      <div class="usecase"><b>과제</b>쇼핑몰 도메인(2~6편에서 만든)에 "상품 리뷰"와 "쿠폰"을 추가하고 위 프롬프트로 리뷰받아 보세요. 기존 스키마를 <b>얼마나 고쳐야 하는지</b>가 확장성 평가의 핵심입니다.</div>
+    </div>
+
+    <div class="card tabpanel" id="tab-mysql">
+      <div class="lbl"><span class="no">G1</span>언제 쓰나</div>
+      <p>게임 스키마를 만들고 <b>인덱스 유무의 차이를 직접 측정</b>합니다. MySQL 8.0 이상.</p>
+      <div class="lbl"><span class="no">G2</span>실행 순서</div>
+      <ol class="steps"><li><b>스키마</b>캐릭터·아이템·인벤토리·로그를 만듭니다.</li><li><b>데이터 채우기</b>재귀 CTE로 대량 행을 넣습니다.</li>
+        <li><b>측정</b>인덱스 없이 조회 시간을 잽니다.</li><li><b>비교</b>인덱스를 만들고 다시 잽니다.</li></ol>
+      <div class="lbl"><span class="no">G3</span>전체 코드</div>
+      <div class="codebox" data-name="mysql_week7" data-title="MySQL — 게임 스키마와 인덱스 효과 측정">
+        <button class="btn copy" type="button" data-copy="code-my-7">코드 복사</button>
+        <pre id="code-my-7"><code>CREATE DATABASE IF NOT EXISTS game CHARACTER SET utf8mb4;
+USE game;
+
+DROP TABLE IF EXISTS battle_log, inventory, item, character_stat, game_character, job;
+
+CREATE TABLE job (
+  job_id   TINYINT PRIMARY KEY,
+  job_name VARCHAR(20) NOT NULL UNIQUE      -- 마법검사, 현자 …
+);
+
+CREATE TABLE game_character (
+  character_id INT PRIMARY KEY AUTO_INCREMENT,
+  name         VARCHAR(50) NOT NULL,
+  job_id       TINYINT NOT NULL,
+  level        SMALLINT NOT NULL DEFAULT 1,
+  exp          INT NOT NULL DEFAULT 0,
+  created_at   DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT fk_char_job FOREIGN KEY (job_id) REFERENCES job(job_id),
+  CONSTRAINT ck_char_level CHECK (level BETWEEN 1 AND 99)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- 1:1 — 스탯은 별도 테이블 (자주 바뀌는 값)
+CREATE TABLE character_stat (
+  character_id INT PRIMARY KEY,
+  strength     SMALLINT NOT NULL DEFAULT 10,
+  intelligence SMALLINT NOT NULL DEFAULT 10,
+  dexterity    SMALLINT NOT NULL DEFAULT 10,
+  vitality     SMALLINT NOT NULL DEFAULT 10,
+  CONSTRAINT fk_stat_char FOREIGN KEY (character_id)
+    REFERENCES game_character(character_id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE item (
+  item_id  INT PRIMARY KEY AUTO_INCREMENT,
+  name     VARCHAR(50) NOT NULL,
+  type_id  TINYINT NOT NULL,      -- 유형 (FK → item_type)
+  rarity   TINYINT NOT NULL,      -- 희귀도 1~5
+  CONSTRAINT ck_item_rarity CHECK (rarity BETWEEN 1 AND 5)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- N:M — 인벤토리가 중간 테이블
+CREATE TABLE inventory (
+  character_id INT NOT NULL,
+  item_id      INT NOT NULL,
+  quantity     INT NOT NULL DEFAULT 1,
+  PRIMARY KEY (character_id, item_id),
+  CONSTRAINT fk_inv_char FOREIGN KEY (character_id) REFERENCES game_character(character_id) ON DELETE CASCADE,
+  CONSTRAINT fk_inv_item FOREIGN KEY (item_id)      REFERENCES item(item_id) ON DELETE RESTRICT,
+  CONSTRAINT ck_inv_qty  CHECK (quantity > 0)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- 쓰기 폭발 테이블 — 비정규화 (캐릭터 이름을 함께 저장해 조인 제거)
+CREATE TABLE battle_log (
+  log_id      BIGINT PRIMARY KEY AUTO_INCREMENT,
+  battle_id   INT NOT NULL,
+  character_id INT NOT NULL,
+  action_type VARCHAR(20) NOT NULL,      -- 공격/스킬/방어
+  damage      INT NOT NULL DEFAULT 0,
+  created_at  DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- ── 대량 데이터 생성 (재귀 CTE) ───────────────────────
+INSERT INTO job VALUES (1,'마법검사'),(2,'현자'),(3,'기사');
+INSERT INTO game_character (name, job_id, level)
+WITH RECURSIVE seq(n) AS (SELECT 1 UNION ALL SELECT n+1 FROM seq WHERE n &lt; 20000)
+SELECT CONCAT('용사', n), 1 + (n % 3), 1 + (n % 99) FROM seq;
+INSERT INTO item (name, type_id, rarity)
+WITH RECURSIVE seq(n) AS (SELECT 1 UNION ALL SELECT n+1 FROM seq WHERE n &lt; 2000)
+SELECT CONCAT('아이템', n), 1 + (n % 10), 1 + (n % 5) FROM seq;
+INSERT INTO inventory (character_id, item_id, quantity)
+WITH RECURSIVE seq(n) AS (SELECT 1 UNION ALL SELECT n+1 FROM seq WHERE n &lt; 60000)
+SELECT 1 + (n % 20000), 1 + (n % 2000), 1 + (n % 9) FROM seq;
+INSERT INTO battle_log (battle_id, character_id, action_type, damage)
+WITH RECURSIVE seq(n) AS (SELECT 1 UNION ALL SELECT n+1 FROM seq WHERE n &lt; 200000)
+SELECT 1 + (n % 5000), 1 + (n % 20000), IF(n%3=0,'스킬','공격'), n % 900 FROM seq;
+
+-- ── 측정 ① 인덱스 없이: 캐릭터 한 명의 인벤토리 조회 ──
+SET profiling = 1;
+SELECT i.item_id, it.name, i.quantity
+FROM inventory i JOIN item it ON it.item_id = i.item_id
+WHERE i.character_id = 12345;
+SHOW PROFILES;          -- Duration 확인
+
+-- ── 인덱스 추가 (조회 근거를 주석으로 남긴다) ─────────
+-- 근거: "캐릭터 인벤토리 조회"가 가장 잦은 조회
+CREATE INDEX idx_inv_char ON inventory(character_id);
+-- 근거: "아이템 유형/희귀도 필터링"
+CREATE INDEX idx_item_type_rarity ON item(type_id, rarity);
+-- 근거: "서버별 최근 전투 로그 조회"
+CREATE INDEX idx_log_char_time ON battle_log(character_id, created_at);
+
+-- ── 측정 ② 인덱스 후 같은 조회 ────────────────────────
+SELECT i.item_id, it.name, i.quantity
+FROM inventory i JOIN item it ON it.item_id = i.item_id
+WHERE i.character_id = 12345;
+SHOW PROFILES;          -- Duration 비교
+
+-- ── 실행계획 확인 ─────────────────────────────────────
+EXPLAIN ANALYZE
+SELECT i.item_id, it.name, i.quantity
+FROM inventory i JOIN item it ON it.item_id = i.item_id
+WHERE i.character_id = 12345;</code></pre>
+      </div>
+      <div class="lbl"><span class="no">G4</span>라인별 해설</div>
+      <div class="twrap"><table class="t"><thead><tr><th>줄</th><th>설명</th></tr></thead><tbody>
+        <tr><td class="ts"><code>character_stat</code> 분리</td><td>자주 바뀌는 스탯을 별도 테이블로. PK가 곧 FK인 <b>1:1 관계</b>입니다.</td></tr>
+        <tr><td class="ts"><code>PRIMARY KEY (character_id, item_id)</code></td><td>인벤토리의 복합 기본키. 같은 아이템 중복 행을 막고, 조회 인덱스 역할도 겸합니다.</td></tr>
+        <tr><td class="ts"><code>battle_log</code> 비정규화</td><td>로그는 쓰기 폭발이므로 조인을 줄입니다. 대신 일관성은 애플리케이션이 책임집니다.</td></tr>
+        <tr><td class="ts">재귀 CTE</td><td><code>WITH RECURSIVE</code>로 대량 데이터를 만듭니다. 성능 실험에 필수입니다.</td></tr>
+        <tr><td class="ts"><code>SET profiling = 1</code></td><td>문장별 실행 시간을 잽니다. <code>SHOW PROFILES</code>로 확인합니다.</td></tr>
+        <tr><td class="ts">인덱스 주석</td><td>"어떤 조회를 위해" 만드는지 반드시 남깁니다. 나중에 지울 수 있는 유일한 근거입니다.</td></tr>
+        <tr><td class="ts"><code>EXPLAIN ANALYZE</code></td><td>실제 실행 계획과 소요 시간을 보여 줍니다. <code>type</code>이 <code>ALL</code>이면 풀 스캔입니다.</td></tr>
+      </tbody></table></div>
+      <div class="lbl"><span class="no">G5</span>흔한 오류와 해결</div>
+      <div class="twrap"><table class="t"><thead><tr><th>오류·증상</th><th>원인</th><th>해결</th></tr></thead><tbody>
+        <tr><td class="ts">Recursive query aborted after 1001 iterations</td><td><code>cte_max_recursion_depth</code> 초과</td><td><code>SET SESSION cte_max_recursion_depth = 1000000;</code></td></tr>
+        <tr><td class="ts">측정값이 들쭉날쭉함</td><td>버퍼 캐시 상태 차이</td><td>각 조회를 2~3회 반복하고 두 번째 값부터 기록합니다.</td></tr>
+        <tr><td class="ts">인덱스를 만들었는데 느림</td><td>선택도가 낮은 열(예: rarity 1~5)</td><td>카디널리티가 높은 열을 앞에 두는 복합 인덱스로 바꿉니다.</td></tr>
+        <tr><td class="ts">ERROR 1114: table is full</td><td>tmp 테이블 공간 부족</td><td>데이터 양을 줄이거나 <code>tmp_table_size</code>를 조정합니다.</td></tr>
+      </tbody></table></div>
+      <div class="lbl"><span class="no">G6</span>체크리스트</div>
+      <ul class="checklist"><li>인덱스마다 근거 조회를 주석으로 남겼는가</li><li>측정을 2회 이상 반복했는가</li>
+        <li>복합 인덱스의 열 순서를 선택도 기준으로 정했는가</li><li>EXPLAIN으로 풀 스캔이 사라졌는지 확인했는가</li></ul>
+      <div class="lbl"><span class="no">G7</span>미니 과제</div>
+      <div class="usecase"><b>과제</b>복합 인덱스 <code>(type_id, rarity)</code>와 <code>(rarity, type_id)</code>의 성능을 각각 측정해 보세요. <b>열 순서</b>가 왜 중요한지 직접 확인할 수 있습니다.</div>
+    </div>
+
+    <div class="card tabpanel" id="tab-pg">
+      <div class="lbl"><span class="no">G1</span>언제 쓰나</div>
+      <p>같은 게임 스키마를 PostgreSQL로 만들고, <b>EXPLAIN (ANALYZE, BUFFERS)</b>로 더 자세한 비용을 봅니다.</p>
+      <div class="lbl"><span class="no">G2</span>실행 순서</div>
+      <ol class="steps"><li><b>스키마</b>만들기</li><li><b>대량 데이터</b><code>generate_series</code>로 생성</li>
+        <li><b>측정</b><code>EXPLAIN ANALYZE</code></li><li><b>인덱스</b>추가 후 재측정</li></ol>
+      <div class="lbl"><span class="no">G3</span>전체 코드</div>
+      <div class="codebox" data-name="pg_week7" data-title="PostgreSQL — 게임 스키마와 실행계획">
+        <button class="btn copy" type="button" data-copy="code-pg-7">코드 복사</button>
+        <pre id="code-pg-7"><code>CREATE SCHEMA IF NOT EXISTS game;
+SET search_path TO game, public;
+
+CREATE TABLE IF NOT EXISTS game_character (
+  character_id integer GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  name   varchar(50) NOT NULL,
+  job_id smallint NOT NULL,
+  level  smallint NOT NULL DEFAULT 1 CHECK (level BETWEEN 1 AND 99),
+  exp    integer NOT NULL DEFAULT 0
+);
+
+CREATE TABLE IF NOT EXISTS item (
+  item_id integer GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  name    varchar(50) NOT NULL,
+  type_id smallint NOT NULL,
+  rarity  smallint NOT NULL CHECK (rarity BETWEEN 1 AND 5)
+);
+
+CREATE TABLE IF NOT EXISTS inventory (
+  character_id integer NOT NULL REFERENCES game_character(character_id) ON DELETE CASCADE,
+  item_id      integer NOT NULL REFERENCES item(item_id) ON DELETE RESTRICT,
+  quantity     integer NOT NULL DEFAULT 1 CHECK (quantity > 0),
+  PRIMARY KEY (character_id, item_id)
+);
+
+-- [차이] 로그 테이블은 선언적 파티셔닝으로 나눈다 (MySQL에서는 직접 구현해야 함)
+CREATE TABLE IF NOT EXISTS battle_log (
+  log_id       bigint GENERATED ALWAYS AS IDENTITY,
+  battle_id    integer NOT NULL,
+  character_id integer NOT NULL,
+  action_type  varchar(20) NOT NULL,
+  damage       integer NOT NULL DEFAULT 0,
+  created_at   timestamptz NOT NULL DEFAULT now(),
+  PRIMARY KEY (log_id, created_at)
+) PARTITION BY RANGE (created_at);
+
+CREATE TABLE IF NOT EXISTS battle_log_2026_10 PARTITION OF battle_log
+  FOR VALUES FROM ('2026-10-01') TO ('2026-11-01');
+CREATE TABLE IF NOT EXISTS battle_log_2026_11 PARTITION OF battle_log
+  FOR VALUES FROM ('2026-11-01') TO ('2026-12-01');
+
+-- ── 대량 데이터 (generate_series가 재귀 CTE보다 간결하다) ──
+INSERT INTO game_character (name, job_id, level)
+SELECT '용사' || g, 1 + (g % 3), 1 + (g % 99) FROM generate_series(1, 20000) g;
+
+INSERT INTO item (name, type_id, rarity)
+SELECT '아이템' || g, 1 + (g % 10), 1 + (g % 5) FROM generate_series(1, 2000) g;
+
+INSERT INTO inventory (character_id, item_id, quantity)
+SELECT 1 + (g % 20000), 1 + (g % 2000), 1 + (g % 9) FROM generate_series(1, 60000) g;
+
+INSERT INTO battle_log (battle_id, character_id, action_type, damage, created_at)
+SELECT 1 + (g % 5000), 1 + (g % 20000),
+       CASE WHEN g % 3 = 0 THEN '스킬' ELSE '공격' END,
+       g % 900, timestamptz '2026-10-01' + (g || ' seconds')::interval
+FROM generate_series(1, 200000) g;
+
+ANALYZE game_character; ANALYZE inventory; ANALYZE battle_log;
+
+-- ── 측정 ① 인덱스 없이 ────────────────────────────────
+EXPLAIN (ANALYZE, BUFFERS, TIMING)
+SELECT i.item_id, it.name, i.quantity
+FROM inventory i JOIN item it USING (item_id)
+WHERE i.character_id = 12345;
+-- Seq Scan on inventory … rows=…  ← 풀 스캔
+
+-- ── 인덱스 추가 ───────────────────────────────────────
+CREATE INDEX idx_inv_char        ON inventory(character_id);
+CREATE INDEX idx_item_type_rarity ON item(type_id, rarity);
+CREATE INDEX idx_log_char_time   ON battle_log(character_id, created_at DESC);
+
+-- [차이] 부분 인덱스 — 고희귀 아이템만 조회하는 화면이 있다면
+CREATE INDEX idx_item_legendary ON item(type_id) WHERE rarity = 5;
+
+-- ── 측정 ② 인덱스 후 ──────────────────────────────────
+EXPLAIN (ANALYZE, BUFFERS, TIMING)
+SELECT i.item_id, it.name, i.quantity
+FROM inventory i JOIN item it USING (item_id)
+WHERE i.character_id = 12345;
+-- Index Scan using idx_inv_char …  ← 인덱스 사용
+-- Buffers: shared hit=…  ← 읽은 블록 수가 줄어든 것을 확인
+
+-- 파티션 프루닝 확인 (10월 로그만 읽는지)
+EXPLAIN (ANALYZE)
+SELECT count(*) FROM battle_log
+WHERE created_at &gt;= '2026-10-05' AND created_at &lt; '2026-10-06';</code></pre>
+      </div>
+      <div class="lbl"><span class="no">G4</span>MySQL ↔ PostgreSQL 대조표</div>
+      <div class="twrap"><table class="t"><thead><tr><th>하고 싶은 일</th><th>MySQL</th><th>PostgreSQL</th></tr></thead><tbody>
+        <tr><td class="ts">대량 데이터 생성</td><td>재귀 CTE (<code>WITH RECURSIVE</code>)</td><td><code>generate_series()</code></td></tr>
+        <tr><td class="ts">실행계획</td><td><code>EXPLAIN ANALYZE</code> / <code>SHOW PROFILES</code></td><td><code>EXPLAIN (ANALYZE, BUFFERS)</code></td></tr>
+        <tr><td class="ts">읽은 블록 수 확인</td><td class="bad">간접적</td><td class="ok"><code>BUFFERS</code> 옵션</td></tr>
+        <tr><td class="ts">조건부 인덱스</td><td class="bad">불가</td><td><code>WHERE</code>가 붙은 부분 인덱스</td></tr>
+        <tr><td class="ts">선언적 파티셔닝</td><td>직접 구현</td><td><code>PARTITION BY RANGE</code></td></tr>
+        <tr><td class="ts">통계 갱신</td><td><code>ANALYZE TABLE</code></td><td><code>ANALYZE</code></td></tr>
+      </tbody></table></div>
+      <div class="lbl"><span class="no">G5</span>흔한 오류와 해결</div>
+      <div class="twrap"><table class="t"><thead><tr><th>오류·증상</th><th>원인</th><th>해결</th></tr></thead><tbody>
+        <tr><td class="ts">파티션 프루닝이 안 됨</td><td>조건이 파티션 키 형태와 불일치</td><td>파티션 키(<code>created_at</code>)에 직접 범위 조건을 씁니다.</td></tr>
+        <tr><td class="ts">EXPLAIN이 여전히 Seq Scan</td><td>통계 미갱신</td><td><code>ANALYZE</code>를 실행합니다.</td></tr>
+        <tr><td class="ts">partition of relation … not found</td><td>값 범위가 어떤 파티션에도 없음</td><td>DEFAULT 파티션을 추가합니다.</td></tr>
+        <tr><td class="ts">인덱스가 무시됨</td><td>반환 행이 전체의 큰 비율</td><td>조건을 좁히거나 인덱스 열 구성을 바꿉니다.</td></tr>
+      </tbody></table></div>
+      <div class="lbl"><span class="no">G6</span>체크리스트</div>
+      <ul class="checklist"><li><code>ANALYZE</code>로 통계를 갱신했는가</li><li>Buffers 값으로 실제 I/O 감소를 확인했는가</li>
+        <li>파티션 프루닝이 동작하는가</li><li>부분 인덱스를 활용할 화면이 있는가</li></ul>
+      <div class="lbl"><span class="no">G7</span>미니 과제</div>
+      <div class="usecase"><b>과제</b>전투 로그를 월 단위로 계속 파티셔닝하고, 1년 뒤 오래된 파티션을 <code>DETACH</code>해 보세요. 대규모 로그 관리의 실무 형태입니다.</div>
+    </div>
+
+    <div class="card tabpanel" id="tab-py">
+      <div class="lbl"><span class="no">G1</span>언제 쓰나</div>
+      <p>인덱스 효과를 <b>스크립트로 측정·기록</b>할 때 씁니다. 성능 개선을 문서로 남기는 실무 방식입니다.</p>
+      <div class="lbl"><span class="no">G2</span>실행 순서</div>
+      <ol class="steps"><li><b>측정 함수</b>쿼리 시간을 재는 함수를 만듭니다.</li><li><b>전/후 비교</b>인덱스 전후를 잽니다.</li>
+        <li><b>기록</b>CSV로 저장합니다.</li><li><b>판단</b>개선 폭을 계산합니다.</li></ol>
+      <div class="lbl"><span class="no">G3</span>전체 코드</div>
+      <div class="codebox" data-name="py_week7" data-title="파이썬 — 인덱스 효과 측정과 기록">
+        <button class="btn copy" type="button" data-copy="code-py-7">코드 복사</button>
+        <pre id="code-py-7"><code># -*- coding: utf-8 -*-
+"""7주차 실습 — 인덱스 효과 측정과 기록"""
+import os, time, statistics
+import pandas as pd
+from sqlalchemy import create_engine, text
+
+engine = create_engine(os.environ.get(
+    "GAME_DB_URL",
+    "mysql+mysqlconnector://root:비밀번호@127.0.0.1:3306/game?charset=utf8mb4"))
+
+QUERY = """
+SELECT i.item_id, it.name, i.quantity
+FROM inventory i JOIN item it ON it.item_id = i.item_id
+WHERE i.character_id = :cid
+"""
+
+def measure(engine, sql, params, repeat=5):
+    """같은 쿼리를 repeat회 실행해 중앙값과 최소값을 돌려준다."""
+    times = []
+    with engine.connect() as con:
+        for _ in range(repeat):
+            t0 = time.perf_counter()
+            con.execute(text(sql), params).fetchall()
+            times.append((time.perf_counter() - t0) * 1000)   # ms
+    return {"중앙값_ms": round(statistics.median(times), 3),
+            "최소_ms":   round(min(times), 3),
+            "표준편차":  round(statistics.pstdev(times), 3)}
+
+def index_exists(engine, table, index_name):
+    q = """SELECT COUNT(*) FROM information_schema.STATISTICS
+           WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = :t AND INDEX_NAME = :i"""
+    with engine.connect() as con:
+        return con.execute(text(q), {"t": table, "i": index_name}).scalar() > 0
+
+CID = 12345
+result = {}
+
+# [1] 인덱스 제거 상태에서 측정
+with engine.begin() as con:
+    if index_exists(engine, "inventory", "idx_inv_char"):
+        con.execute(text("DROP INDEX idx_inv_char ON inventory"))
+result["인덱스 없음"] = measure(engine, QUERY, {"cid": CID})
+
+# [2] 인덱스 생성 후 측정
+with engine.begin() as con:
+    con.execute(text("CREATE INDEX idx_inv_char ON inventory(character_id)"))
+result["인덱스 있음"] = measure(engine, QUERY, {"cid": CID})
+
+# [3] 실행계획 수집 — 풀 스캔이 사라졌는지 확인
+with engine.connect() as con:
+    plan = con.execute(text("EXPLAIN " + QUERY), {"cid": CID}).fetchall()
+plan_txt = "\n".join(str(r[0]) for r in plan)
+print(plan_txt)
+
+# [4] 기록
+df = pd.DataFrame(result).T
+df["개선배수"] = (df.loc["인덱스 없음", "중앙값_ms"] / df["중앙값_ms"]).round(2)
+print(df)
+df.to_csv("index_benchmark.csv", encoding="utf-8-sig")
+print("index_benchmark.csv 저장 완료")
+
+# [5] 판단 — 인덱스를 유지할 가치가 있는가
+before = df.loc["인덱스 없음", "중앙값_ms"]
+after  = df.loc["인덱스 있음", "중앙값_ms"]
+if after &lt; before * 0.7:
+    print(f"유지 권장: {before:.1f}ms → {after:.1f}ms ({before/after:.1f}배 개선)")
+else:
+    print("효과 미미: 인덱스 유지 비용(쓰기 지연·저장공간)을 재검토하세요")</code></pre>
+      </div>
+      <div class="lbl"><span class="no">G4</span>라인별 해설</div>
+      <div class="twrap"><table class="t"><thead><tr><th>줄</th><th>설명</th></tr></thead><tbody>
+        <tr><td class="ts"><code>repeat=5</code> + 중앙값</td><td>첫 실행은 캐시가 비어 있어 느립니다. 한 번의 측정으로 판단하면 안 됩니다.</td></tr>
+        <tr><td class="ts"><code>index_exists</code></td><td>데이터 사전(<code>information_schema.STATISTICS</code>)에서 인덱스 존재를 확인합니다.</td></tr>
+        <tr><td class="ts">인덱스 제거/생성</td><td>실험을 위해 인덱스를 껐다 켭니다. <b>운영 DB에서는 하지 않습니다.</b></td></tr>
+        <tr><td class="ts"><code>EXPLAIN</code> 수집</td><td>수치와 함께 실행계획을 남겨야 나중에 근거가 됩니다.</td></tr>
+        <tr><td class="ts">개선배수 판단</td><td>효과가 미미하면 인덱스를 지웁니다. 인덱스는 <b>쓰기 비용</b>을 만듭니다.</td></tr>
+      </tbody></table></div>
+      <div class="lbl"><span class="no">G5</span>흔한 오류와 해결</div>
+      <div class="twrap"><table class="t"><thead><tr><th>증상</th><th>원인</th><th>해결</th></tr></thead><tbody>
+        <tr><td class="ts">측정값이 0.000ms</td><td>결과를 실제로 읽지 않음</td><td><code>fetchall()</code>로 결과를 소비해야 시간이 반영됩니다.</td></tr>
+        <tr><td class="ts">개선배수가 1.0에 가까움</td><td>캐시에 이미 올라가 있음</td><td>다른 <code>character_id</code>로 여러 번 측정합니다.</td></tr>
+        <tr><td class="ts">DROP INDEX 실패</td><td>인덱스가 다른 제약에 사용됨</td><td>제약 이름을 확인합니다.</td></tr>
+        <tr><td class="ts">운영 중 락 발생</td><td>운영 DB에서 인덱스 생성</td><td>MySQL 8.0은 <code>CREATE INDEX … ALGORITHM=INPLACE, LOCK=NONE</code>을 씁니다.</td></tr>
+      </tbody></table></div>
+      <div class="lbl"><span class="no">G6</span>체크리스트</div>
+      <ul class="checklist"><li>측정을 3회 이상 반복했는가</li><li>중앙값과 최소값을 함께 기록했는가</li>
+        <li>실행계획을 함께 저장했는가</li><li>개선 폭이 작을 때 인덱스를 지울 판단을 했는가</li></ul>
+      <div class="lbl"><span class="no">G7</span>미니 과제</div>
+      <div class="usecase"><b>과제</b>전투 로그에 <code>(character_id, created_at)</code> 인덱스를 추가하고 "한 캐릭터의 최근 20건" 조회를 측정해 보세요. 게임 화면에서 가장 흔한 조회 패턴입니다.</div>
+    </div>
+  </div>
+</section>
+
+<section class="part" id="glossary">
+  <div class="wrap">
+    <div class="part-head"><div class="part-no">Aa</div><h2>용어 사전 — 비유로 보기<span class="en">Glossary</span></h2></div>
+    <div class="gl-group"><h4>실무 설계</h4>
+      <div class="gl-grid">
+        <div class="gl-card" id="g-인덱스"><b>인덱스</b>
+          <p class="gl-an"><span>비유</span>책 뒤의 찾아보기. 본문을 다 넘기지 않고 바로 그 쪽으로 갑니다. 대신 책이 조금 두꺼워집니다.</p>
+          <p class="gl-mean"><span>뜻</span>특정 열의 값을 빠르게 찾기 위한 별도 자료 구조. 조회는 빨라지고 쓰기·저장공간은 늘어납니다.</p></div>
+        <div class="gl-card" id="g-복합인덱스"><b>복합 인덱스</b>
+          <p class="gl-an"><span>비유</span>"성+이름" 순으로 정렬된 명부. 성만으로도 찾을 수 있지만 이름만으로는 못 찾습니다.</p>
+          <p class="gl-mean"><span>뜻</span>두 개 이상의 열을 묶은 인덱스. <b>열 순서</b>가 성능을 좌우합니다.</p></div>
+        <div class="gl-card" id="g-카디널리티2"><b>카디널리티 (선택도)</b>
+          <p class="gl-an"><span>비유</span>값의 종류가 많은 열일수록 잘 걸러집니다. "성별"보다 "주민번호"가 훨씬 잘 걸러집니다.</p>
+          <p class="gl-mean"><span>뜻</span>열에 들어 있는 서로 다른 값의 개수. 인덱스 열 순서를 정할 때 기준이 됩니다.</p></div>
+        <div class="gl-card" id="g-비정규화"><b>비정규화</b>
+          <p class="gl-an"><span>비유</span>자주 쓰는 값을 손님이 보는 자리에 미리 놓아 두기. 정리는 덜 됐지만 빠릅니다.</p>
+          <p class="gl-mean"><span>뜻</span>성능을 위해 의도적으로 중복을 남기는 설계. 이유를 반드시 기록해야 합니다.</p></div>
+        <div class="gl-card" id="g-샤딩"><b>샤딩</b>
+          <p class="gl-an"><span>비유</span>한 창고가 꽉 차서 월드별로 창고를 나누는 것.</p>
+          <p class="gl-mean"><span>뜻</span>데이터를 여러 서버에 나눠 저장해 대규모 동시접속을 처리하는 전략.</p></div>
+        <div class="gl-card" id="g-파티셔닝"><b>파티셔닝</b>
+          <p class="gl-an"><span>비유</span>한 장부를 월별 권으로 나누기. 10월 자료를 볼 때 9월 권은 열지 않습니다.</p>
+          <p class="gl-mean"><span>뜻</span>큰 테이블을 기간·범위 등으로 나눠 관리하는 기법. 조회 범위를 좁혀 성능을 올립니다.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="part" id="author-sec">
+  <div class="wrap">
+    <div class="part-head"><div class="part-no">E-1</div><h2>저자 소개<span class="en">About the Author</span></h2></div>
+    <div class="author"><img class="ph" data-src="ch_doc_front" alt="박사"><div class="ai">
+      <h3>안상선</h3><p>(주)M-Robo 대표 · 데이터베이스 설계 강의 담당</p><p>logix44@hanmail.net</p>
+      <p style="margin-top:10px">4주차 강의안 사례(RPG 용사의 전설 — 데이터베이스 설계자의 실무 프로젝트 가이드)를 웹 자료로 재구성했습니다. 수치와 사례는 원 강의안에 제시된 값을 그대로 옮겼습니다.</p>
+    </div></div>
+    <div class="callout info" style="margin-top:16px"><b>교육자 안내</b>
+      확인 문제 총 8문항. 정답·해설·배점은 <a href="answers.html">교육자용 정답 페이지</a>에 있습니다.</div>
+  </div>
+</section>
+
+<section class="part" id="outro">
+  <div class="wrap outro">
+    <h2>설계의 뼈대가 섰습니다</h2>
+    <p>데이터와 정보에서 출발해 파일 시스템의 한계, DBMS, 3단계 구조, 데이터 모델링, 관계 데이터 모델, 그리고 실무 프로젝트까지 왔습니다. 이제 데이터베이스 설계의 뼈대가 손에 잡힐 것입니다.</p>
+    <div class="hbtns" style="justify-content:center">
+      <a class="pbtn primary" href="answers.html">교육자용 정답과 채점 기준</a>
+      <a class="pbtn" href="index.html">처음 화면으로</a>
+      <a class="pbtn" href="index.html">2주차 다시 보기</a>
+    </div>
+  </div>
+</section>

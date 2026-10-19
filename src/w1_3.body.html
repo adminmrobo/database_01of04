@@ -1,0 +1,295 @@
+<section class="part" id="m1">
+  <div class="wrap">
+    <div class="part-head"><div class="part-no">01</div>
+      <h2>도구 지도 — 두 개의 축<span class="en">Map of Tools</span></h2>
+      <p>이름이 많아 보이지만, 두 개의 축만 알면 정리됩니다. <b>어디에 사는가(서버형/내장형)</b>와 <b>어떻게 생겼는가(관계형/비관계형)</b>입니다.</p></div>
+    <div class="grid">
+      <div class="card span">
+        <div class="lbl"><span class="no">1</span>네 칸으로 나누기</div>
+        <div class="calc scroll">데이터베이스 도구 지도
+
+                    관계형 (표 · SQL)          비관계형 (NoSQL)
+              ┌──────────────────────────┬──────────────────────────┐
+   서버형     │ MySQL · MariaDB          │ MongoDB                  │
+   (따로 설치)│ PostgreSQL · Oracle      │ Redis · Cassandra        │
+              │ SQL Server · DB2         │                          │
+              ├──────────────────────────┼──────────────────────────┤
+   내장형     │ SQLite                   │ (파일 기반 경량 저장소)  │
+   (앱 안에)  │ 파일 하나 = 데이터베이스 │                          │
+              └──────────────────────────┴──────────────────────────┘
+
+   이 강의의 실습 기준 : MySQL · PostgreSQL · SQLite
+   이유                : 무료로 설치할 수 있고, 자료가 많고, 표준 SQL을 배울 수 있다</div>
+        <div class="callout info"><b>SQL은 공통어입니다</b>
+          도구가 달라도 <b>물어보는 말(SQL)</b>은 거의 같습니다. 그래서 하나를 제대로 배우면 나머지로 옮겨 가는 비용이 작습니다. 이 강의가 MySQL과 PostgreSQL을 <b>나란히</b> 보여 주는 이유입니다.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="part" id="m2">
+  <div class="wrap">
+    <div class="part-head"><div class="part-no">02</div>
+      <h2>MySQL과 MariaDB — 한 뿌리에서 갈라진 두 갈래<span class="en">MySQL · MariaDB</span></h2>
+      <p>이름이 비슷한 데는 이유가 있습니다. 실제로 <b>같은 사람이 만든 같은 코드</b>에서 출발했습니다.</p></div>
+    <div class="grid">
+      <div class="card">
+        <div class="lbl"><span class="no">1</span>이름의 유래</div>
+        <p>MySQL의 창시자는 핀란드 출신의 <b>마이클 "몬티" 비데니우스</b>입니다. 그는 자기 딸 <b>My</b>의 이름을 따서 MySQL이라 이름 붙였습니다. MySQL은 1995년에 등장해 웹 서비스와 함께 빠르게 퍼졌습니다.</p>
+        <div class="callout key"><b>그런데 왜 갈라졌나</b>
+          MySQL을 만든 회사(MySQL AB)는 <b>Sun Microsystems</b>에 인수되었고, 이어 <b>Oracle이 Sun을 인수(2010년 완료)</b>했습니다. MySQL의 원 개발자들은 이 흐름에 반대하며 <b>2009년</b> MySQL 소스에서 갈라져 나온 새 프로젝트를 시작했고, 이번에는 다른 딸 <b>Maria</b>의 이름을 붙였습니다 — <b>MariaDB</b>입니다.</div>
+      </div>
+      <div class="card">
+        <div class="lbl"><span class="no">2</span>실무에서 무엇이 다른가</div>
+        <div class="twrap"><table class="t">
+          <caption>MySQL vs MariaDB — 실무 체감 차이</caption>
+          <thead><tr><th style="width:150px">항목</th><th>MySQL</th><th>MariaDB</th></tr></thead>
+          <tbody>
+            <tr><td>관리 주체</td><td>Oracle (상용 겸 오픈소스)</td><td class="ts">커뮤니티 재단</td></tr>
+            <tr><td>호환성</td><td colspan="2">기본 SQL과 클라이언트 도구가 대부분 호환 — 실습 코드는 거의 그대로 실행됩니다</td></tr>
+            <tr><td>저장 엔진</td><td>InnoDB 중심</td><td class="ts">InnoDB · Aria 등 선택 폭 넓음</td></tr>
+            <tr><td>학습 자료</td><td class="ts">압도적으로 많음</td><td class="ts">MySQL 자료를 그대로 활용 가능</td></tr>
+          </tbody>
+        </table></div>
+        <div class="callout tip"><b>이 강의에서의 선택</b>
+          배우는 단계에서는 <b>둘 중 무엇을 써도 무방</b>합니다. 코드 예제는 MySQL 기준으로 적고, MariaDB에서도 그대로 실행되도록 씁니다. 설치가 간편한 쪽을 고르세요.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="part" id="m3">
+  <div class="wrap">
+    <div class="part-head"><div class="part-no">03</div>
+      <h2>PostgreSQL — 표준과 확장성<span class="en">PostgreSQL</span></h2>
+      <p>대학 연구실에서 태어나 표준을 가장 충실히 따르는 데이터베이스입니다.</p></div>
+    <div class="grid">
+      <div class="card">
+        <div class="lbl"><span class="no">1</span>출발은 캘리포니아 대학 버클리</div>
+        <p>PostgreSQL의 뿌리는 <b>UC 버클리에서 개발된 POSTGRES</b>입니다. <b>1996년</b>에 SQL을 지원하며 <b>PostgreSQL</b>이라는 이름을 갖게 되었습니다. 공식 문서에도 "지금 PostgreSQL로 알려진 객체-관계형 DBMS는 버클리의 POSTGRES 패키지에서 파생되었다"고 적혀 있습니다.</p>
+        <p class="src">출처 — PostgreSQL 공식 문서 「A Brief History of PostgreSQL」</p>
+        <div class="facts">
+          <div class="fact"><span>성격</span>객체-관계형 (표 + 사용자 정의 타입)</div>
+          <div class="fact"><span>특징</span>표준 SQL 준수에 매우 엄격</div>
+          <div class="fact"><span>강점</span>확장 기능 · JSON · 지리 정보 · 동시성 처리</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="lbl"><span class="no">2</span>MySQL과 견주어 보면</div>
+        <div class="twrap"><table class="t">
+          <caption>MySQL · MariaDB vs PostgreSQL — 배우는 단계에서 볼 차이</caption>
+          <thead><tr><th style="width:150px">항목</th><th>MySQL · MariaDB</th><th>PostgreSQL</th></tr></thead>
+          <tbody>
+            <tr><td>설치와 시작</td><td class="ts">가볍고 빠름</td><td class="ts">조금 더 무겁지만 무난</td></tr>
+            <tr><td>표준 SQL</td><td>실용적 타협이 있음</td><td class="ts">표준을 엄격히 따름</td></tr>
+            <tr><td>자료형</td><td>기본형 중심</td><td class="ts">배열 · JSON · 범위 · 사용자 정의형</td></tr>
+            <tr><td>주 쓰임</td><td>웹 서비스 일반</td><td class="ts">분석 · 복잡한 조회 · 확장이 필요한 곳</td></tr>
+            <tr><td>자동 증가</td><td><code>AUTO_INCREMENT</code></td><td class="ts"><code>SERIAL</code> · <code>GENERATED</code></td></tr>
+          </tbody>
+        </table></div>
+        <div class="callout info"><b>방언 차이를 눈으로 익히세요</b>
+          같은 설계를 두 도구로 적어 보면 차이가 손에 익습니다. 이 강의의 코드 가이드 탭에 <b>MySQL 탭과 PostgreSQL 탭</b>을 따로 둔 이유입니다.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="part" id="m4">
+  <div class="wrap">
+    <div class="part-head"><div class="part-no">04</div>
+      <h2>Oracle과 SQLite — 양 끝의 두 도구<span class="en">Oracle · SQLite</span></h2>
+      <p>가장 큰 도구와 가장 작은 도구를 나란히 봅니다. 이 둘을 알면 나머지 도구의 위치가 잡힙니다.</p></div>
+    <div class="grid">
+      <div class="card">
+        <div class="lbl"><span class="no">1</span>Oracle — 기업용의 기준</div>
+        <p>SQL 관계형 데이터베이스가 상용 제품으로 자리 잡은 초창기부터 존재해 온 대표적인 <b>상용(유료) DBMS</b>입니다. 대규모 기업·금융·공공 시스템에서 오래 쓰여 왔습니다.</p>
+        <ul class="checklist">
+          <li><b>강점</b> — 대규모 처리, 안정성, 장애 대응, 지원 체계</li>
+          <li><b>대가</b> — 라이선스 비용, 전담 인력, 무거운 운영</li>
+          <li><b>배우는 단계</b> — SQL 문법은 거의 같으므로 나중에 옮겨 가도 부담이 작습니다</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="lbl"><span class="no">2</span>SQLite — 파일 하나가 데이터베이스</div>
+        <p>서버를 설치하지 않습니다. <b>파일 하나(.db)가 곧 데이터베이스</b>이고, 프로그램 안에 라이브러리로 들어갑니다. 휴대폰 앱·브라우저·데스크톱 프로그램이 이 방식을 씁니다.</p>
+        <ul class="checklist">
+          <li>설치·설정이 필요 없다 — 파일만 있으면 끝</li>
+          <li>파이썬에 <b>표준 라이브러리로 포함</b>되어 있어 <code>import sqlite3</code>만 하면 바로 씁니다</li>
+          <li>여러 사람이 동시에 쓰는 대규모 서비스에는 맞지 않습니다</li>
+        </ul>
+        <div class="callout tip"><b>연습용으로 최적</b>
+          SQL을 처음 익힐 때는 SQLite가 가장 편합니다. 설치 없이 파일 하나로 시작하고, 익숙해지면 MySQL·PostgreSQL로 옮기면 됩니다. <b>문법이 거의 같습니다.</b></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="part" id="m5">
+  <div class="wrap">
+    <div class="part-head"><div class="part-no">05</div>
+      <h2>파이썬과 데이터베이스는 어떻게 다른가<span class="en">Python vs Database</span></h2>
+      <p>가장 많이 받는 질문입니다. 둘은 <b>경쟁 관계가 아니라 역할이 다릅니다.</b></p></div>
+    <div class="grid">
+      <div class="card span">
+        <div class="lbl"><span class="no">1</span>언어와 창고</div>
+        <div class="twrap"><table class="t">
+          <caption>파이썬과 데이터베이스 — 무엇을 하는 도구인가</caption>
+          <thead><tr><th style="width:150px">항목</th><th>파이썬</th><th>데이터베이스 (DBMS)</th></tr></thead>
+          <tbody>
+            <tr><td>정체</td><td>프로그래밍 <b>언어</b></td><td class="ts">데이터를 보관·보장하는 <b>시스템</b></td></tr>
+            <tr><td>잘하는 일</td><td>계산 · 자동화 · 분석 · 파일 처리</td><td class="ts">저장 · 조회 · 동시 사용 · 규칙 강제</td></tr>
+            <tr><td>데이터가 사는 곳</td><td>실행하는 동안 메모리에만</td><td class="ts">프로그램을 꺼도 남아 있음</td></tr>
+            <tr><td>여러 명이 함께</td><td>각자 자기 컴퓨터에서</td><td class="ts">하나의 원본을 함께</td></tr>
+            <tr><td>규칙 강제</td><td>사람이 코드로 직접 확인</td><td class="ts">DBMS가 자동으로 거부</td></tr>
+            <tr><td>관계</td><td colspan="2">파이썬이 <b>데이터베이스에 물어보고</b>, 받은 결과로 계산·분석·출력합니다</td></tr>
+          </tbody>
+        </table></div>
+        <div class="callout key"><b>한 줄로</b>
+          파이썬은 <b>손</b>, 데이터베이스는 <b>창고</b>입니다. 손이 아무리 재주가 좋아도 창고 없이 재고를 관리할 수는 없습니다.</div>
+      </div>
+      <div class="card span">
+        <div class="lbl"><span class="no">2</span>파이썬에서 데이터베이스 쓰기 — 설치 없이 바로</div>
+        <div class="codebox" data-name="sqlite_intro" data-title="sqlite3로 첫 테이블 만들고 조회하기">
+          <button class="btn copy" type="button" data-copy="code-sqlite-intro">코드 복사</button>
+          <pre id="code-sqlite-intro"><code># 표준 라이브러리 — 설치가 필요 없습니다
+import sqlite3
+
+# [1] 연결 — 파일이 없으면 새로 만들어집니다
+con = sqlite3.connect("shop.db")
+cur = con.cursor()
+
+# [2] 테이블 만들기 — 열마다 형식과 규칙을 정합니다 (DDL)
+cur.execute("""
+CREATE TABLE IF NOT EXISTS customer (
+    customer_id INTEGER PRIMARY KEY,   -- 기본키: 비어 있을 수 없다
+    name        TEXT    NOT NULL,      -- 이름은 반드시 있어야 한다
+    email       TEXT    UNIQUE         -- 같은 이메일은 하나만
+)
+""")
+
+# [3] 값 넣기 — ? 자리에 값을 끼워 넣습니다 (SQL 인젝션 방지)
+cur.execute("INSERT OR IGNORE INTO customer (name, email) VALUES (?, ?)",
+            ("김철수", "a@shop.com"))
+con.commit()                          # 커밋해야 실제로 저장됩니다
+
+# [4] 물어보기 — 조건에 맞는 행만 가져옵니다 (DML)
+cur.execute("SELECT customer_id, name FROM customer WHERE name = ?", ("김철수",))
+for row in cur.fetchall():
+    print(row)                        # (1, '김철수')
+
+con.close()</code></pre>
+        </div>
+        <div class="callout warn"><b>두 가지를 눈여겨보세요</b>
+          ① <b>규칙을 코드가 아니라 테이블에 적었습니다</b>(PRIMARY KEY · NOT NULL · UNIQUE). 그래서 나중에 다른 프로그램이 값을 넣어도 규칙이 지켜집니다.<br>
+          ② 값을 <code>?</code>로 넘겼습니다. 문자열을 직접 이어 붙이면 <b>SQL 인젝션</b>에 노출됩니다. 뒤에서 다시 다룹니다.</div>
+      </div>
+      <div class="card span quiz"><div class="lbl"><span class="no">✓</span>확인 문제</div>
+        <div class="q" data-ok="1" data-ex="MySQL은 1995년 마이클 '몬티' 비데니우스가 만들었고, 이름은 딸 My에서 왔습니다. MySQL AB는 Sun에 인수되었고 이어 Oracle이 Sun을 인수(2010년 완료)했습니다.">
+          <p class="qt">Q1. MySQL에 대한 설명으로 알맞은 것은?</p>
+          <div class="opts">
+            <button type="button" data-i="0">Oracle이 처음부터 만들어 온 제품이다</button>
+            <button type="button" data-i="1">딸의 이름에서 이름이 왔고, 이후 Oracle이 인수한 회사의 제품이 되었다</button>
+            <button type="button" data-i="2">PostgreSQL에서 갈라져 나온 프로젝트다</button>
+          </div>
+          <p class="fb" aria-live="polite"></p>
+        </div>
+        <div class="q" data-ok="2" data-ex="MariaDB는 MySQL 원 개발자들이 2009년 MySQL 소스에서 갈라져 나온 프로젝트이며, 다른 딸 Maria의 이름을 붙였습니다. 기본 SQL과 도구가 대부분 호환됩니다.">
+          <p class="qt">Q2. MariaDB에 대한 설명으로 알맞은 것은?</p>
+          <div class="opts">
+            <button type="button" data-i="0">MySQL과 완전히 다른 문법을 쓰는 새 언어다</button>
+            <button type="button" data-i="1">Oracle이 만든 MySQL의 상용 버전이다</button>
+            <button type="button" data-i="2">MySQL 원 개발자들이 2009년 갈라져 만든 프로젝트로, 기본 문법이 호환된다</button>
+          </div>
+          <p class="fb" aria-live="polite"></p>
+        </div>
+        <div class="q" data-ok="0" data-ex="PostgreSQL의 뿌리는 UC 버클리의 POSTGRES 패키지이며, 1996년 SQL을 지원하며 PostgreSQL이라는 이름을 갖게 되었습니다. 공식 문서의 'A Brief History of PostgreSQL'에서 확인할 수 있습니다.">
+          <p class="qt">Q3. PostgreSQL의 출발로 알맞은 것은?</p>
+          <div class="opts">
+            <button type="button" data-i="0">캘리포니아 대학 버클리의 POSTGRES 연구 프로젝트</button>
+            <button type="button" data-i="1">Oracle의 오픈소스 배포판</button>
+            <button type="button" data-i="2">MySQL에서 갈라진 프로젝트</button>
+          </div>
+          <p class="fb" aria-live="polite"></p>
+        </div>
+        <div class="q" data-ok="1" data-ex="SQLite는 서버를 설치하지 않고 파일 하나가 데이터베이스가 되는 내장형입니다. 파이썬 표준 라이브러리에 포함되어 import sqlite3만 하면 바로 쓸 수 있습니다.">
+          <p class="qt">Q4. SQLite의 특징으로 알맞은 것은?</p>
+          <div class="opts">
+            <button type="button" data-i="0">서버를 반드시 따로 설치해야 한다</button>
+            <button type="button" data-i="1">파일 하나가 데이터베이스이며, 파이썬에 표준 라이브러리로 포함되어 있다</button>
+            <button type="button" data-i="2">여러 사람이 동시에 쓰는 대규모 서비스에 가장 적합하다</button>
+          </div>
+          <p class="fb" aria-live="polite"></p>
+        </div>
+        <div class="q" data-ok="2" data-ex="파이썬은 데이터를 다루는 언어이고 데이터베이스는 데이터를 보관·보장하는 시스템입니다. 파이썬이 데이터베이스에 질의하고 결과를 받아 계산·분석·출력하는 관계입니다.">
+          <p class="qt">Q5. 파이썬과 데이터베이스의 관계로 가장 알맞은 것은?</p>
+          <div class="opts">
+            <button type="button" data-i="0">둘은 같은 일을 하므로 하나만 배우면 된다</button>
+            <button type="button" data-i="1">데이터베이스가 파이썬을 대체한다</button>
+            <button type="button" data-i="2">파이썬이 데이터베이스에 물어보고, 받은 결과로 계산·분석한다</button>
+          </div>
+          <p class="fb" aria-live="polite"></p>
+        </div>
+        <div class="q" data-ok="0" data-ex="테이블을 만들 때 PRIMARY KEY · NOT NULL · UNIQUE 같은 규칙을 함께 적어 두면, 나중에 다른 프로그램이 값을 넣더라도 DBMS가 규칙을 강제해 줍니다. 이것이 데이터베이스가 '보장'을 제공하는 방식입니다.">
+          <p class="qt">Q6. 테이블을 만들 때 <code>PRIMARY KEY</code>·<code>NOT NULL</code>·<code>UNIQUE</code>를 함께 적는 이유는?</p>
+          <div class="opts">
+            <button type="button" data-i="0">나중에 누가 값을 넣어도 DBMS가 규칙을 강제해 주기 때문</button>
+            <button type="button" data-i="1">실행 속도를 두 배로 높이기 때문</button>
+            <button type="button" data-i="2">화면에 표를 예쁘게 그리기 때문</button>
+          </div>
+          <p class="fb" aria-live="polite"></p>
+        </div>
+        <div class="qscore" aria-live="polite"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="part" id="glossary">
+  <div class="wrap">
+    <div class="part-head">
+      <div class="part-no">Aa</div>
+      <h2>용어 사전 — 비유로 보기<span class="en">Glossary</span></h2>
+      <p>도구 이름과 관련 낱말을 정리했습니다.</p>
+    </div>
+    <div class="gl-group"><h4>도구의 종류</h4>
+      <div class="gl-grid">
+        <div class="gl-card" id="g-DBMS"><b>DBMS</b>
+          <p class="gl-an"><span>비유</span>창고지기. 물건을 넣어 주고, 찾아 주고, 규칙을 어기면 막습니다.</p>
+          <p class="gl-mean"><span>뜻</span>Database Management System. 데이터베이스를 만들고 관리하고 지켜 주는 소프트웨어.</p></div>
+        <div class="gl-card" id="g-서버형"><b>서버형 데이터베이스</b>
+          <p class="gl-an"><span>비유</span>동네 창고. 여러 사람이 찾아와 함께 씁니다.</p>
+          <p class="gl-mean"><span>뜻</span>별도 프로그램으로 설치되어 여러 사용자가 네트워크로 접속해 함께 쓰는 방식. MySQL·PostgreSQL·Oracle이 여기 속합니다.</p></div>
+        <div class="gl-card" id="g-내장형"><b>내장형 데이터베이스</b>
+          <p class="gl-an"><span>비유</span>내 가방 속 필통. 남에게 빌려 주지 않고 혼자 씁니다.</p>
+          <p class="gl-mean"><span>뜻</span>프로그램 안에 라이브러리로 들어가 파일 하나로 동작하는 방식. SQLite가 대표적입니다.</p></div>
+        <div class="gl-card" id="g-NoSQL"><b>NoSQL</b>
+          <p class="gl-an"><span>비유</span>정해진 서식이 없는 메모지. 아무 모양이나 붙일 수 있지만 규칙은 약합니다.</p>
+          <p class="gl-mean"><span>뜻</span>표 형태에 얽매이지 않고 유연한 구조로 저장하는 데이터베이스 계열. MongoDB·Redis 등이 있습니다.</p></div>
+      </div>
+    </div>
+    <div class="gl-group"><h4>파이썬과 연결</h4>
+      <div class="gl-grid">
+        <div class="gl-card" id="g-sqlite3"><b>sqlite3</b>
+          <p class="gl-an"><span>비유</span>파이썬 가방에 기본으로 들어 있는 작은 공구.</p>
+          <p class="gl-mean"><span>뜻</span>파이썬 표준 라이브러리에 포함된 SQLite 모듈. 설치 없이 import해서 바로 씁니다.</p></div>
+        <div class="gl-card" id="g-커밋"><b>커밋 (Commit)</b>
+          <p class="gl-an"><span>비유</span>서류에 도장을 찍는 순간. 그 전까지는 초안입니다.</p>
+          <p class="gl-mean"><span>뜻</span>변경 내용을 확정해 실제로 저장하는 것. 커밋하지 않으면 값은 남지 않습니다.</p></div>
+        <div class="gl-card" id="g-인젝션"><b>SQL 인젝션</b>
+          <p class="gl-an"><span>비유</span>주문서에 몰래 다른 문장을 끼워 넣는 것.</p>
+          <p class="gl-mean"><span>뜻</span>입력값을 그대로 SQL 문장에 이어 붙일 때 악의적인 문장이 실행되는 공격. 값은 <code>?</code> 같은 자리표시자로 넘겨 막습니다.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="part" id="outro">
+  <div class="wrap outro">
+    <h2>도구는 달라도 문법은 하나</h2>
+    <p>MySQL·MariaDB·PostgreSQL·Oracle·SQLite — 이름은 달라도 <b>묻는 말(SQL)</b>은 거의 같습니다. 다음 페이지에서 이 일을 하려면 프로그래밍을 꼭 배워야 하는지 따져 봅니다.</p>
+    <div class="hbtns" style="justify-content:center">
+      <a class="pbtn primary" href="04_habits_and_security.html">다음 · 프로그래밍 지식이 꼭 필요할까?</a>
+      <a class="pbtn" href="02_db_vs_spreadsheet.html">이전 · 엑셀·구글 시트와의 차이</a>
+    </div>
+  </div>
+</section>
